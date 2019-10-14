@@ -1,0 +1,6 @@
+3;NIS inválido;O NIS é inválido;
+4;NIS não cadastrado;O NIS não foi identificado na base de dados do Cadastro Único;
+5;NIS excluído;O NIS foi identificado na base de dados do Cadastro Único, porém com status excluído;
+6;NIS com renda fora do perfil;O NIS foi identificado na base do Cadastro Único, porém com renda per capita familiar fora do perfil;
+7;NIS não é o da pessoa informada;O NIS foi identificado na base do Cadastro Único, com renda per capita familiar dentro do perfil, porém não pertence a pessoa informada;
+13;Cadastro desatualizado;Pessoa identificada em família com cadastro desatualizado;
