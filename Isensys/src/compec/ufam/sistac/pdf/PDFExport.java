@@ -18,10 +18,10 @@ public class PDFExport {
 	/** Monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo já compilado (.jasper) */
 	public static void export(ListaRetornos retornos, String cabecalho, Resultado tipoResultado) throws JRException, IOException {
 		
-		File imagePath = new File(ResourceManager.getResource("img/header.png"));
+		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
 		BufferedImage image = ImageIO.read(imagePath);
 		
-		String reportPath = ResourceManager.getResource("relatorios/edital-isensys.jasper");
+		String reportPath = ResourceManager.getResource("relatorios/Edital.jasper");
 		JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(reportPath);
 		
 		Map<String,Object> parameters = new HashMap<String,Object>();
@@ -43,10 +43,10 @@ public class PDFExport {
 	/** Compila e monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo fonte (.jrxml) */
 	public static void compileAndExport(ListaRetornos retornos, String cabecalho, Resultado tipoResultado) throws JRException, IOException {
 		
-		File imagePath = new File(ResourceManager.getResource("img/header.png"));
+		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
 		BufferedImage image = ImageIO.read(imagePath);
 		
-		String reportPath = ResourceManager.getResource("relatorios/edital-isensys.jrxml");
+		String reportPath = ResourceManager.getResource("relatorios/Edital.jrxml");
 		JasperReport report = JasperCompileManager.compileReport(reportPath);
 		
 		Map<String,Object> parameters = new HashMap<String,Object>();
