@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
+import com.phill.libs.ui.*;
 import com.phill.libs.exception.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
@@ -234,9 +235,9 @@ public class TelaRetornoFinal extends JFrame {
 			executeJob(TXT_READ);
 			
 		}
-		catch (BlankFieldException exception) { AlertDialog.erro(exception.getMessage()); }
+		catch (BlankFieldException exception) { AlertDialog.error(exception.getMessage()); }
 		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.erro("Não foi possível carregar o arquivo Sistac!"); }
+		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Sistac!"); }
 	}
 	
 	private void selecionaArquivoExcel() {
@@ -252,9 +253,9 @@ public class TelaRetornoFinal extends JFrame {
 			executeJob(XLSX_READ);
 			
 		}
-		catch (BlankFieldException exception) { AlertDialog.erro(exception.getMessage()); }
+		catch (BlankFieldException exception) { AlertDialog.error(exception.getMessage()); }
 		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.erro("Não foi possível carregar o arquivo Excel!"); }
+		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Excel!"); }
 	}
 	
 	private void selecionaCompilacao() {
@@ -271,7 +272,7 @@ public class TelaRetornoFinal extends JFrame {
 			
 		}
 		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.erro("Não foi possível carregar a compilação!"); }
+		catch (Exception exception) { AlertDialog.error("Não foi possível carregar a compilação!"); }
 		
 	}
 	
@@ -293,7 +294,7 @@ public class TelaRetornoFinal extends JFrame {
 			
 		}
 		catch (BlankFieldException | FileNotSelectedException exception) {
-			AlertDialog.erro(exception.getMessage());
+			AlertDialog.error(exception.getMessage());
 		}
 		
 	}
@@ -332,19 +333,19 @@ public class TelaRetornoFinal extends JFrame {
 				switch (function) {
 				
 					case BSF_READ:
-						AlertDialog.erro("Falha ao carregar a compilação!");
+						AlertDialog.error("Falha ao carregar a compilação!");
 					break;
 				
 					case TXT_READ:
-						AlertDialog.erro("Falha ao carregar o arquivo de retorno do Sistac!");
+						AlertDialog.error("Falha ao carregar o arquivo de retorno do Sistac!");
 					break;
 					
 					case XLSX_READ:
-						AlertDialog.erro("Falha ao carregar o arquivo de retorno do Excel!");
+						AlertDialog.error("Falha ao carregar o arquivo de retorno do Excel!");
 					break;
 					
 					case PDF_EXPORT:
-						AlertDialog.erro("Falha ao gerar visualização!");
+						AlertDialog.error("Falha ao gerar visualização!");
 					break;
 				}
 				

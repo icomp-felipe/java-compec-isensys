@@ -2,7 +2,7 @@ package compec.ufam.sistac.io;
 
 import java.io.*;
 import java.util.*;
-import com.phill.libs.*;
+import com.phill.libs.ui.*;
 import compec.ufam.sistac.exception.*;
 import org.apache.poi.xssf.usermodel.*;
 
@@ -24,7 +24,7 @@ public class ExcelSheetWriter {
 		// Se a lista não contém erros, nem crio o arquivo 'xlsx'
 		int size = listaErros.size();
 		if (size == 0) {
-			AlertDialog.dialog("Não há nenhum erro para escrever!");
+			AlertDialog.info("Não há nenhum erro para escrever!");
 			return;
 		}
 		

@@ -3,6 +3,7 @@ package compec.ufam.sistac.view;
 import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
+import com.phill.libs.ui.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André
@@ -86,7 +87,7 @@ public class TelaInicioIsensys extends JFrame {
 	
 	/** Exibe um dialog com a ajuda do sistema */
 	private void ajuda() {
-		AlertDialog.informativo("IsenSys");
+		AlertDialog.info("IsenSys");
 	}
 	
 }

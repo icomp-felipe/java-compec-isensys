@@ -3,6 +3,7 @@ package compec.ufam.sistac.pdf;
 import java.io.*;
 import java.util.*;
 import com.phill.libs.*;
+import com.phill.libs.ui.*;
 
 /** Classe que carrega os motivos de erro de processamento de um arquivo .csv.
  *  Esta lista foi extraída do manual do Sistac em anexo neste projeto (res/manual).
@@ -32,7 +33,7 @@ public class SituacaoDAO {
 			
 		} catch (IOException exception) {
 			exception.printStackTrace();
-			AlertDialog.erro("Falha ao ler o arquivo de erros de processamento.");
+			AlertDialog.error("Lendo arquivo de erros","Falha ao ler o arquivo de erros de processamento.");
 		}
 		
 		return listaSituacoes;

@@ -4,6 +4,7 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
+import com.phill.libs.ui.*;
 import compec.ufam.sistac.io.*;
 import com.phill.libs.exception.*;
 import compec.ufam.sistac.model.*;
@@ -266,7 +267,7 @@ public class TelaEnvio extends JFrame {
 	private void reload() {
 		
 		if (arquivoEntrada == null)
-			AlertDialog.erro("Selecione o arquivo de entrada");
+			AlertDialog.error("Selecione o arquivo de entrada");
 		else {
 			Runnable job = () -> loadSheet();
 			new Thread(job).start();
@@ -295,7 +296,7 @@ public class TelaEnvio extends JFrame {
 		}
 		catch (Exception exception) {
 			exception.printStackTrace();
-			AlertDialog.erro("Falha ao processar arquivo!\nVerifique se ele está no formato correto.");
+			AlertDialog.error("Falha ao processar arquivo!\nVerifique se ele está no formato correto.");
 			textArquivoEntrada.setText (null );
 			labelProcessando.setVisible(false);
 		}
@@ -330,7 +331,7 @@ public class TelaEnvio extends JFrame {
 			textSaidaSistac.setText(saidaSistac.getName());
 			
 		} catch (BlankFieldException exception) {
-			AlertDialog.erro(exception.getMessage());
+			AlertDialog.error(exception.getMessage());
 		} catch (Exception exception) { }
 		
 	}
@@ -371,10 +372,10 @@ public class TelaEnvio extends JFrame {
 			ExcelSheetWriter.write(listaResultados.getListaExcecoes(), saidaExcel);
 			SistacFile.generate(listaResultados.getListaCandidatos(), saidaSistac);
 			
-			AlertDialog.informativo("Arquivo(s) exportado(s) com sucesso!");
+			AlertDialog.info("Arquivo(s) exportado(s) com sucesso!");
 			
 		} catch (Exception exception) {
-			AlertDialog.erro(exception.getMessage());
+			AlertDialog.error(exception.getMessage());
 		}
 		
 	}

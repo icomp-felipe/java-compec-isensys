@@ -2,6 +2,7 @@ package compec.ufam.sistac.model;
 
 import org.joda.time.*;
 import com.phill.libs.*;
+import com.phill.libs.br.CPFParser;
 import com.phill.libs.time.*;
 import com.phill.libs.exception.*;
 import compec.ufam.sistac.exception.*;

@@ -4,6 +4,7 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
+import com.phill.libs.ui.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
@@ -196,7 +197,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 		}
 		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.erro("Não foi possível carregar o arquivo Sistac!"); }
+		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Sistac!"); }
 	}
 	
 	/** Carrega a planilha de erros para o sistema */
@@ -221,7 +222,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 		}
 		catch (NullPointerException exception) { exception.printStackTrace(); }
-		catch (Exception exception) { AlertDialog.erro("Não foi possível carregar o arquivo Excel!"); }
+		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Excel!"); }
 	}
 	
 	/** Seleciona o arquivo de compilação do sistema */
@@ -253,7 +254,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 		}
 		catch (BlankFieldException | FileNotSelectedException exception) {
-			AlertDialog.erro(exception.getMessage());
+			AlertDialog.error(exception.getMessage());
 		}
 		
 	}
@@ -270,7 +271,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 		} catch (Exception exception) {
 			exception.printStackTrace();
-			AlertDialog.erro("Falha ao carregar o arquivo de retorno do Sistac!");
+			AlertDialog.error("Falha ao carregar o arquivo de retorno do Sistac!");
 		}
 		finally {
 			updateInfo(null,false);
@@ -288,7 +289,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 		} catch (Exception exception) {
 			exception.printStackTrace();
-			AlertDialog.erro("Falha ao carregar o arquivo de retorno do Excel!");
+			AlertDialog.error("Falha ao carregar o arquivo de retorno do Excel!");
 		}
 		finally {
 			updateInfo(null,false);
@@ -316,7 +317,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 		} catch (Exception exception) {
 			exception.printStackTrace();
-			AlertDialog.erro("Falha ao gerar visualização!");
+			AlertDialog.error("Falha ao gerar visualização!");
 		}
 		finally {
 			updateInfo(null,false);
