@@ -15,6 +15,7 @@ public class SistacFile {
 	public static final String UFAM_CNPJ   = "04378626000197";
 	
 	/** Escreve o arquivo para envio ao Sistac */
+	@SuppressWarnings("resource")
 	public static boolean generate(ArrayList<Candidato> listaCandidatos, File arquivo) {
 		
 		try {

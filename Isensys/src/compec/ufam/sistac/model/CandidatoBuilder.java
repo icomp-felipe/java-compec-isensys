@@ -4,7 +4,6 @@ import org.joda.time.*;
 import com.phill.libs.*;
 import com.phill.libs.br.CPFParser;
 import com.phill.libs.time.*;
-import com.phill.libs.exception.*;
 import compec.ufam.sistac.exception.*;
 
 /** Classe que monta um 'Candidato' a partir das informações do vetor 'args'
@@ -65,11 +64,11 @@ public class CandidatoBuilder {
 	/** Remove caracteres especiais e espaços múltiplos entre nome e sobrenome */
 	private static String parseNome(String nome, boolean eNomeMae) throws FieldException {
 		
-		nome = StringUtils.removeCaracteresEspeciais(nome);
-		nome = StringUtils.removeEspacosMultiplos(nome);
+		nome = StringUtils.wipeSpecialCharacters(nome);
+		nome = StringUtils.wipeMultipleSpaces(nome);
 		nome = nome.replace("'","");
 		
-		if (!StringUtils.isOnlyAlfaString(nome))
+		if (!StringUtils.isAlphaStringOnly(nome))
 			throw (eNomeMae) ? new FieldException("Nome da mãe inválido",nome) : new FieldException("Nome inválido",nome);
 			
 		return nome;
@@ -78,7 +77,7 @@ public class CandidatoBuilder {
 	/** Processa o órgão emissor */
 	public static String parseOrgao(String orgaoEmissor) {
 		
-		orgaoEmissor = StringUtils.extraiAlfabeto(orgaoEmissor);
+		orgaoEmissor = StringUtils.extractAlphabet(orgaoEmissor);
 		
 		// Força o retorno do órgão emissor 'SSP' em caso de erro, já que este não é um dado tão crítico
 		if ((orgaoEmissor == null) || (orgaoEmissor.length() == 0) || (orgaoEmissor.length() > 10))
@@ -120,11 +119,11 @@ public class CandidatoBuilder {
 		if (date.length() == 7)
 			date = "0" + date;
 		
-		DateTime data = TimeParser.createDate(date);
+		DateTime data = PhillsDateParser.createDate(date);
 		
 		// Força o retorno da data '01/jan/2000' em caso de erro, já que este não é um dado tão crítico
 		if (data == null)
-			data = TimeParser.createDate("2000-01-01");
+			data = PhillsDateParser.createDate("2000-01-01");
 		
 		return data;
 	}

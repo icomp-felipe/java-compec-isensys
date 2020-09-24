@@ -2,7 +2,6 @@ package compec.ufam.sistac.exception;
 
 import java.util.*;
 import com.phill.libs.*;
-import com.phill.libs.exception.*;
 
 public class RowParseException extends Exception {
 

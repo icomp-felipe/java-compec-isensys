@@ -64,12 +64,12 @@ public class Candidato {
 
 	/** Getter para a data de nascimento do candidato */
 	public String getDataNascimento() {
-		return TimeParser.retrieveDate(TimeFormatter.RAW_DATE, dataNascimento);
+		return PhillsDateParser.retrieveDate(dataNascimento, PhillsDateFormatter.RAW_DATE);
 	}
 
 	/** Getter para a data de emissão do RG do candidato */
 	public String getDataRG() {
-		return TimeParser.retrieveDate(TimeFormatter.RAW_DATE, dataRG);
+		return PhillsDateParser.retrieveDate(dataRG, PhillsDateFormatter.RAW_DATE);
 	}
 
 	/** Getter para o sexo do candidato */

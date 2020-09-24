@@ -8,7 +8,9 @@ import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
-import com.phill.libs.exception.*;
+import com.phill.libs.files.PhillFileUtils;
+
+import compec.ufam.sistac.exception.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
@@ -48,9 +50,9 @@ public class TelaRetornoFinal extends JFrame {
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		
-		Icon searchIcon  = ResourceManager.getResizedIcon("icon/search.png",20,20);
-		Icon exitIcon    = ResourceManager.getResizedIcon("icon/exit.png",25,25);
-		Icon exportIcon  = ResourceManager.getResizedIcon("icon/report.png",25,25);
+		Icon searchIcon  = ResourceManager.getIcon("icon/search.png",20,20);
+		Icon exitIcon    = ResourceManager.getIcon("icon/exit.png",25,25);
+		Icon exportIcon  = ResourceManager.getIcon("icon/report.png",25,25);
 		
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
@@ -228,7 +230,7 @@ public class TelaRetornoFinal extends JFrame {
 			
 			verificaLista();
 			
-			retornoSistac = FileChooserHelper.loadFile(this, FileFilters.SISTAC_RETV, "Selecione o arquivo de texto Sistac", false, null);
+			retornoSistac = PhillFileUtils.loadFile("Selecione o arquivo de texto Sistac", Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, null);
 			textRetornoSistac.setText(retornoSistac.getName());
 			
 			updateInfo(MSG_LOAD_FILE);
@@ -246,7 +248,7 @@ public class TelaRetornoFinal extends JFrame {
 			
 			verificaLista();
 			
-			retornoExcel = FileChooserHelper.loadFile(this, FileFilters.XLSX, "Selecione a planilha", false, null);
+			retornoExcel = PhillFileUtils.loadFile("Selecione a planilha", Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, null);
 			textRetornoExcel.setText(retornoExcel.getName());
 			
 			updateInfo(MSG_LOAD_FILE);
@@ -262,7 +264,7 @@ public class TelaRetornoFinal extends JFrame {
 		
 		try {
 			
-			compilacao = FileChooserHelper.loadFile(this, FileFilters.BSF, "Selecione o arquivo de compilação", false, null);
+			compilacao = PhillFileUtils.loadFile("Selecione o arquivo de compilação", Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, null);
 			textCompilacao.setText(compilacao.getName());
 			
 			painelAnalise.setVisible(true);

@@ -5,8 +5,11 @@ import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
+
+import compec.ufam.sistac.exception.*;
 import compec.ufam.sistac.io.*;
-import com.phill.libs.exception.*;
+import com.phill.libs.files.PhillFileUtils;
+
 import compec.ufam.sistac.model.*;
 
 public class TelaEnvio extends JFrame {
@@ -67,10 +70,10 @@ public class TelaEnvio extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		painel.setLayout(null);
 		
-		Icon searchIcon  = ResourceManager.getResizedIcon("icon/search.png",20,20);
-		Icon reloadIcon  = ResourceManager.getResizedIcon("icon/reload.png",20,20);
-		Icon exitIcon    = ResourceManager.getResizedIcon("icon/exit.png",25,25);
-		Icon exportIcon  = ResourceManager.getResizedIcon("icon/save.png",25,25);
+		Icon searchIcon  = ResourceManager.getIcon("icon/search.png",20,20);
+		Icon reloadIcon  = ResourceManager.getIcon("icon/reload.png",20,20);
+		Icon exitIcon    = ResourceManager.getIcon("icon/exit.png",25,25);
+		Icon exportIcon  = ResourceManager.getIcon("icon/save.png",25,25);
 		
 		JPanel painelEntrada = new JPanel();
 		painelEntrada.setOpaque(false);
@@ -238,7 +241,7 @@ public class TelaEnvio extends JFrame {
 		
 		try {
 			
-			arquivoEntrada  = FileChooserHelper.loadFile(this, FileFilters.SISTAC_INPUT, "Selecione o arquivo de entrada", false, sugestao);
+			arquivoEntrada  = PhillFileUtils.loadFile("Selecione o arquivo de entrada", Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, sugestao);
 			
 			atualizaSugestao(arquivoEntrada);
 			textArquivoEntrada.setText(arquivoEntrada.getName());
@@ -327,7 +330,7 @@ public class TelaEnvio extends JFrame {
 			
 			File sugestao = SistacFile.getSistacExportName(this.sugestao, textEdital.getText(), textSequencia.getText());
 			
-			saidaSistac = FileChooserHelper.loadFile(TelaEnvio.this, FileFilters.SISTAC_SEND, "Selecione o arquivo de saída", true, sugestao);
+			saidaSistac = PhillFileUtils.loadFile("Selecione o arquivo de saída", Constants.FileFormat.SISTAC_SEND, PhillFileUtils.SAVE_DIALOG, sugestao);
 			textSaidaSistac.setText(saidaSistac.getName());
 			
 		} catch (BlankFieldException exception) {
@@ -352,7 +355,7 @@ public class TelaEnvio extends JFrame {
 		
 		try {
 			
-			saidaExcel = FileChooserHelper.loadFile(TelaEnvio.this, FileFilters.XLSX, "Selecione o arquivo de saída", true, sugestao);
+			saidaExcel = PhillFileUtils.loadFile("Selecione o arquivo de saída", Constants.FileFormat.XLSX, PhillFileUtils.SAVE_DIALOG, sugestao);
 			
 			atualizaSugestao(saidaExcel);
 			textSaidaExcel.setText(saidaExcel.getName());

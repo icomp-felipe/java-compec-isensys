@@ -35,9 +35,9 @@ public class TelaInicioIsensys extends JFrame {
 		setResizable(false);
 		painel.setLayout(null);
 		
-		Icon iconEnvio  = ResourceManager.getResizedIcon("img/botao-envio.png",442,30);
-		Icon iconPrelim = ResourceManager.getResizedIcon("img/botao-preliminar.png",442,30);
-		Icon iconFinal  = ResourceManager.getResizedIcon("img/botao-final.png",442,30);
+		Icon iconEnvio  = ResourceManager.getIcon("img/botao-envio.png",442,30);
+		Icon iconPrelim = ResourceManager.getIcon("img/botao-preliminar.png",442,30);
+		Icon iconFinal  = ResourceManager.getIcon("img/botao-final.png",442,30);
 		
 		JButton botaoEnvio = new JButton(iconEnvio);
 		botaoEnvio.setBorderPainted(false);
@@ -62,9 +62,9 @@ public class TelaInicioIsensys extends JFrame {
 		
 		painel.add(botaoRetornoFinal);
 		
-		String rawText     = ResourceManager.getFormatFromResource("text/pt-BR.lng");
-		String welcomeText = StringUtils.convertToHTML(rawText);
-		Icon isensys_icon  = ResourceManager.getResizedIcon("img/isensys-logo.png",154,130);
+		String rawText     = ResourceManager.getFormat("text/pt-BR.lng");
+		String welcomeText = StringUtils.toHTML(rawText);
+		Icon isensys_icon  = ResourceManager.getIcon("img/isensys-logo.png",154,130);
 		
 		JButton botaoAjuda = new JButton(isensys_icon);
 		botaoAjuda.addActionListener((event) -> ajuda());

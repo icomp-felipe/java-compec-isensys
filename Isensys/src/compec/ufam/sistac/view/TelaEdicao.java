@@ -1,8 +1,10 @@
 package compec.ufam.sistac.view;
 
 import java.awt.*;
-import javax.swing.*;import com.phill.libs.GraphicsHelper;
+import javax.swing.*;
+
 import com.phill.libs.ResourceManager;
+import com.phill.libs.ui.GraphicsHelper;
 
 public class TelaEdicao extends JFrame {
 
@@ -21,7 +23,7 @@ public class TelaEdicao extends JFrame {
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
 		
-		Icon clearIcon  = ResourceManager.getResizedIcon("icon/clear.png",20,20);
+		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png",20,20);
 		
 		Dimension d = new Dimension(640,480);
 		

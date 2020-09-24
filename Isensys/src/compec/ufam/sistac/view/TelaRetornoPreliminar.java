@@ -5,10 +5,12 @@ import java.awt.*;
 import javax.swing.*;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
+
+import compec.ufam.sistac.exception.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
-import com.phill.libs.exception.*;
+import com.phill.libs.files.PhillFileUtils;
 
 /** Classe que controla a view de processamento Retorno Preliminar
  *  @author Felipe André
@@ -41,9 +43,9 @@ public class TelaRetornoPreliminar extends JFrame {
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		
-		Icon searchIcon  = ResourceManager.getResizedIcon("icon/search.png",20,20);
-		Icon exitIcon    = ResourceManager.getResizedIcon("icon/exit.png",25,25);
-		Icon exportIcon  = ResourceManager.getResizedIcon("icon/report.png",25,25);
+		Icon searchIcon  = ResourceManager.getIcon("icon/search.png",20,20);
+		Icon exitIcon    = ResourceManager.getIcon("icon/exit.png",25,25);
+		Icon exportIcon  = ResourceManager.getIcon("icon/report.png",25,25);
 		
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
@@ -183,7 +185,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 			
 			// Abrindo a GUI de seleção de arquivo
-			retornoSistac = FileChooserHelper.loadFile(this, FileFilters.SISTAC_RETV, "Selecione o arquivo de texto Sistac", false, sugestao);
+			retornoSistac = PhillFileUtils.loadFile("Selecione o arquivo de texto Sistac", Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, sugestao);
 			
 			// Atualizando o arquivo de sugestão (último diretório selecionado)
 			sugestao = new File(retornoSistac.getParent());
@@ -208,7 +210,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 			
 			// Abrindo a GUI de seleção de arquivo
-			retornoExcel = FileChooserHelper.loadFile(this, FileFilters.XLSX, "Selecione a planilha", false, sugestao);
+			retornoExcel = PhillFileUtils.loadFile("Selecione a planilha", Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, sugestao);
 			
 			// Atualizando o arquivo de sugestão (último diretório selecionado)
 			sugestao = new File(retornoExcel.getParent());
@@ -231,7 +233,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 			
 			// Abrindo a GUI de seleção de arquivo
-			compilacao = FileChooserHelper.loadFile(this, FileFilters.BSF, "Selecione o arquivo de compilação", true, sugestao);
+			compilacao = PhillFileUtils.loadFile("Selecione o arquivo de compilação", Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, sugestao);
 			
 			// Atualizando o arquivo de sugestão (último diretório selecionado)
 			sugestao = new File(compilacao.getParent());

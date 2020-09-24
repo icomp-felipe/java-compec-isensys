@@ -1,7 +1,7 @@
 package compec.ufam.sistac.io;
 
 import java.io.*;
-import com.phill.libs.*;
+import com.phill.libs.files.CSVUtils;
 import compec.ufam.sistac.model.*;
 import compec.ufam.sistac.exception.*;
 
