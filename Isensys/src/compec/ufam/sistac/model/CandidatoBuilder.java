@@ -70,7 +70,7 @@ public class CandidatoBuilder {
 		
 		if (!StringUtils.isAlphaStringOnly(nome))
 			throw (eNomeMae) ? new FieldException("Nome da mãe inválido",nome) : new FieldException("Nome inválido",nome);
-			
+		
 		return nome;
 	}
 	

@@ -19,7 +19,7 @@ public class TelaEnvio extends JFrame {
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
 	private JTextField textArquivoEntrada;
-	private JTextField textSaidaSistac,textSaidaExcel;
+	private JTextField textSaidaSistac;
 
 	private final Color gr_dk = new Color(0x0d6b12);
 	private final Color rd_dk = new Color(0xbc1742);
@@ -28,7 +28,7 @@ public class TelaEnvio extends JFrame {
 	private static final boolean PANEL_RESULTS = false;
 	
 	private JButton botaoArquivoEntrada;
-	private JButton botaoSaidaSistac,botaoSaidaExcel;
+	private JButton botaoSaidaSistac;
 	
 	private JLabel labelProcessando;
 	private JPanel painelSituacoes;
@@ -36,13 +36,12 @@ public class TelaEnvio extends JFrame {
 	private JLabel textOK,textErro,textTotal;
 	
 	private ParseResult listaResultados;
-	private File saidaSistac, saidaExcel;
 	private JButton botaoSair;
 	private JButton botaoExportar;
 	private JTextField textEdital;
 	private JTextField textSequencia;
 	
-	private File sugestao, arquivoEntrada;
+	private File arquivoEntrada, dirSaida;
 	
 	private int sizeERR = 0;
 	
@@ -100,7 +99,7 @@ public class TelaEnvio extends JFrame {
 		botaoArquivoEntrada.addActionListener((event) -> carregaArquivoEntrada());
 		
 		JButton botaoReload = new JButton(reloadIcon);
-		botaoReload.addActionListener((event) -> reload());
+		botaoReload.addActionListener((event) -> functionReload());
 		botaoReload.setToolTipText("Recarrega o arquivo atual");
 		botaoReload.setBounds(352, 30, 30, 25);
 		painelEntrada.add(botaoReload);
@@ -176,7 +175,7 @@ public class TelaEnvio extends JFrame {
 		textSequencia.setBounds(334, 28, 90, 20);
 		painelSaida.add(textSequencia);
 		
-		JLabel labelSaidaSistac = new JLabel("Arquivo Sistac:");
+		JLabel labelSaidaSistac = new JLabel("Pasta de Saída:");
 		labelSaidaSistac.setFont(fonte);
 		labelSaidaSistac.setBounds(12, 62, 118, 15);
 		painelSaida.add(labelSaidaSistac);
@@ -195,25 +194,6 @@ public class TelaEnvio extends JFrame {
 		botaoSaidaSistac.setBounds(394, 60, 30, 25);
 		painelSaida.add(botaoSaidaSistac);
 		
-		JLabel labelSaidaExcel = new JLabel("Planilha Erros:");
-		labelSaidaExcel.setFont(fonte);
-		labelSaidaExcel.setBounds(12, 94, 118, 15);
-		painelSaida.add(labelSaidaExcel);
-		
-		textSaidaExcel = new JTextField();
-		textSaidaExcel.setFont(fonte);
-		textSaidaExcel.setForeground(color);
-		textSaidaExcel.setEditable(false);
-		textSaidaExcel.setColumns(10);
-		textSaidaExcel.setBounds(130, 91, 252, 25);
-		painelSaida.add(textSaidaExcel);
-		
-		botaoSaidaExcel = new JButton(searchIcon);
-		botaoSaidaExcel.setToolTipText("Escolher aonde será salva a planilha de erros. Lembrando que esta é opcional caso não haja erros");
-		botaoSaidaExcel.addActionListener((event) -> selecionaSaidaExcel());
-		botaoSaidaExcel.setBounds(394, 91, 30, 25);
-		painelSaida.add(botaoSaidaExcel);
-		
 		botaoExportar = new JButton(exportIcon);
 		botaoExportar.setToolTipText("Exporta o(s) arquivo(s)");
 		botaoExportar.addActionListener((event) -> exportarArquivos());
@@ -230,30 +210,22 @@ public class TelaEnvio extends JFrame {
 		
 	}
 
-	/** Escreve o diretório completo até o arquivo informado */
-	private void atualizaSugestao(File arquivo) {
-		this.sugestao = new File(arquivo.getParent());
-	}
-	
-	
 	/** Carrega o arquivo de entrada de dados e atualiza as informações da janela */
 	private void carregaArquivoEntrada() {
 		
-		try {
+		// Recuperando o arquivo de entrada
+		this.arquivoEntrada  = PhillFileUtils.loadFile("Selecione o arquivo de entrada", Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, null);
+		
+		// Só prossigo se algum arquivo foi selecionado
+		if (this.arquivoEntrada != null) {
 			
-			arquivoEntrada  = PhillFileUtils.loadFile("Selecione o arquivo de entrada", Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, sugestao);
-			
-			atualizaSugestao(arquivoEntrada);
+			// Atualizando a view
 			textArquivoEntrada.setText(arquivoEntrada.getName());
-			
 			switchPanels(PANEL_LOADING);
 			
-			Runnable job = () -> loadSheet();
-			new Thread(job).start();
+			// Lendo o CSV
+			csv_loader();
 			
-			
-		} catch (Exception exception) {
-			return;
 		}
 		
 	}
@@ -261,25 +233,35 @@ public class TelaEnvio extends JFrame {
 	/** Alterna entre os painéis de processamento de arquivo e de resultados */
 	private void switchPanels(boolean panel) {
 		
-		painelSituacoes .setVisible(!panel);
-		labelProcessando.setVisible(panel);
+		SwingUtilities.invokeLater(() -> {
+		
+			painelSituacoes .setVisible(!panel);
+			labelProcessando.setVisible( panel);
+		
+		});
+		
+	}
+	
+	private void functionReload() {
+		
+		if (this.arquivoEntrada != null)
+			csv_loader();
 		
 	}
 	
 	/** Recarrega o arquivo de entrada */
-	private void reload() {
-		
-		if (arquivoEntrada == null)
-			AlertDialog.error("Selecione o arquivo de entrada");
-		else {
-			Runnable job = () -> loadSheet();
-			new Thread(job).start();
-		}
+	private void csv_loader() {
+			
+		// Carregando o arquivo
+		Thread thread_loader = new Thread(() -> thread_csv_loader());
+							
+		thread_loader.setName("TelaEnvio.class - Thread do leitor de CSV");
+		thread_loader.start();
 		
 	}
 	
 	/** Carrega os dados de entrada para o sistema */
-	private void loadSheet() {
+	private void thread_csv_loader() {
 		
 		try {
 			
@@ -321,46 +303,27 @@ public class TelaEnvio extends JFrame {
 		
 	}
 	
-	/** Seleciona e monta, com base nos dados de entrada, o nome do arquivo sistac */
+	/** Seleciona o diretório de saída dos arquivos gerados */
 	private void selecionaSaidaSistac() {
 		
-		try {
+		dirSaida = PhillFileUtils.loadDir("Selecione o arquivo de saída", PhillFileUtils.OPEN_DIALOG, null);
 			
-			dependenciaSistac();
-			
-			File sugestao = SistacFile.getSistacExportName(this.sugestao, textEdital.getText(), textSequencia.getText());
-			
-			saidaSistac = PhillFileUtils.loadFile("Selecione o arquivo de saída", Constants.FileFormat.SISTAC_SEND, PhillFileUtils.SAVE_DIALOG, sugestao);
-			textSaidaSistac.setText(saidaSistac.getName());
-			
-		} catch (BlankFieldException exception) {
-			AlertDialog.error(exception.getMessage());
-		} catch (Exception exception) { }
+		if (dirSaida != null)
+			textSaidaSistac.setText(dirSaida.getAbsolutePath());
 		
 	}
 	
 	/** Verifica se as dependências para a montagem do nome do arquivo sistac estão satisfeitas */
 	private void dependenciaSistac() throws BlankFieldException {
 		
-		if (textEdital.getText().trim().equals(""))
+		if (textEdital.getText().trim().isEmpty())
 			throw new BlankFieldException("Informe o Edital!");
 		
-		if (textSequencia.getText().trim().equals(""))
+		if (textSequencia.getText().trim().isEmpty())
 			throw new BlankFieldException("Informe a Sequência!");
 		
-	}
-	
-	/** Seleciona o arquivo de saída da planilha de erros em formato excel */
-	private void selecionaSaidaExcel() {
-		
-		try {
-			
-			saidaExcel = PhillFileUtils.loadFile("Selecione o arquivo de saída", Constants.FileFormat.XLSX, PhillFileUtils.SAVE_DIALOG, sugestao);
-			
-			atualizaSugestao(saidaExcel);
-			textSaidaExcel.setText(saidaExcel.getName());
-			
-		} catch (Exception exception) { }
+		if (dirSaida == null)
+			throw new BlankFieldException("Selecione a pasta de saída");
 		
 	}
 	
@@ -370,7 +333,14 @@ public class TelaEnvio extends JFrame {
 		
 		try {
 			
+			dependenciaSistac();
 			dependenciaExportacao();
+			
+			String edital = textEdital.getText().trim();
+			String sequencia = textSequencia.getText().trim();
+			
+			File saidaSistac = getSistacFile(edital, sequencia);
+			File saidaExcel  = getExcelFile (edital, sequencia);
 			
 			ExcelSheetWriter.write(listaResultados.getListaExcecoes(), saidaExcel);
 			SistacFile.generate(listaResultados.getListaCandidatos(), saidaSistac);
@@ -383,17 +353,23 @@ public class TelaEnvio extends JFrame {
 		
 	}
 	
+	private File getSistacFile(final String edital, final String sequencia) {
+		
+		return SistacFile.getSistacExportName(this.arquivoEntrada, edital, sequencia);
+	}
+	
+	private File getExcelFile(final String edital, final String sequencia) {
+		
+		String filename = String.format("errors-%s-%s.xlsx", edital, sequencia);
+		
+		return new File(this.arquivoEntrada, filename);
+	}
+	
 	/** Verifica se todas os requisitos para a exportação foram devidamente satisfeitos */
 	private void dependenciaExportacao() throws FileNotSelectedException {
 		
 		if (listaResultados == null)
 			throw new FileNotSelectedException("Selecione o arquivo de entrada de dados!");
-		
-		if (saidaSistac == null)
-			throw new FileNotSelectedException("Selecione o arquivo de exportação do Sistac!");
-		
-		if ((saidaExcel == null) && (sizeERR != 0))
-			throw new FileNotSelectedException("Selecione o arquivo de exportação do Excel!");
 		
 	}
 	

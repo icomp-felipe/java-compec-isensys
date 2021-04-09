@@ -24,7 +24,6 @@ public class ExcelSheetWriter {
 		// Se a lista não contém erros, nem crio o arquivo 'xlsx'
 		int size = listaErros.size();
 		if (size == 0) {
-			AlertDialog.info("Não há nenhum erro para escrever!");
 			return;
 		}
 		
