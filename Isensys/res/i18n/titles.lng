@@ -16,8 +16,44 @@ inicio-button-help = IsenSys v.2.7 - Build 20210409
 # Window title
 envio-window-title = IsenSys v.2.7 - Exportação
 
-! TelaEnvio::functionInputClear
+####### TelaEnvio
+
+! TelaEnvio::actionInputReload
+envio-input-reload-thread = TelaEnvio.class - Thread de recarregamento de arquivo de entrada
+
+! TelaEnvio::actionInputClear
 envio-input-clear-title  = Limpar seleção
 envio-input-clear-dialog = Tem certeza que deseja remover o arquivo de entrada?\n\
                            As informações relacionadas a ele serão removidas daqui,\n\
                            mas não se preocupe, o arquivo original continuará intacto!
+
+! TelaEnvio::actionInputSelect
+envio-input-select-title  = Selecione o arquivo de entrada
+envio-input-select-thread = TelaEnvio.class - Thread de carregamento de arquivo de entrada
+
+! TelaEnvio::actionOutputSelect
+envio-output-select-title = Selecione a pasta de saída
+
+! TelaEnvio::actionOutputClear
+envio-output-clear-title  = Limpar pasta selecionada
+envio-output-clear-dialog = Deseja mesmo limpar a pasta de saída?
+
+! TelaEnvio::actionExport
+envio-export-title  = Exportar arquivos
+envio-export-dialog = Arquivo(s) exportado(s) com sucesso!
+envio-export-error  = Falha ao exportar arquivo(s)!\n\
+                      Verifique o console para mais informações.
+
+! TelaEnvio::setInputProcessing
+envio-input-processing = Processando...
+
+! TelaEnvio::updateStatistics
+envio-statistics-status = Solicitações:
+envio-statistics-ok = (OK)
+envio-statistics-error = (ERRO)
+envio-statistics-total = (TOTAL)
+
+! TelaEnvio::threadParser
+envio-parser-title = Processando arquivo de entrada
+envio-parser-error = Falha ao processar arquivo!\n\
+                     Verifique se ele está no formato correto.
