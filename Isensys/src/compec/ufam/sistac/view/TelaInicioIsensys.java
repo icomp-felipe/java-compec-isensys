@@ -8,13 +8,13 @@ import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André
- *  @version 2.7, 08/04/2021 */
+ *  @version 2.8, 10/04/2021 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;
 	
 	// Carregando bundle de idiomas
-	private final PropertyBundle bundle = new PropertyBundle("i18n/titles", null);;
+	private final static PropertyBundle bundle = new PropertyBundle("i18n/titles", null);
 
 	/** Função principal */
 	public static void main(String[] args) {
@@ -23,7 +23,7 @@ public class TelaInicioIsensys extends JFrame {
 
 	/** Inicialização da view */
 	public TelaInicioIsensys() {
-		super("IsenSys v.2.7");
+		super(bundle.getString("inicio-window-title"));
 				
 		// Carregando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
@@ -38,39 +38,39 @@ public class TelaInicioIsensys extends JFrame {
 		Icon iconFinal  = ResourceManager.getIcon("img/botao-final.png",442,30);
 		
 		// Construindo janela
-		JButton botaoEnvio = new JButton(iconEnvio);
-		botaoEnvio.setBorderPainted(false);
-		botaoEnvio.setOpaque(false);
-		botaoEnvio.setContentAreaFilled(false);
-		botaoEnvio.addActionListener((event) -> new TelaEnvio());
-		botaoEnvio.setBounds(20, 145, 442, 30);
-		painel.add(botaoEnvio);
+		JButton buttonEnvio = new JButton(iconEnvio);
+		buttonEnvio.setBorderPainted(false);
+		buttonEnvio.setOpaque(false);
+		buttonEnvio.setContentAreaFilled(false);
+		buttonEnvio.addActionListener((event) -> new TelaEnvio());
+		buttonEnvio.setBounds(20, 145, 442, 30);
+		painel.add(buttonEnvio);
 		
-		JButton botaoRetornoPrelim = new JButton(iconPrelim);
-		botaoRetornoPrelim.addActionListener((event) -> new TelaRetornoPreliminar());
-		botaoRetornoPrelim.setBorderPainted(false);
-		botaoRetornoPrelim.setOpaque(false);
-		botaoRetornoPrelim.setContentAreaFilled(false);
-		botaoRetornoPrelim.setBounds(20, 187, 442, 30);
-		painel.add(botaoRetornoPrelim);
+		JButton buttonRetornoPrelim = new JButton(iconPrelim);
+		buttonRetornoPrelim.addActionListener((event) -> new TelaRetornoPreliminar());
+		buttonRetornoPrelim.setBorderPainted(false);
+		buttonRetornoPrelim.setOpaque(false);
+		buttonRetornoPrelim.setContentAreaFilled(false);
+		buttonRetornoPrelim.setBounds(20, 187, 442, 30);
+		painel.add(buttonRetornoPrelim);
 		
-		JButton botaoRetornoFinal = new JButton(iconFinal);
-		botaoRetornoFinal.addActionListener((event) -> new TelaRetornoFinal());
-		botaoRetornoFinal.setBorderPainted(false);
-		botaoRetornoFinal.setOpaque(false);
-		botaoRetornoFinal.setContentAreaFilled(false);
-		botaoRetornoFinal.setBounds(20, 229, 442, 30);
-		painel.add(botaoRetornoFinal);
+		JButton buttonRetornoFinal = new JButton(iconFinal);
+		buttonRetornoFinal.addActionListener((event) -> new TelaRetornoFinal());
+		buttonRetornoFinal.setBorderPainted(false);
+		buttonRetornoFinal.setOpaque(false);
+		buttonRetornoFinal.setContentAreaFilled(false);
+		buttonRetornoFinal.setBounds(20, 229, 442, 30);
+		painel.add(buttonRetornoFinal);
 		
 		Icon isensys_icon  = ResourceManager.getIcon("img/isensys-logo.png",154,130);
 		
-		JButton botaoAjuda = new JButton(isensys_icon);
-		botaoAjuda.addActionListener((event) -> function_help());
-		botaoAjuda.setBorderPainted(false);
-		botaoAjuda.setOpaque(false);
-		botaoAjuda.setContentAreaFilled(false);
-		botaoAjuda.setBounds(308, 12, 154, 121);
-		painel.add(botaoAjuda);
+		JButton buttonAjuda = new JButton(isensys_icon);
+		buttonAjuda.addActionListener((event) -> function_help());
+		buttonAjuda.setBorderPainted(false);
+		buttonAjuda.setOpaque(false);
+		buttonAjuda.setContentAreaFilled(false);
+		buttonAjuda.setBounds(308, 12, 154, 121);
+		painel.add(buttonAjuda);
 		
 		// Carregando texto i18n
 		final String text_info = bundle.getString("inicio-panel-info");

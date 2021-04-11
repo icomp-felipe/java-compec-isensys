@@ -3,22 +3,28 @@ package compec.ufam.sistac.view;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
+
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
+import com.phill.libs.i18n.*;
+import com.phill.libs.files.*;
 
-import compec.ufam.sistac.exception.*;
 import compec.ufam.sistac.io.*;
-import com.phill.libs.files.PhillFileUtils;
-
 import compec.ufam.sistac.model.*;
+import compec.ufam.sistac.exception.*;
 
 public class TelaEnvio extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1766759262038217449L;
 	
+	// Carregando bundle de idiomas
+	private final static PropertyBundle bundle = new PropertyBundle("i18n/titles", null);
+	
+	
+
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
-	private JTextField textArquivoEntrada;
+	private JTextField textInputName;
 	private JTextField textSaidaSistac;
 
 	private final Color gr_dk = new Color(0x0d6b12);
@@ -27,10 +33,10 @@ public class TelaEnvio extends JFrame {
 	private static final boolean PANEL_LOADING = true;
 	private static final boolean PANEL_RESULTS = false;
 	
-	private JButton botaoArquivoEntrada;
+	private JButton buttonInputSelect;
 	private JButton botaoSaidaSistac;
 	
-	private JLabel labelProcessando;
+	private JLabel labelInputStatus;
 	private JPanel painelSituacoes;
 	
 	private JLabel textOK,textErro,textTotal;
@@ -43,27 +49,29 @@ public class TelaEnvio extends JFrame {
 	
 	private File arquivoEntrada, dirSaida;
 	
-	private int sizeERR = 0;
+	private JButton buttonInputRefresh;
+	private JButton buttonInputClear;
+
+	private ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
 	public static void main(String[] args) {
 		new TelaEnvio();
 	}
 
 	public TelaEnvio() {
-		
-		super("IsenSys: Exportação");
+		//super(bundle.getString("envio-window-title"));
 		
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
-		Dimension d = new Dimension(460,340);
+		Dimension dimension = new Dimension(500,340);
 		
-		JPanel painel = new JPaintedPanel("img/envio-screen.jpg",d);
+		JPanel painel = new JPaintedPanel("img/envio-screen.jpg",dimension);
 		setContentPane(painel);
 		
-		setSize(d);
+		setSize(dimension);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -73,81 +81,73 @@ public class TelaEnvio extends JFrame {
 		Icon reloadIcon  = ResourceManager.getIcon("icon/reload.png",20,20);
 		Icon exitIcon    = ResourceManager.getIcon("icon/exit.png",25,25);
 		Icon exportIcon  = ResourceManager.getIcon("icon/save.png",25,25);
+		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png",20,20);
 		
 		JPanel painelEntrada = new JPanel();
 		painelEntrada.setOpaque(false);
 		painelEntrada.setBorder(instance.getTitledBorder("Arquivo de Entrada"));
-		painelEntrada.setBounds(12, 12, 436, 113);
+		painelEntrada.setBounds(12, 10, 476, 105);
 		painel.add(painelEntrada);
 		painelEntrada.setLayout(null);
 		
-		JLabel labelArquivoEntrada = new JLabel("Nome:");
-		labelArquivoEntrada.setFont(fonte);
-		labelArquivoEntrada.setBounds(12, 31, 61, 20);
-		painelEntrada.add(labelArquivoEntrada);
+		JLabel labelInputName = new JLabel("Nome:");
+		labelInputName.setFont(fonte);
+		labelInputName.setBounds(10, 30, 50, 20);
+		painelEntrada.add(labelInputName);
 		
-		textArquivoEntrada = new JTextField();
-		textArquivoEntrada.setEditable(false);
-		textArquivoEntrada.setForeground(color);
-		textArquivoEntrada.setFont(fonte);
-		textArquivoEntrada.setBounds(67, 30, 273, 25);
-		painelEntrada.add(textArquivoEntrada);
-		textArquivoEntrada.setColumns(10);
+		textInputName = new JTextField();
+		textInputName.setEditable(false);
+		textInputName.setForeground(color);
+		textInputName.setFont(fonte);
+		textInputName.setBounds(65, 30, 280, 25);
+		painelEntrada.add(textInputName);
+		textInputName.setColumns(10);
 		
-		botaoArquivoEntrada = new JButton(searchIcon);
-		botaoArquivoEntrada.setToolTipText("Busca o arquivo de entrada");
-		botaoArquivoEntrada.addActionListener((event) -> carregaArquivoEntrada());
+		buttonInputSelect = new JButton(searchIcon);
+		buttonInputSelect.setToolTipText("Busca o arquivo de entrada");
+		buttonInputSelect.addActionListener((event) -> carregaArquivoEntrada());
 		
-		JButton botaoReload = new JButton(reloadIcon);
-		botaoReload.addActionListener((event) -> functionReload());
-		botaoReload.setToolTipText("Recarrega o arquivo atual");
-		botaoReload.setBounds(352, 30, 30, 25);
-		painelEntrada.add(botaoReload);
-		botaoArquivoEntrada.setBounds(394, 30, 30, 25);
-		painelEntrada.add(botaoArquivoEntrada);
+		buttonInputRefresh = new JButton(reloadIcon);
+		buttonInputRefresh.addActionListener((event) -> functionReload());
+		buttonInputRefresh.setToolTipText("Recarrega o arquivo atual");
+		buttonInputRefresh.setBounds(355, 30, 30, 25);
+		painelEntrada.add(buttonInputRefresh);
 		
-		ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
+		buttonInputClear = new JButton(clearIcon);
+		buttonInputClear.addActionListener((event) -> functionInputClear());
+		buttonInputClear.setToolTipText("Busca o arquivo de entrada");
+		buttonInputClear.setBounds(395, 30, 30, 25);
+		painelEntrada.add(buttonInputClear);
+		buttonInputSelect.setBounds(435, 30, 30, 25);
+		painelEntrada.add(buttonInputSelect);
 		
-		labelProcessando = new JLabel("Processando Arquivo",loading,SwingConstants.LEFT);
-		labelProcessando.setVisible(false);
-		labelProcessando.setFont(fonte);
-		labelProcessando.setBounds(12, 72, 193, 15);
-		painelEntrada.add(labelProcessando);
+		labelInputStatus = new JLabel();
+		labelInputStatus.setFont(fonte);
+		labelInputStatus.setBounds(10, 70, 120, 20);
+		painelEntrada.add(labelInputStatus);
 		
-		painelSituacoes = new JPanel();
-		painelSituacoes.setOpaque(false);
-		painelSituacoes.setVisible(false);
-		painelSituacoes.setBounds(12, 60, 416, 41);
-		painelEntrada.add(painelSituacoes);
-		painelSituacoes.setLayout(null);
-		
-		JLabel labelSituacoes = new JLabel("Solicitações:");
-		labelSituacoes.setFont(fonte);
-		labelSituacoes.setBounds(0, 12, 102, 15);
-		painelSituacoes.add(labelSituacoes);
-		
-		textOK = new JLabel("0 (OK)",SwingConstants.CENTER);
+		textOK = new JLabel();
+		textOK.setBounds(150, 70, 80, 20);
+		painelEntrada.add(textOK);
 		textOK.setForeground(gr_dk);
 		textOK.setFont(fonte);
-		textOK.setBounds(97, 12, 85, 15);
-		painelSituacoes.add(textOK);
 		
-		textErro = new JLabel("0 (ERRO)", SwingConstants.CENTER);
+		textErro = new JLabel();
+		textErro.setBounds(240, 70, 100, 20);
+		painelEntrada.add(textErro);
 		textErro.setForeground(rd_dk);
 		textErro.setFont(fonte);
-		textErro.setBounds(190, 12, 96, 15);
-		painelSituacoes.add(textErro);
 		
-		textTotal = new JLabel("0 (TOTAL)", SwingConstants.RIGHT);
+		textTotal = new JLabel();
+		textTotal.setBounds(350, 70, 105, 20);
+		painelEntrada.add(textTotal);
 		textTotal.setForeground(color);
 		textTotal.setFont(fonte);
-		textTotal.setBounds(302, 12, 102, 15);
-		painelSituacoes.add(textTotal);
 		
 		JPanel painelSaida = new JPanel();
 		painelSaida.setOpaque(false);
 		painelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
-		painelSaida.setBounds(12, 129, 436, 130);
+		painelSaida.setBounds(12, 115, 476, 130);
 		painel.add(painelSaida);
 		painelSaida.setLayout(null);
 		
@@ -206,6 +206,18 @@ public class TelaEnvio extends JFrame {
 		botaoSair.setBounds(363, 266, 35, 30);
 		painel.add(botaoSair);
 		
+		painelSituacoes = new JPanel();
+		painelSituacoes.setBounds(22, 255, 416, 41);
+		painel.add(painelSituacoes);
+		painelSituacoes.setOpaque(false);
+		painelSituacoes.setVisible(false);
+		painelSituacoes.setLayout(null);
+		
+		JLabel labelSituacoes = new JLabel("Solicitações:");
+		labelSituacoes.setFont(fonte);
+		labelSituacoes.setBounds(0, 12, 102, 15);
+		painelSituacoes.add(labelSituacoes);
+		
 		setVisible(true);
 		
 	}
@@ -220,25 +232,12 @@ public class TelaEnvio extends JFrame {
 		if (this.arquivoEntrada != null) {
 			
 			// Atualizando a view
-			textArquivoEntrada.setText(arquivoEntrada.getName());
-			switchPanels(PANEL_LOADING);
+			textInputName.setText(arquivoEntrada.getName());
 			
 			// Lendo o CSV
 			csv_loader();
 			
 		}
-		
-	}
-	
-	/** Alterna entre os painéis de processamento de arquivo e de resultados */
-	private void switchPanels(boolean panel) {
-		
-		SwingUtilities.invokeLater(() -> {
-		
-			painelSituacoes .setVisible(!panel);
-			labelProcessando.setVisible( panel);
-		
-		});
 		
 	}
 	
@@ -251,7 +250,20 @@ public class TelaEnvio extends JFrame {
 	
 	/** Recarrega o arquivo de entrada */
 	private void csv_loader() {
-			
+		
+		// Atualizando a view
+		labelInputStatus.setIcon(loading);
+		labelInputStatus.setText("Processando");
+		labelInputStatus.setVisible(true);
+		
+		textOK   .setVisible(false);
+		textErro .setVisible(false);
+		textTotal.setVisible(false);
+		
+		buttonInputClear  .setEnabled(false);
+		buttonInputRefresh.setEnabled(false);
+		buttonInputSelect .setEnabled(false);
+		
 		// Carregando o arquivo
 		Thread thread_loader = new Thread(() -> thread_csv_loader());
 							
@@ -260,14 +272,37 @@ public class TelaEnvio extends JFrame {
 		
 	}
 	
+	private void functionInputClear() {
+		
+		// If a playlist was previously downloaded, a clear dialog is shown
+					
+		String title   = bundle.getString("envio-input-clear-title");
+		String message = bundle.getString("envio-input-clear-dialog");
+					
+		int choice     = AlertDialog.dialog(title, message);
+					
+		// Breaks here when EXIT or CANCEL is selected
+		if (choice != AlertDialog.OK_OPTION)
+			return;
+		
+		this.arquivoEntrada  = null;
+		this.listaResultados = null;
+		
+		textInputName.setText(null);
+		labelInputStatus.setVisible(false);
+		
+		textOK   .setVisible(false);
+		textErro .setVisible(false);
+		textTotal.setVisible(false);
+		
+	}
+	
 	/** Carrega os dados de entrada para o sistema */
 	private void thread_csv_loader() {
 		
 		try {
 			
-			switchPanels(PANEL_LOADING);
-			
-			// melhorar esses IFs
+			// Seleciona o tipo de leitor de acordo com a extensão do arquivo de entrada
 			if (arquivoEntrada.getName().endsWith("xlsx"))
 				listaResultados = ExcelSheetReader.read(arquivoEntrada, INDEXES);
 			else
@@ -282,8 +317,8 @@ public class TelaEnvio extends JFrame {
 		catch (Exception exception) {
 			exception.printStackTrace();
 			AlertDialog.error("Falha ao processar arquivo!\nVerifique se ele está no formato correto.");
-			textArquivoEntrada.setText (null );
-			labelProcessando.setVisible(false);
+			textInputName.setText (null );
+			labelInputStatus.setVisible(false);
 		}
 		
 	}
@@ -291,15 +326,24 @@ public class TelaEnvio extends JFrame {
 	/** Atualiza os totais de candidatos processados */
 	private void updateStatistics() {
 		
-		    sizeERR = listaResultados.getListaExcecoes  ().size();
+		int sizeERR = listaResultados.getListaExcecoes  ().size();
 		int sizeOK  = listaResultados.getListaCandidatos().size();
 		int sizeALL = (sizeOK + sizeERR);
+		
+		buttonInputClear  .setEnabled(true);
+		buttonInputRefresh.setEnabled(true);
+		buttonInputSelect .setEnabled(true);
+		
+		labelInputStatus.setIcon(null);
+		labelInputStatus.setText("Solicitações:");
+		
+		textOK   .setVisible(true);
+		textErro .setVisible(true);
+		textTotal.setVisible(true);
 		
 		textOK   .setText(sizeOK  + " (OK)"   );
 		textErro .setText(sizeERR + " (ERRO)" );
 		textTotal.setText(sizeALL + " (TOTAL)");
-		
-		switchPanels(PANEL_RESULTS);
 		
 	}
 	
@@ -372,5 +416,4 @@ public class TelaEnvio extends JFrame {
 			throw new FileNotSelectedException("Selecione o arquivo de entrada de dados!");
 		
 	}
-	
 }
