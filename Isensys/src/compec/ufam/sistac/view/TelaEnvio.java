@@ -16,7 +16,7 @@ import compec.ufam.sistac.model.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 2.9, 11/04/2021 */
+ *  @version 3.0, 11/04/2021 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -42,12 +42,8 @@ public class TelaEnvio extends JFrame {
 	
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
-	public static void main(String[] args) {
-		new TelaEnvio();
-	}
-	
 	public TelaEnvio() {
-		//super(bundle.getString("envio-window-title"));
+		super(bundle.getString("envio-window-title"));
 		
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
@@ -72,17 +68,18 @@ public class TelaEnvio extends JFrame {
 		// Painel 'Arquivo de Entrada'
 		JPanel painelEntrada = new JPanel();
 		painelEntrada.setOpaque(false);
-		painelEntrada.setBorder(instance.getTitledBorder("Arquivo de Entrada"));
+		painelEntrada.setBorder(instance.getTitledBorder(bundle.getString("envio-input-panel")));
 		painelEntrada.setBounds(12, 10, 476, 105);
 		painelEntrada.setLayout(null);
 		painel.add(painelEntrada);
 		
-		JLabel labelInputName = new JLabel("Nome:");
+		JLabel labelInputName = new JLabel(bundle.getString("envio-label-input-name"));
 		labelInputName.setFont(fonte);
 		labelInputName.setBounds(10, 30, 50, 20);
 		painelEntrada.add(labelInputName);
 		
 		textInputName = new JTextField();
+		textInputName.setToolTipText(bundle.getString("hint-text-input-name"));
 		textInputName.setEditable(false);
 		textInputName.setForeground(color);
 		textInputName.setFont(fonte);
@@ -91,18 +88,18 @@ public class TelaEnvio extends JFrame {
 		
 		buttonInputReload = new JButton(reloadIcon);
 		buttonInputReload.addActionListener((event) -> actionInputReload());
-		buttonInputReload.setToolTipText("Recarrega o arquivo atual");
+		buttonInputReload.setToolTipText(bundle.getString("hint-button-input-reload"));
 		buttonInputReload.setBounds(355, 30, 30, 25);
 		painelEntrada.add(buttonInputReload);
 		
 		buttonInputClear = new JButton(clearIcon);
 		buttonInputClear.addActionListener((event) -> actionInputClear());
-		buttonInputClear.setToolTipText("Busca o arquivo de entrada");
+		buttonInputClear.setToolTipText(bundle.getString("hint-button-input-clear"));
 		buttonInputClear.setBounds(395, 30, 30, 25);
 		painelEntrada.add(buttonInputClear);
 		
 		buttonInputSelect = new JButton(searchIcon);
-		buttonInputSelect.setToolTipText("Busca o arquivo de entrada");
+		buttonInputSelect.setToolTipText(bundle.getString("hint-button-input-select"));
 		buttonInputSelect.addActionListener((event) -> actionInputSelect());
 		buttonInputSelect.setBounds(435, 30, 30, 25);
 		painelEntrada.add(buttonInputSelect);
@@ -136,24 +133,25 @@ public class TelaEnvio extends JFrame {
 		// Painel 'Arquivos de Saída'
 		JPanel painelSaida = new JPanel();
 		painelSaida.setOpaque(false);
-		painelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
+		painelSaida.setBorder(instance.getTitledBorder(bundle.getString("envio-output-panel")));
 		painelSaida.setBounds(12, 115, 476, 105);
 		painelSaida.setLayout(null);
 		painel.add(painelSaida);
 		
-		JLabel labelOutputEdital = new JLabel("Num do Edital:");
+		JLabel labelOutputEdital = new JLabel(bundle.getString("envio-label-output-edital"));
 		labelOutputEdital.setHorizontalAlignment(JLabel.RIGHT);
 		labelOutputEdital.setFont(fonte);
 		labelOutputEdital.setBounds(10, 30, 110, 20);
 		painelSaida.add(labelOutputEdital);
 		
 		textOutputEdital = new JTextFieldBounded(6);
+		textOutputEdital.setToolTipText(bundle.getString("hint-text-output-edital"));
 		textOutputEdital.setForeground(color);
 		textOutputEdital.setFont(fonte);
 		textOutputEdital.setBounds(125, 30, 170, 25);
 		painelSaida.add(textOutputEdital);
 		
-		JLabel labelOutputSequencia = new JLabel("Sequência:");
+		JLabel labelOutputSequencia = new JLabel(bundle.getString("envio-label-output-sequencia"));
 		labelOutputSequencia.setHorizontalAlignment(JLabel.RIGHT);
 		labelOutputSequencia.setFont(fonte);
 		labelOutputSequencia.setBounds(300, 30, 85, 20);
@@ -180,13 +178,14 @@ public class TelaEnvio extends JFrame {
 		spinnerField.setForeground(color);
 		spinnerField.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel labelOutputFolder = new JLabel("Pasta de Saída:");
-		labelOutputFolder.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel labelOutputFolder = new JLabel(bundle.getString("envio-label-output-folder"));
+		labelOutputFolder.setHorizontalAlignment(JLabel.RIGHT);
 		labelOutputFolder.setFont(fonte);
 		labelOutputFolder.setBounds(10, 65, 110, 20);
 		painelSaida.add(labelOutputFolder);
 		
 		textOutputFolder = new JTextField();
+		textOutputFolder.setToolTipText(bundle.getString("hint-text-output-name"));
 		textOutputFolder.setFont(fonte);
 		textOutputFolder.setForeground(color);
 		textOutputFolder.setEditable(false);
@@ -194,26 +193,26 @@ public class TelaEnvio extends JFrame {
 		painelSaida.add(textOutputFolder);
 		
 		JButton buttonOutputSelect = new JButton(searchIcon);
-		buttonOutputSelect.setToolTipText("Escolher aonde será salvo o arquivo de importação para o Sistac");
+		buttonOutputSelect.setToolTipText(bundle.getString("hint-button-output-select"));
 		buttonOutputSelect.addActionListener((event) -> actionOutputSelect());
 		buttonOutputSelect.setBounds(394, 65, 30, 25);
 		painelSaida.add(buttonOutputSelect);
 		
 		JButton buttonOutputClear = new JButton(clearIcon);
+		buttonOutputClear.setToolTipText(bundle.getString("hint-button-output-clear"));
 		buttonOutputClear.addActionListener((event) -> actionOutputClear());
-		buttonOutputClear.setToolTipText("Busca o arquivo de entrada");
 		buttonOutputClear.setBounds(434, 65, 30, 25);
 		painelSaida.add(buttonOutputClear);
 		
 		// Fundo da janela
 		JButton buttonExit = new JButton(exitIcon);
-		buttonExit.setToolTipText("Sai do sistema");
+		buttonExit.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonExit.addActionListener((event) -> dispose());
 		buttonExit.setBounds(406, 232, 35, 30);
 		painel.add(buttonExit);
 		
 		JButton buttonExport = new JButton(exportIcon);
-		buttonExport.setToolTipText("Exporta o(s) arquivo(s)");
+		buttonExport.setToolTipText(bundle.getString("hint-button-export"));
 		buttonExport.addActionListener((event) -> actionExport());
 		buttonExport.setBounds(453, 232, 35, 30);
 		painel.add(buttonExport);

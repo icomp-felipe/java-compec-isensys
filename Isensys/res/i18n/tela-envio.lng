@@ -1,11 +1,39 @@
-# Window title
+########## Window title
 envio-window-title = IsenSys v.2.7 - Exportação
 
-# MFV API error messages
+########## MFV API error messages
 envio-mfv-input  = Selecione um arquivo de entrada válido
 envio-mfv-edital = Informe o número do edital com exatamente 6 caracteres alfanuméricos
 envio-mfv-output = Selecione a pasta de saída
 
+########## Painéis
+envio-input-panel  = Arquivo de Entrada
+envio-output-panel = Arquivos de Saída
+
+########## Labels
+envio-label-input-name = Nome:
+
+envio-label-output-edital    = Num. do Edital:
+envio-label-output-sequencia = Sequência:
+envio-label-output-folder    = Pasta de Saída:
+
+########## Dicas
+hint-text-input-name = Nome do arquivo de entrada de dados
+
+hint-button-input-reload = Recarrega o arquivo atual
+hint-button-input-clear  = Limpa a seleção do arquivo atual
+hint-button-input-select = Busca o arquivo de entrada
+
+hint-text-output-edital = Informe o número do edital, com exatos 6 caracteres alfanuméricos
+hint-text-output-name   = Nome da pasta de saída de arquivos (Sistac + Excel)
+
+hint-button-output-select = Escolher aonde serão salvos os arquivos pós-processamento
+hint-button-output-clear  = Limpa a seleção da pasta atual
+
+hint-button-exit   = Sai desta tela
+hint-button-export = Gera os arquivos na pasta selecionada 
+
+########## Métodos
 ! TelaEnvio::actionInputReload
 envio-input-reload-thread = TelaEnvio.class - Thread de recarregamento de arquivo de entrada
 
