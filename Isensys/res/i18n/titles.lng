@@ -1,4 +1,4 @@
-####### TelaInicial
+####### TelaInicioIsensys
 
 # Window title
 inicio-window-title = IsenSys v.2.7
@@ -10,13 +10,15 @@ inicio-panel-info = <html>Bem vindo ao IsenSys v.2.7!<br><br>Escolha uma das op�
 inicio-button-help = IsenSys v.2.7 - Build 20210409
 
 
-
-####### TelaInicioIsensys
+####### TelaEnvio
 
 # Window title
 envio-window-title = IsenSys v.2.7 - Exportação
 
-####### TelaEnvio
+# MFV API error messages
+envio-mfv-input  = Selecione um arquivo de entrada válido
+envio-mfv-edital = Informe o número do edital com exatamente 6 caracteres alfanuméricos
+envio-mfv-output = Selecione a pasta de saída
 
 ! TelaEnvio::actionInputReload
 envio-input-reload-thread = TelaEnvio.class - Thread de recarregamento de arquivo de entrada

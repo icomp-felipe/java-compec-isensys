@@ -8,11 +8,12 @@ import javax.swing.text.DefaultFormatter;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.i18n.*;
+import com.phill.libs.mfvapi.MandatoryFieldsLogger;
+import com.phill.libs.mfvapi.MandatoryFieldsManager;
 import com.phill.libs.files.*;
 
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.model.*;
-import compec.ufam.sistac.exception.*;
 
 public class TelaEnvio extends JFrame {
 
@@ -48,6 +49,9 @@ public class TelaEnvio extends JFrame {
 	public static void main(String[] args) {
 		new TelaEnvio();
 	}
+	
+	private final MandatoryFieldsManager  fieldValidator;
+	private final MandatoryFieldsLogger fieldLogger;
 
 	public TelaEnvio() {
 		//super(bundle.getString("envio-window-title"));
@@ -151,7 +155,7 @@ public class TelaEnvio extends JFrame {
 		labelOutputEdital.setBounds(10, 30, 110, 20);
 		painelSaida.add(labelOutputEdital);
 		
-		textOutputEdital = new JTextField();
+		textOutputEdital = new JTextFieldBounded(6);
 		textOutputEdital.setForeground(color);
 		textOutputEdital.setFont(fonte);
 		textOutputEdital.setColumns(10);
@@ -177,7 +181,7 @@ public class TelaEnvio extends JFrame {
 		
 		JFormattedTextField spinnerField  = (JFormattedTextField) ne_spinnerOutputSequencia.getComponent(0);
 		
-				spinnerOutputSequencia.setEditor(ne_spinnerOutputSequencia);
+		spinnerOutputSequencia.setEditor(ne_spinnerOutputSequencia);
 		
 		JLabel labelOutputFolder = new JLabel("Pasta de Saída:");
 		labelOutputFolder.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -224,6 +228,18 @@ public class TelaEnvio extends JFrame {
 
 		spinnerFormatter.setCommitsOnValidEdit(true);
 		
+		// Cadastrando validação de campos
+		this.fieldValidator = new MandatoryFieldsManager();
+		this.fieldLogger    = new MandatoryFieldsLogger ();
+		
+		fieldValidator.addPermanent(labelInputName   , () -> this.arquivoEntrada != null, bundle.getString("envio-mfv-input"), false);
+		fieldValidator.addPermanent(labelOutputEdital, () -> {
+																final String text = textOutputEdital.getText().trim();
+																return text.length() == 6 && StringUtils.isAlphanumericStringOnly(text);
+															 }, bundle.getString("envio-mfv-edital"), false);
+		fieldValidator.addPermanent(labelOutputFolder, () -> this.dirSaida != null, bundle.getString("envio-mfv-output"), false);
+		
+		// Mostrando a janela
 		setVisible(true);
 		
 	}
@@ -350,9 +366,18 @@ public class TelaEnvio extends JFrame {
 	private void actionExport() {
 		
 		try {
+
+			// Realizando validação dos campos antes de prosseguir
+			fieldValidator.validate(fieldLogger);
 			
-			//////////////// AAAAQQQQQUIIIIIIIIIIIIIIII
-			dependenciaSistac();
+			// Só prossigo se todas os campos foram devidamente preenchidos
+			if (fieldLogger.hasErrors()) {
+				
+				AlertDialog.error(bundle.getString("envio-export-title"), fieldLogger.getErrorString());
+				fieldLogger.clear(); return;
+				
+			}
+			
 			
 			// Recuperando edital e sequência
 			final String edital    = textOutputEdital.getText().trim();
@@ -483,28 +508,6 @@ public class TelaEnvio extends JFrame {
 			});
 			
 		}
-		
-	}
-	
-	
-	
-	
-	
-	/** Verifica se as dependências para a montagem do nome do arquivo sistac estão satisfeitas 
-	 * @throws FileNotSelectedException */
-	private void dependenciaSistac() throws BlankFieldException, FileNotSelectedException {
-		
-		if (textOutputEdital.getText().trim().isEmpty())
-			throw new BlankFieldException("Informe o Edital!");
-		
-		if (spinnerOutputSequencia.getValue().toString().trim().isEmpty())
-			throw new BlankFieldException("Informe a Sequência!");
-		
-		if (dirSaida == null)
-			throw new BlankFieldException("Selecione a pasta de saída");
-		
-		if (listaResultados == null)
-			throw new FileNotSelectedException("Selecione o arquivo de entrada de dados!");
 		
 	}
 	
