@@ -7,14 +7,14 @@ import com.phill.libs.ui.*;
 import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
- *  @author Felipe André
- *  @version 2.8, 10/04/2021 */
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 2.9, 11/04/2021 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;
 	
 	// Carregando bundle de idiomas
-	private final static PropertyBundle bundle = new PropertyBundle("i18n/titles", null);
+	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-inicio-isensys", null);
 
 	/** Função principal */
 	public static void main(String[] args) {
