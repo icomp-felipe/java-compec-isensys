@@ -3,6 +3,7 @@ package compec.ufam.sistac.view;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.DefaultFormatter;
 
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
@@ -27,17 +28,10 @@ public class TelaEnvio extends JFrame {
 	private JTextField textInputName;
 	private JTextField textSaidaSistac;
 
-	private final Color gr_dk = new Color(0x0d6b12);
-	private final Color rd_dk = new Color(0xbc1742);
-	
-	private static final boolean PANEL_LOADING = true;
-	private static final boolean PANEL_RESULTS = false;
-	
 	private JButton buttonInputSelect;
 	private JButton botaoSaidaSistac;
 	
 	private JLabel labelInputStatus;
-	private JPanel painelSituacoes;
 	
 	private JLabel textOK,textErro,textTotal;
 	
@@ -45,7 +39,6 @@ public class TelaEnvio extends JFrame {
 	private JButton botaoSair;
 	private JButton botaoExportar;
 	private JTextField textEdital;
-	private JTextField textSequencia;
 	
 	private File arquivoEntrada, dirSaida;
 	
@@ -53,6 +46,7 @@ public class TelaEnvio extends JFrame {
 	private JButton buttonInputClear;
 
 	private ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
+	private JSpinner spinnerSequencia;
 	
 	public static void main(String[] args) {
 		new TelaEnvio();
@@ -66,7 +60,7 @@ public class TelaEnvio extends JFrame {
 		
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
-		Dimension dimension = new Dimension(500,340);
+		Dimension dimension = new Dimension(500,300);
 		
 		JPanel painel = new JPaintedPanel("img/envio-screen.jpg",dimension);
 		setContentPane(painel);
@@ -127,18 +121,21 @@ public class TelaEnvio extends JFrame {
 		painelEntrada.add(labelInputStatus);
 		
 		textOK = new JLabel();
+		textOK.setHorizontalAlignment(SwingConstants.CENTER);
 		textOK.setBounds(150, 70, 80, 20);
 		painelEntrada.add(textOK);
-		textOK.setForeground(gr_dk);
+		textOK.setForeground(new Color(0x0D6B12));
 		textOK.setFont(fonte);
 		
 		textErro = new JLabel();
+		textErro.setHorizontalAlignment(SwingConstants.CENTER);
 		textErro.setBounds(240, 70, 100, 20);
 		painelEntrada.add(textErro);
-		textErro.setForeground(rd_dk);
+		textErro.setForeground(new Color(0xBC1742));
 		textErro.setFont(fonte);
 		
 		textTotal = new JLabel();
+		textTotal.setHorizontalAlignment(SwingConstants.CENTER);
 		textTotal.setBounds(350, 70, 105, 20);
 		painelEntrada.add(textTotal);
 		textTotal.setForeground(color);
@@ -147,37 +144,33 @@ public class TelaEnvio extends JFrame {
 		JPanel painelSaida = new JPanel();
 		painelSaida.setOpaque(false);
 		painelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
-		painelSaida.setBounds(12, 115, 476, 130);
+		painelSaida.setBounds(12, 115, 476, 105);
 		painel.add(painelSaida);
 		painelSaida.setLayout(null);
 		
 		JLabel labelEdital = new JLabel("Num do Edital:");
+		labelEdital.setHorizontalAlignment(SwingConstants.RIGHT);
 		labelEdital.setFont(fonte);
-		labelEdital.setBounds(12, 30, 110, 15);
+		labelEdital.setBounds(10, 30, 110, 20);
 		painelSaida.add(labelEdital);
 		
 		textEdital = new JTextField();
 		textEdital.setForeground(color);
 		textEdital.setFont(fonte);
 		textEdital.setColumns(10);
-		textEdital.setBounds(130, 28, 100, 20);
+		textEdital.setBounds(125, 30, 170, 25);
 		painelSaida.add(textEdital);
 		
 		JLabel labelSequencia = new JLabel("Sequência:");
+		labelSequencia.setHorizontalAlignment(SwingConstants.RIGHT);
 		labelSequencia.setFont(fonte);
-		labelSequencia.setBounds(241, 27, 90, 20);
+		labelSequencia.setBounds(300, 30, 85, 20);
 		painelSaida.add(labelSequencia);
 		
-		textSequencia = new JTextField();
-		textSequencia.setForeground(color);
-		textSequencia.setFont(fonte);
-		textSequencia.setColumns(10);
-		textSequencia.setBounds(334, 28, 90, 20);
-		painelSaida.add(textSequencia);
-		
 		JLabel labelSaidaSistac = new JLabel("Pasta de Saída:");
+		labelSaidaSistac.setHorizontalAlignment(SwingConstants.RIGHT);
 		labelSaidaSistac.setFont(fonte);
-		labelSaidaSistac.setBounds(12, 62, 118, 15);
+		labelSaidaSistac.setBounds(10, 65, 110, 20);
 		painelSaida.add(labelSaidaSistac);
 		
 		textSaidaSistac = new JTextField();
@@ -185,38 +178,50 @@ public class TelaEnvio extends JFrame {
 		textSaidaSistac.setForeground(color);
 		textSaidaSistac.setEditable(false);
 		textSaidaSistac.setColumns(10);
-		textSaidaSistac.setBounds(130, 60, 252, 25);
+		textSaidaSistac.setBounds(125, 65, 260, 25);
 		painelSaida.add(textSaidaSistac);
 		
 		botaoSaidaSistac = new JButton(searchIcon);
 		botaoSaidaSistac.setToolTipText("Escolher aonde será salvo o arquivo de importação para o Sistac");
 		botaoSaidaSistac.addActionListener((event) -> selecionaSaidaSistac());
-		botaoSaidaSistac.setBounds(394, 60, 30, 25);
+		botaoSaidaSistac.setBounds(394, 65, 30, 25);
 		painelSaida.add(botaoSaidaSistac);
 		
 		botaoExportar = new JButton(exportIcon);
 		botaoExportar.setToolTipText("Exporta o(s) arquivo(s)");
 		botaoExportar.addActionListener((event) -> exportarArquivos());
-		botaoExportar.setBounds(410, 266, 35, 30);
+		botaoExportar.setBounds(453, 232, 35, 30);
 		painel.add(botaoExportar);
 		
 		botaoSair = new JButton(exitIcon);
 		botaoSair.setToolTipText("Sai do sistema");
 		botaoSair.addActionListener((event) -> dispose());
-		botaoSair.setBounds(363, 266, 35, 30);
+		botaoSair.setBounds(406, 232, 35, 30);
 		painel.add(botaoSair);
 		
-		painelSituacoes = new JPanel();
-		painelSituacoes.setBounds(22, 255, 416, 41);
-		painel.add(painelSituacoes);
-		painelSituacoes.setOpaque(false);
-		painelSituacoes.setVisible(false);
-		painelSituacoes.setLayout(null);
+		spinnerSequencia = new JSpinner();
+		spinnerSequencia.setBounds(394, 30, 70, 25);
+		spinnerSequencia.setValue(1);
+		painelSaida.add(spinnerSequencia);
 		
-		JLabel labelSituacoes = new JLabel("Solicitações:");
-		labelSituacoes.setFont(fonte);
-		labelSituacoes.setBounds(0, 12, 102, 15);
-		painelSituacoes.add(labelSituacoes);
+		JSpinner.NumberEditor ne_spinnerAno = new JSpinner.NumberEditor(spinnerSequencia);
+		ne_spinnerAno.getFormat().setGroupingUsed(false);
+
+		JFormattedTextField spinnerField  = (JFormattedTextField) ne_spinnerAno.getComponent(0);
+		DefaultFormatter spinnerFormatter = (DefaultFormatter) spinnerField.getFormatter();
+
+		spinnerSequencia.setEditor(ne_spinnerAno);
+		
+		JButton buttonInputClear_1 = new JButton(clearIcon);
+		buttonInputClear_1.setToolTipText("Busca o arquivo de entrada");
+		buttonInputClear_1.setBounds(434, 65, 30, 25);
+		painelSaida.add(buttonInputClear_1);
+
+		spinnerField.setFont(fonte);
+		spinnerField.setForeground(color);
+		spinnerField.setHorizontalAlignment(SwingConstants.CENTER);
+
+		spinnerFormatter.setCommitsOnValidEdit(true);
 		
 		setVisible(true);
 		
@@ -363,7 +368,7 @@ public class TelaEnvio extends JFrame {
 		if (textEdital.getText().trim().isEmpty())
 			throw new BlankFieldException("Informe o Edital!");
 		
-		if (textSequencia.getText().trim().isEmpty())
+		if (spinnerSequencia.getValue().toString().trim().isEmpty())
 			throw new BlankFieldException("Informe a Sequência!");
 		
 		if (dirSaida == null)
@@ -381,7 +386,7 @@ public class TelaEnvio extends JFrame {
 			dependenciaExportacao();
 			
 			String edital = textEdital.getText().trim();
-			String sequencia = textSequencia.getText().trim();
+			String sequencia = spinnerSequencia.getValue().toString().trim();
 			
 			File saidaSistac = getSistacFile(edital, sequencia);
 			File saidaExcel  = getExcelFile (edital, sequencia);
