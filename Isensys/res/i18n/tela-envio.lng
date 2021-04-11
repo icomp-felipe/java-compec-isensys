@@ -1,17 +1,3 @@
-####### TelaInicioIsensys
-
-# Window title
-inicio-window-title = IsenSys v.2.7
-
-# Labels
-inicio-panel-info = <html>Bem vindo ao IsenSys v.2.7!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
-
-# Popup buttons
-inicio-button-help = IsenSys v.2.7 - Build 20210409
-
-
-####### TelaEnvio
-
 # Window title
 envio-window-title = IsenSys v.2.7 - Exportação
 
