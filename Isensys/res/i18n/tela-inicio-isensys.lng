@@ -1,8 +1,8 @@
 # Window title
-inicio-window-title = IsenSys v.2.7
+inicio-window-title = IsenSys v.3.0
 
 # Labels
-inicio-panel-info = <html>Bem vindo ao IsenSys v.2.7!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
+inicio-panel-info = <html>Bem vindo ao IsenSys v.3.0!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
 
 # Popup buttons
-inicio-button-help = IsenSys v.2.7 - Build 20210409
+inicio-button-help = IsenSys v.3.0 - Build 20210412
