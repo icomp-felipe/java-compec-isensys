@@ -373,7 +373,6 @@ public class TelaEnvio extends JFrame {
 				
 			}
 			
-			
 			// Recuperando edital e sequência
 			final String edital    = textOutputEdital.getText().trim();
 			final String sequencia = String.format("%03d", spinnerOutputSequencia.getValue());

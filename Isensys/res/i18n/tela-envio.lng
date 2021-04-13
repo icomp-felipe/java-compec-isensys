@@ -1,7 +1,7 @@
 ########## Window title
 envio-window-title = IsenSys v.3.0 - Exportação
 
-########## MFV API error messages
+########## Mensagens de erro da API MFV
 envio-mfv-input  = Selecione um arquivo de entrada válido
 envio-mfv-edital = Informe o número do edital com exatamente 6 caracteres alfanuméricos
 envio-mfv-output = Selecione a pasta de saída
