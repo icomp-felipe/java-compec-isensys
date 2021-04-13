@@ -1,17 +1,18 @@
 package compec.ufam.sistac.view;
 
 import java.io.*;
+import java.awt.*;
+import javax.swing.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.awt.*;
-import javax.swing.*;
+
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
-import com.phill.libs.files.PhillFileUtils;
-import com.phill.libs.i18n.PropertyBundle;
-import com.phill.libs.mfvapi.MandatoryFieldsLogger;
-import com.phill.libs.mfvapi.MandatoryFieldsManager;
+import com.phill.libs.i18n.*;
+import com.phill.libs.files.*;
+import com.phill.libs.mfvapi.*;
 
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
@@ -19,7 +20,7 @@ import compec.ufam.sistac.model.*;
 
 /** Classe que controla a view de processamento Retorno Final
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 12/04/2021 */
+ *  @version 3.0, 13/04/2021 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -31,27 +32,25 @@ public class TelaRetornoFinal extends JFrame {
 	// Declaração de atributos gráficos
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
+	private final JTextField textCompilacao;
+	private final JButton buttonCompilacaoReload, buttonCompilacaoClear, buttonCompilacaoSelect;
+	private final JPanel panelResults;
+	private final JLabel  textDeferidos, textIndeferidos, textTotal;
 	
+	private final JTextField textRetorno, textErros;
+	private final JButton buttonRetornoSelect, buttonErrosSelect;
 	
-	private JTextField textRetorno,textErros,textCabecalho;
-	private File retornoSistac,retornoExcel,compilacao;
+	private final JTextField textCabecalho;
+	private final JLabel labelStatus;
+	private final JButton buttonExport;
+	
+	// Atributos dinâmicos
+	private File retornoSistac, retornoExcel, compilacao;
 	private ListaRetornos listaRetornos;
-	private JLabel labelStatus;
-	private JTextField textCompilacao;
-	private JLabel textDeferidos;
-	private JLabel textIndeferidos;
-	private JLabel textTotal;
-	private JPanel panelResults;
-	private JButton buttonCompilacaoReload;
-	private JButton buttonCompilacaoClear;
-	private JButton buttonCompilacaoSelect;
-	private JButton buttonRetornoSelect;
-	private JButton buttonErrosSelect;
 
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
-	private JButton buttonExport;
 	
 	public static void main(String[] args) {
 		new TelaRetornoFinal();
@@ -65,7 +64,7 @@ public class TelaRetornoFinal extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
-		Dimension dimension = new Dimension(500,400);
+		Dimension dimension = new Dimension(500,385);
 		
 		JPanel painel = new JPaintedPanel("img/final-screen.jpg", dimension);
 		painel.setLayout(null);
@@ -225,7 +224,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("final-panel-edital")));
-		panelEdital.setBounds(12, 255, 476, 65);
+		panelEdital.setBounds(12, 240, 476, 65);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel(bundle.getString("final-label-cabecalho"));
@@ -252,12 +251,12 @@ public class TelaRetornoFinal extends JFrame {
 		JButton buttonSair = new JButton(exitIcon);
 		buttonSair.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonSair.addActionListener((event) -> dispose());
-		buttonSair.setBounds(406, 331, 35, 30);
+		buttonSair.setBounds(406, 315, 35, 30);
 		painel.add(buttonSair);
 		
 		buttonExport = new JButton(reportIcon);
 		buttonExport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonExport.setBounds(453, 331, 35, 30);
+		buttonExport.setBounds(453, 315, 35, 30);
 		buttonExport.addActionListener((event) -> actionExport());
 		painel.add(buttonExport);
 		
