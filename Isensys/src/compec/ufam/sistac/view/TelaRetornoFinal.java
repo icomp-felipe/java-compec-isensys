@@ -245,7 +245,7 @@ public class TelaRetornoFinal extends JFrame {
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(12, 331, 214, 20);
+		labelStatus.setBounds(12, 320, 215, 20);
 		painel.add(labelStatus);
 		
 		JButton buttonSair = new JButton(exitIcon);
@@ -313,22 +313,23 @@ public class TelaRetornoFinal extends JFrame {
 			// Limpa os campos se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
 				
+				// Limpando atributos
 				this.compilacao = null;
 				this.listaRetornos = null;
+				this.retornoSistac = null;
+				this.retornoExcel  = null;
 				
+				// Limpando campos de texto
 				textCompilacao.setText(null);
+				textRetorno   .setText(null);
+				textErros     .setText(null);
 				
+				// Ocultando painel de processamento
 				panelResults.setVisible(false);
 				
 				// Limpando dados do painel 'Arquivos de Entrada'
 				buttonRetornoSelect.setEnabled(false);
 				buttonErrosSelect  .setEnabled(false);
-				
-				textRetorno.setText(null);
-				textErros  .setText(null);
-				
-				this.retornoSistac = null;
-				this.retornoExcel  = null;
 				
 			}
 			
@@ -348,19 +349,42 @@ public class TelaRetornoFinal extends JFrame {
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
 			
+			// Se já existe uma compilação previamente selecionada, um diálogo de sobrescrever é exibido
+			if (this.compilacao != null) {
+				
+				// Montando janela de diálogo
+				final String dialogTitle   = bundle.getString("final-compile-select-dtitle");
+				final String dialogMessage = bundle.getString("final-compile-select-dmessage");
+				
+				// Exibe o diálogo de confirmação
+				final int choice = AlertDialog.dialog(dialogTitle, dialogMessage);
+				
+				// Limpa os campos se o usuário escolheu 'OK'
+				if (choice == AlertDialog.OK_OPTION) {
+					
+					this.retornoSistac = this.retornoExcel = null;
+					
+					textRetorno.setText(null);
+					textErros  .setText(null);
+					
+				}
+				else return;
+				
+			}
+				
 			// Salvando arquivo
 			this.compilacao = selected;
-			
+				
 			// Atualizando a view
 			textCompilacao.setText(compilacao.getName());
 			setCompileProcessing(true);
-			
+				
 			// Processando o arquivo
 			Thread thread_retriever = new Thread(() -> threadRetriever());
-			
+				
 			thread_retriever.setName(bundle.getString("final-compile-select-thread"));
 			thread_retriever.start();
-			
+				
 		}
 		
 	}
@@ -594,6 +618,13 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Recupera a compilação
 			this.listaRetornos = Compilation.retrieve(compilacao);
+			
+			// Processa os retornos (função do botão 'Recarregar')
+			if (this.retornoSistac != null)
+				SistacFile.readRetorno(listaRetornos, retornoSistac);
+			
+			if (this.retornoExcel != null)
+				ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(2000L);
