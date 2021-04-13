@@ -243,6 +243,7 @@ public class TelaEnvio extends JFrame {
 	/** Reprocessa o arquivo de entrada */
 	private void actionInputReload() {
 		
+		// Faz algo somente se algum arquivo foi selecionado
 		if (this.inputFile != null) {
 			
 			// Atualizando a view
@@ -475,7 +476,7 @@ public class TelaEnvio extends JFrame {
 				resultList = CSVSheetReader.read(inputFile, INDEXES);
 		
 			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000);
+			Thread.sleep(2000L);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
@@ -483,9 +484,10 @@ public class TelaEnvio extends JFrame {
 		}
 		catch (Exception exception) {
 			
-			exception.printStackTrace(); labelInputStatus .setVisible(false);
+			exception.printStackTrace();
 			
-			// Mostrando status na view
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelInputStatus.setVisible(false));
 			AlertDialog.error( bundle.getString("envio-parser-title" ),
 							   bundle.getString("envio-parser-error"));
 			
