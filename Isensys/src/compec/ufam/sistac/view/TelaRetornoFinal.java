@@ -10,12 +10,12 @@ import com.phill.libs.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.files.PhillFileUtils;
 import com.phill.libs.i18n.PropertyBundle;
+import com.phill.libs.mfvapi.MandatoryFieldsLogger;
+import com.phill.libs.mfvapi.MandatoryFieldsManager;
 
-import compec.ufam.sistac.exception.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
-import net.sf.jasperreports.engine.*;
 
 /** Classe que controla a view de processamento Retorno Final
  *  @author Felipe André - felipeandresouza@hotmail.com
@@ -33,11 +33,6 @@ public class TelaRetornoFinal extends JFrame {
 	
 	
 	
-	private static final String MSG_LOAD_FILE = "Processando Arquivo";
-	private static final String MSG_LOAD_PDF  = "Gerando Visualização";
-	
-	private static final int BSF_READ = 0, TXT_READ = 1, XLSX_READ = 2, PDF_EXPORT = 3;
-	
 	private JTextField textRetorno,textErros,textCabecalho;
 	private File retornoSistac,retornoExcel,compilacao;
 	private ListaRetornos listaRetornos;
@@ -50,7 +45,14 @@ public class TelaRetornoFinal extends JFrame {
 	private JButton buttonCompilacaoReload;
 	private JButton buttonCompilacaoClear;
 	private JButton buttonCompilacaoSelect;
+	private JButton buttonRetornoSelect;
+	private JButton buttonErrosSelect;
 
+	// MFV API
+	private final MandatoryFieldsManager fieldValidator;
+	private final MandatoryFieldsLogger  fieldLogger;
+	private JButton buttonExport;
+	
 	public static void main(String[] args) {
 		new TelaRetornoFinal();
 	}
@@ -129,7 +131,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelResults.setBounds(12, 60, 453, 55);
 		panelPreliminar.add(panelResults);
 		
-		JLabel labelDeferidos = new JLabel("Deferidos:");
+		JLabel labelDeferidos = new JLabel(bundle.getString("final-label-deferidos"));
 		labelDeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelDeferidos.setFont(fonte);
 		labelDeferidos.setBounds(15, 25, 80, 20);
@@ -142,7 +144,7 @@ public class TelaRetornoFinal extends JFrame {
 		textDeferidos.setBounds(100, 25, 45, 20);
 		panelResults.add(textDeferidos);
 		
-		JLabel labelIndeferidos = new JLabel("Indeferidos:");
+		JLabel labelIndeferidos = new JLabel(bundle.getString("final-label-indeferidos"));
 		labelIndeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelIndeferidos.setFont(fonte);
 		labelIndeferidos.setBounds(175, 25, 90, 20);
@@ -155,7 +157,7 @@ public class TelaRetornoFinal extends JFrame {
 		textIndeferidos.setBounds(270, 25, 45, 20);
 		panelResults.add(textIndeferidos);
 		
-		JLabel labelTotal = new JLabel("Total:");
+		JLabel labelTotal = new JLabel(bundle.getString("final-label-total"));
 		labelTotal.setHorizontalAlignment(JLabel.RIGHT);
 		labelTotal.setFont(fonte);
 		labelTotal.setBounds(350, 25, 40, 20);
@@ -187,19 +189,15 @@ public class TelaRetornoFinal extends JFrame {
 		textRetorno.setForeground(color);
 		textRetorno.setFont(fonte);
 		textRetorno.setEditable(false);
-		textRetorno.setBounds(125, 30, 257, 25);
+		textRetorno.setBounds(125, 30, 297, 25);
 		panelInputFile.add(textRetorno);
 		
-		JButton buttonRetornoSelect = new JButton(searchIcon);
+		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
-		buttonRetornoSelect.addActionListener((event) -> selecionaArquivoSistac());
-		buttonRetornoSelect.setBounds(394, 30, 30, 25);
+		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
+		buttonRetornoSelect.setEnabled(false);
+		buttonRetornoSelect.setBounds(434, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
-		
-		JButton buttonReturnClear = new JButton(clearIcon);
-		buttonReturnClear.setToolTipText(bundle.getString("hint-button-retorno-clear"));
-		buttonReturnClear.setBounds(434, 30, 30, 25);
-		panelInputFile.add(buttonReturnClear);
 		
 		JLabel labelErros = new JLabel(bundle.getString("final-label-erros"));
 		labelErros.setHorizontalAlignment(JLabel.RIGHT);
@@ -212,19 +210,15 @@ public class TelaRetornoFinal extends JFrame {
 		textErros.setForeground(color);
 		textErros.setFont(fonte);
 		textErros.setEditable(false);
-		textErros.setBounds(125, 65, 257, 25);
+		textErros.setBounds(125, 65, 297, 25);
 		panelInputFile.add(textErros);
 		
-		JButton buttonErrosSelect = new JButton(searchIcon);
+		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
-		buttonErrosSelect.addActionListener((event) -> selecionaArquivoExcel());
-		buttonErrosSelect.setBounds(394, 65, 30, 25);
+		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
+		buttonErrosSelect.setEnabled(false);
+		buttonErrosSelect.setBounds(434, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
-		
-		JButton buttonErrosClear = new JButton(clearIcon);
-		buttonErrosClear.setToolTipText(bundle.getString("hint-button-erros-clear"));
-		buttonErrosClear.setBounds(434, 65, 30, 25);
-		panelInputFile.add(buttonErrosClear);
 		
 		// Painel 'Edital'
 		JPanel panelEdital = new JPanel();
@@ -249,6 +243,7 @@ public class TelaRetornoFinal extends JFrame {
 		
 		// Fundo da janela
 		labelStatus = new JLabel(loadingIcon);
+		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
 		labelStatus.setBounds(12, 331, 214, 20);
@@ -260,11 +255,18 @@ public class TelaRetornoFinal extends JFrame {
 		buttonSair.setBounds(406, 331, 35, 30);
 		painel.add(buttonSair);
 		
-		JButton buttonExport = new JButton(reportIcon);
+		buttonExport = new JButton(reportIcon);
 		buttonExport.setToolTipText(bundle.getString("hint-button-report"));
 		buttonExport.setBounds(453, 331, 35, 30);
+		buttonExport.addActionListener((event) -> actionExport());
 		painel.add(buttonExport);
-		buttonExport.addActionListener((event) -> gerarVisualizacao());
+		
+		// Cadastrando validação de campos
+		this.fieldValidator = new MandatoryFieldsManager();
+		this.fieldLogger    = new MandatoryFieldsLogger ();
+		
+		fieldValidator.addPermanent(labelCompilacao, () -> this.compilacao != null, bundle.getString("final-mfv-compilacao"), false);
+		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().trim().isEmpty(), bundle.getString("final-mfv-cabecalho"), false);
 		
 		// Mostrando a janela
 		setSize(dimension);
@@ -284,7 +286,7 @@ public class TelaRetornoFinal extends JFrame {
 		if (this.compilacao != null) {
 			
 			// Atualizando a view
-			setCompileProcessing();
+			setCompileProcessing(true);
 			
 			// Processando o arquivo
 			Thread thread_retriever = new Thread(() -> threadRetriever());
@@ -319,6 +321,15 @@ public class TelaRetornoFinal extends JFrame {
 				
 				panelResults.setVisible(false);
 				
+				// Limpando dados do painel 'Arquivos de Entrada'
+				buttonRetornoSelect.setEnabled(false);
+				buttonErrosSelect  .setEnabled(false);
+				
+				textRetorno.setText(null);
+				textErros  .setText(null);
+				
+				this.retornoSistac = null;
+				this.retornoExcel  = null;
 				
 			}
 			
@@ -333,14 +344,17 @@ public class TelaRetornoFinal extends JFrame {
 		final String title = bundle.getString("final-compile-select-title");
 		
 		// Recuperando o arquivo de entrada
-		this.compilacao  = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, null);
+		final File selected  = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
-		if (this.compilacao != null) {
+		if (selected != null) {
+			
+			// Salvando arquivo
+			this.compilacao = selected;
 			
 			// Atualizando a view
 			textCompilacao.setText(compilacao.getName());
-			setCompileProcessing();
+			setCompileProcessing(true);
 			
 			// Processando o arquivo
 			Thread thread_retriever = new Thread(() -> threadRetriever());
@@ -352,20 +366,194 @@ public class TelaRetornoFinal extends JFrame {
 		
 	}
 	
+	/** Carrega o arquivo de retorno do Sistac e atualiza as informações da janela. */
+	private void actionRetornoSelect() {
+		
+		// Faz algo somente se o arquivo de compilação já foi previamente selecionado
+		if (this.compilacao != null) {
+			
+			// Recuperando título da janela
+			final String title = bundle.getString("final-retorno-select-title");
+						
+			// Recuperando o arquivo de retorno
+			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, null);
+						
+			// Faz algo somente se algum arquivo foi selecionado
+			if (selected != null) {
+				
+				// Salvando arquivo
+				this.retornoSistac = selected;
+							
+				// Atualizando a view
+				textRetorno.setText(retornoSistac.getName());
+				setCompileProcessing(true);
+				
+				// Processando o arquivo
+				Thread thread_sistac = new Thread(() -> threadSistac());
+				
+				thread_sistac.setName(bundle.getString("final-retorno-select-thread"));
+				thread_sistac.start();
+							
+			}
+			
+		}
+		else 
+			compileFileErrorDialog();
+			
+	}
+	
+	/** Carrega o arquivo de erros e atualiza as informações da janela. */
+	private void actionErrosSelect() {
+		
+		// Faz algo somente se o arquivo de compilação já foi previamente selecionado
+		if (this.compilacao != null) {
+			
+			// Recuperando título da janela
+			final String title = bundle.getString("final-erros-select-title");
+						
+			// Recuperando o arquivo de erros
+			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, null);
+		
+			// Faz algo somente se algum arquivo foi selecionado
+			if (selected != null) {
+		
+				// Salvando arquivo
+				this.retornoExcel = selected;
+				
+				// Atualizando a view
+				textErros.setText(retornoExcel.getName());
+				setCompileProcessing(true);
+		
+				// Processando o arquivo
+				Thread thread_erros = new Thread(() -> threadErros());
+				
+				thread_erros.setName(bundle.getString("final-erros-select-thread"));
+				thread_erros.start();
+							
+			}
+			
+		}
+		else 
+			compileFileErrorDialog();
+		
+	}
+	
+	/** Gera o edital de resultado final. */
+	private void actionExport() {
+		
+		// Realizando validação dos campos antes de prosseguir
+		fieldValidator.validate(fieldLogger);
+					
+		// Só prossigo se todas os campos foram devidamente preenchidos
+		if (fieldLogger.hasErrors()) {
+						
+			AlertDialog.error(bundle.getString("final-export-title"), fieldLogger.getErrorString());
+			fieldLogger.clear(); return;
+			
+		}
+		
+		// Processando o edital
+		Thread thread_export = new Thread(() -> threadExport());
+										
+		thread_export.setName(bundle.getString("final-export-thread"));
+		thread_export.start();
+		
+		
+	}
+	
 	/************************* Utility Methods Section ************************************/
 	
+	/** Mostra uma tela de erro caso o arquivo de compilação não tenha sido selecionado. */
+	private void compileFileErrorDialog() {
+		
+		AlertDialog.error( bundle.getString("final-file-error-dialog-title" ),
+		                   bundle.getString("final-file-error-dialog-error"));
+		
+	}
+	
 	/** Método de atualização de UI relacionado aos métodos <method>actionCompileReload</method> e <method>actionCompileSelect</method>. */
-	private void setCompileProcessing() {
+	private void setCompileProcessing(final boolean isProcessing) {
 		
-		// Atualizando a view
-		labelStatus.setText(bundle.getString("final-compile-processing"));
-		labelStatus.setVisible(true);
-		
-		panelResults.setVisible(false);
+		if (isProcessing) {
+			
+			// Atualizando a view
+			labelStatus.setText(bundle.getString("final-compile-processing"));
+			labelStatus.setVisible(true);
+			
+			panelResults.setVisible(false);
 
-		buttonCompilacaoReload.setEnabled(false);
-		buttonCompilacaoClear .setEnabled(false);
-		buttonCompilacaoSelect.setEnabled(false);
+			// Bloqueando os botões do painel 'Resultado Preliminar'
+			buttonCompilacaoReload.setEnabled(false);
+			buttonCompilacaoClear .setEnabled(false);
+			buttonCompilacaoSelect.setEnabled(false);
+			
+			// Bloqueando os botões do painel 'Arquivos de Entrada'
+			buttonRetornoSelect.setEnabled(false);
+			buttonErrosSelect  .setEnabled(false);
+			
+			// Bloqueando botão de exportar
+			buttonExport.setEnabled(false);
+			
+		}
+		else {
+			
+			// Desbloqueia os botões
+			SwingUtilities.invokeLater(() -> {
+				
+				// Desbloqueando os botões do painel 'Análise do Arquivo'
+				buttonCompilacaoReload.setEnabled(true);
+				buttonCompilacaoClear .setEnabled(true);
+				buttonCompilacaoSelect.setEnabled(true);
+				
+				// Desbloqueando os botões do painel 'Arquivos de Entrada'
+				buttonRetornoSelect.setEnabled( this.retornoSistac == null );
+				buttonErrosSelect  .setEnabled( this.retornoExcel  == null );
+				
+				// Desbloqueando botão 'Exportar'
+				buttonExport.setEnabled(true);
+				
+			});
+			
+		}
+		
+	}
+	
+	/** Controla a visualização de alguns campos e botões durante a geração do edital. */
+	private void setExportProcessing(final boolean isProcessing) {
+		
+		SwingUtilities.invokeLater(() -> {
+			
+			// Controlando visualização dos botões do painel 'Resultado Preliminar'
+			buttonCompilacaoReload.setEnabled( !isProcessing );
+			buttonCompilacaoClear .setEnabled( !isProcessing );
+			buttonCompilacaoSelect.setEnabled( !isProcessing );
+			
+			// Controlando visualização do botão 'Exportar'
+			buttonExport.setEnabled( !isProcessing );
+			
+			// Controlando visualização do texto de cabeçalho
+			textCabecalho.setEditable( !isProcessing );
+			
+			// Controlando visualização dos botões do painel 'Arquivos de Entrada' e do label de status
+			if (isProcessing) {
+				
+				buttonRetornoSelect.setEnabled(false);
+				buttonErrosSelect  .setEnabled(false);
+				
+				labelStatus.setText(bundle.getString("final-export-processing"));
+				labelStatus.setVisible(true);
+				
+			}
+			else {
+				
+				buttonRetornoSelect.setEnabled( this.retornoSistac == null );
+				buttonErrosSelect  .setEnabled( this.retornoExcel  == null );
+				
+				labelStatus.setVisible(false);
+				
+			}
+			
+		});
 		
 	}
 	
@@ -421,214 +609,120 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("final-retriever-title" ),
-					           bundle.getString("final-retriever-error"));
+			AlertDialog.error( bundle.getString("final-thread-retriever-title" ),
+					           bundle.getString("final-thread-retriever-error"));
 			
 		}
 		finally {
 			
-			// Desbloqueia os botões
-			SwingUtilities.invokeLater(() -> {
-				
-				buttonCompilacaoReload.setEnabled(true);
-				buttonCompilacaoClear .setEnabled(true);
-				buttonCompilacaoSelect.setEnabled(true);
-				
-			});
+			// Desbloqueando campos
+			setCompileProcessing(false);
 			
 		}
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	private void selecionaArquivoSistac() {
+	/** Processa o arquivo de retorno do Sistac mesclando os resultados com os do edital preliminar. */
+	private void threadSistac() {
 		
 		try {
 			
-			verificaLista();
+			// Processa a lista de retornos do Sistac
+			SistacFile.readRetorno(listaRetornos, retornoSistac);
 			
-			retornoSistac = PhillFileUtils.loadFile("Selecione o arquivo de texto Sistac", Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, null);
-			textRetorno.setText(retornoSistac.getName());
-			
-			updateInfo(MSG_LOAD_FILE);
-			executeJob(TXT_READ);
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(2000L);
+						
+			// Atualiza a view com estatísticas do processamento
+			updateStatistics();
 			
 		}
-		catch (BlankFieldException exception) { AlertDialog.error(exception.getMessage()); }
-		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Sistac!"); }
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("final-thread-sistac-title" ),
+					           bundle.getString("final-thread-sistac-error"));
+			
+		}
+		finally {
+			
+			// Desbloqueando campos
+			setCompileProcessing(false);
+			
+		}
+		
 	}
 	
-	private void selecionaArquivoExcel() {
+	/** Processa o arquivo de erros do Excel mesclando os resultados com os do edital preliminar. */
+	private void threadErros() {
 		
 		try {
 			
-			verificaLista();
+			// Processa a lista de erros
+			ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
 			
-			retornoExcel = PhillFileUtils.loadFile("Selecione a planilha", Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, null);
-			textErros.setText(retornoExcel.getName());
-			
-			updateInfo(MSG_LOAD_FILE);
-			executeJob(XLSX_READ);
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(2000L);
+						
+			// Atualiza a view com estatísticas do processamento
+			updateStatistics();
 			
 		}
-		catch (BlankFieldException exception) { AlertDialog.error(exception.getMessage()); }
-		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Excel!"); }
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("final-thread-erros-title" ),
+					           bundle.getString("final-thread-erros-error"));
+			
+		}
+		finally {
+			
+			// Desbloqueando campos
+			setCompileProcessing(false);
+			
+		}
+		
 	}
 	
-	private void verificaLista() throws BlankFieldException {
-		
-		if (listaRetornos == null)
-			throw new BlankFieldException("Selecione primeiro o arquivo de compilação!");
-		
-	}
-	
-	private void gerarVisualizacao() {
+	/** Gera a visualização do edital. */
+	private void threadExport() {
 		
 		try {
 			
-			dependenciaVisualizacao();
+			// Bloqueando botões e campos de texto
+			setExportProcessing(true);
+		
+			// Recuperando cabeçalho
+			final String cabecalho = textCabecalho.getText().trim();
 			
-			updateInfo(MSG_LOAD_PDF);
-			executeJob(PDF_EXPORT);
+			// Ordenando dados
+			listaRetornos.sort();
 			
-		}
-		catch (BlankFieldException | FileNotSelectedException exception) {
-			AlertDialog.error(exception.getMessage());
-		}
-		
-	}
-	
-	private void dependenciaVisualizacao() throws BlankFieldException,FileNotSelectedException {
-		
-		if (listaRetornos == null)
-			throw new FileNotSelectedException("Selecione ao menos um arquivo de entrada!");
-		
-		if (textCabecalho.getText().trim().equals(""))
-			throw new BlankFieldException("Informe o cabeçalho do edital!");
-		
-		if (compilacao == null)
-			throw new FileNotSelectedException("Selecione o arquivo de compilação.");
-		
-	}
-	
-	private void executeJob(int jobID) {
-		new EventDispatcher(jobID).start();
-	}
-	
-	private class EventDispatcher extends Thread {
-
-		private final int function;
-		
-		public EventDispatcher(int function) {
-			this.function = function;
-		}
-		
-		@Override
-		public void run() {
-			
-			try { dispatch(); }
-			catch (Exception exception) {
-				
-				switch (function) {
-				
-					case BSF_READ:
-						AlertDialog.error("Falha ao carregar a compilação!");
-					break;
-				
-					case TXT_READ:
-						AlertDialog.error("Falha ao carregar o arquivo de retorno do Sistac!");
-					break;
-					
-					case XLSX_READ:
-						AlertDialog.error("Falha ao carregar o arquivo de retorno do Excel!");
-					break;
-					
-					case PDF_EXPORT:
-						AlertDialog.error("Falha ao gerar visualização!");
-					break;
-				}
-				
-			}
+			// Gerando visualização
+			PDFExport.export(listaRetornos, cabecalho, Resultado.FINAL);
 			
 		}
-		
-		private void dispatch() throws IOException, JRException, InterruptedException, ClassNotFoundException {
+		catch (Exception exception) {
 			
-			switch (function) {
+			exception.printStackTrace();
 			
-				case BSF_READ:
-					
-					listaRetornos = Compilation.retrieve(compilacao);
-					updateStatistics();
-					
-				break;
-			
-				case TXT_READ:
-					
-					SistacFile.readRetorno(listaRetornos, retornoSistac);
-					updateStatistics();
-					
-				break;
-					
-				case XLSX_READ:
-					
-					ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
-					updateStatistics();
-					
-				break;
-					
-				case PDF_EXPORT:
-					
-					String cabecalho  = textCabecalho.getText().trim();
-					
-					listaRetornos.sort();
-					
-					PDFExport.export(listaRetornos, cabecalho, Resultado.FINAL);
-					
-					resetInfo();
-					
-				break;
-			}
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("final-thread-export-title" ),
+					           bundle.getString("final-thread-export-error"));
 			
 		}
-		
-	}
-	
-	private void updateInfo(String message, boolean visibility) {
-		Runnable job = new InfoUpdater(message, visibility);
-		SwingUtilities.invokeLater(job);
-	}
-	
-	private void resetInfo() {
-		updateInfo(null, false);
-	}
-	
-	private void updateInfo(String message) {
-		updateInfo(message, true);
-	}
-	
-	private class InfoUpdater implements Runnable {
-
-		private String message;
-		private boolean visibility;
-		
-		public InfoUpdater(String message, boolean visibility) {
-			this.message = message;
-			this.visibility = visibility;
-		}
-		
-		@Override
-		public void run() {
-			labelStatus.setText(message);
-			labelStatus.setVisible(visibility);
-			labelStatus.repaint();
+		finally {
+			
+			// Desbloqueando botões e campos de texto
+			setExportProcessing(false);
+			
 		}
 		
 	}

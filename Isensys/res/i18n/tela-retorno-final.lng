@@ -1,6 +1,10 @@
 ########## Window title
 final-window-title = IsenSys v.3.0 - Resultado Final
 
+########## Mensagens de erro da API MFV
+final-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
+final-mfv-cabecalho  = Informe o cabeçalho do edital
+
 ########## Painéis
 final-panel-prelim     = Resultado Preliminar
 final-panel-results    = Análise do Arquivo
@@ -9,6 +13,10 @@ final-panel-edital     = Edital
 
 ########## Labels
 final-label-compilacao = Compilação:
+
+final-label-deferidos   = Deferidos:
+final-label-indeferidos = Indeferidos
+final-label-total       = Total:
 
 final-label-retorno = Retorno Sistac:
 final-label-erros   = Planilha Erros:
@@ -49,14 +57,47 @@ final-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de c
 final-compile-select-title  = Selecione o arquivo de compilação
 final-compile-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de compilação
 
+! TelaRetornoFinal::actionRetornoSelect
+final-retorno-select-title  = Selecione o arquivo de retorno do Sistac
+final-retorno-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de retorno
+
+! TelaRetornoFinal::actionErrosSelect
+final-erros-select-title  = Selecione o arquivo de erros
+final-erros-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de erros
+
+! TelaRetornoFinal::actionExport
+final-export-title  = Gerando edital
+final-export-thread = TelaRetornoFinal.class - Thread de geração de relatório Jasper
+
 ! TelaRetornoFinal::threadRetriever
-final-retriever-title = Processando arquivo de entrada
-final-retriever-error = Falha ao processar arquivo!\n\
-                        Verifique se ele não foi corrompido.
+final-thread-retriever-title = Processando arquivo de entrada
+final-thread-retriever-error = Falha ao processar arquivo!\n\
+                               Verifique se ele não foi corrompido.
+
+! TelaRetornoFinal::threadSistac
+final-thread-sistac-title = Processando arquivo de retorno
+final-thread-sistac-error = Falha ao processar arquivo!\n\
+                            Verifique se vocẽ selecionou o arquivo correto.
+
+! TelaRetornoFinal::threadErros
+final-thread-erros-title = Processando arquivo de erros
+final-thread-erros-error = Falha ao processar arquivo!\n\
+                           Verifique se vocẽ selecionou o arquivo correto.
+
+! TelaRetornoFinal::threadExport
+final-thread-export-title = Gerando visualização de edital
+final-thread-export-error = Falha ao gerar visualização.\n\
+                            Verifique o console para mais informações.
+
+! TelaRetornoFinal::compileFileErrorDialog
+final-file-error-dialog-title = Processando arquivo de entrada
+final-file-error-dialog-error = Primeiro selecione o arquivo de compilação!
 
 ! TelaRetornoFinal::setInputProcessing
 final-compile-processing = Processando arquivo...
 
+! TelaRetornoFinal::setExportProcessing
+final-export-processing = Gerando visualização... 
 
 
 
