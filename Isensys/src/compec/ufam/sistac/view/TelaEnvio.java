@@ -43,7 +43,8 @@ public class TelaEnvio extends JFrame {
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
 	public TelaEnvio() {
-		super(bundle.getString("envio-window-title"));
+		
+		setTitle(bundle.getString("envio-window-title"));
 		
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
