@@ -47,6 +47,9 @@ public class TelaRetornoFinal extends JFrame {
 	private JLabel textIndeferidos;
 	private JLabel textTotal;
 	private JPanel panelResults;
+	private JButton buttonCompilacaoReload;
+	private JButton buttonCompilacaoClear;
+	private JButton buttonCompilacaoSelect;
 
 	public static void main(String[] args) {
 		new TelaRetornoFinal();
@@ -99,19 +102,21 @@ public class TelaRetornoFinal extends JFrame {
 		textCompilacao.setBounds(105, 30, 238, 25);
 		panelPreliminar.add(textCompilacao);
 		
-		JButton buttonCompilacaoReload = new JButton(reloadIcon);
+		buttonCompilacaoReload = new JButton(reloadIcon);
 		buttonCompilacaoReload.setToolTipText(bundle.getString("hint-button-compilacao-reload"));
+		buttonCompilacaoReload.addActionListener((event) -> actionCompileReload());
 		buttonCompilacaoReload.setBounds(355, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoReload);
 		
-		JButton buttonCompilacaoClear = new JButton(clearIcon);
+		buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
+		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
 		buttonCompilacaoClear.setBounds(395, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoClear);
 		
-		JButton buttonCompilacaoSelect = new JButton(searchIcon);
+		buttonCompilacaoSelect = new JButton(searchIcon);
 		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
-		buttonCompilacaoSelect.addActionListener((event) -> selecionaCompilacao());
+		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
 		buttonCompilacaoSelect.setBounds(435, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoSelect);
 		
@@ -270,6 +275,176 @@ public class TelaRetornoFinal extends JFrame {
 		
 	}
 
+	/********************** Tratamento de Eventos de Botões *******************************/
+	
+	/** Reprocessa o arquivo de entrada */
+	private void actionCompileReload() {
+		
+		// Faz algo somente se algum arquivo foi selecionado
+		if (this.compilacao != null) {
+			
+			// Atualizando a view
+			setCompileProcessing();
+			
+			// Processando o arquivo
+			Thread thread_retriever = new Thread(() -> threadRetriever());
+						
+			thread_retriever.setName(bundle.getString("final-compile-reload-thread"));
+			thread_retriever.start();
+			
+		}
+		
+	}
+	
+	/** Limpa o painel 'Resultado Preliminar' */
+	private void actionCompileClear() {
+		
+		// Faz algo somente se algum arquivo foi selecionado
+		if (this.compilacao != null) {
+			
+			// Montando janela de diálogo
+			final String title   = bundle.getString("final-compile-clear-title");
+			final String message = bundle.getString("final-compile-clear-dialog");
+			
+			// Exibe o diálogo de confirmação
+			final int choice = AlertDialog.dialog(title, message);
+			
+			// Limpa os campos se o usuário escolheu 'OK'
+			if (choice == AlertDialog.OK_OPTION) {
+				
+				this.compilacao = null;
+				this.listaRetornos = null;
+				
+				textCompilacao.setText(null);
+				
+				panelResults.setVisible(false);
+				
+				
+			}
+			
+		}
+		
+	}
+	
+	/** Carrega o arquivo de entrada de dados e atualiza as informações da janela */
+	private void actionCompileSelect() {
+		
+		// Recuperando título da janela
+		final String title = bundle.getString("final-compile-select-title");
+		
+		// Recuperando o arquivo de entrada
+		this.compilacao  = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, null);
+		
+		// Faz algo somente se algum arquivo foi selecionado
+		if (this.compilacao != null) {
+			
+			// Atualizando a view
+			textCompilacao.setText(compilacao.getName());
+			setCompileProcessing();
+			
+			// Processando o arquivo
+			Thread thread_retriever = new Thread(() -> threadRetriever());
+			
+			thread_retriever.setName(bundle.getString("final-compile-select-thread"));
+			thread_retriever.start();
+			
+		}
+		
+	}
+	
+	/************************* Utility Methods Section ************************************/
+	
+	/** Método de atualização de UI relacionado aos métodos <method>actionCompileReload</method> e <method>actionCompileSelect</method>. */
+	private void setCompileProcessing() {
+		
+		// Atualizando a view
+		labelStatus.setText(bundle.getString("final-compile-processing"));
+		labelStatus.setVisible(true);
+		
+		panelResults.setVisible(false);
+
+		buttonCompilacaoReload.setEnabled(false);
+		buttonCompilacaoClear .setEnabled(false);
+		buttonCompilacaoSelect.setEnabled(false);
+		
+	}
+	
+	/** Atualiza os totais de candidatos processados. */
+	private void updateStatistics() {
+		
+		// Recuperando dados
+		Map<Boolean,List<Retorno>> map = listaRetornos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido));
+		
+		List<Retorno>   deferidos = map.get(true );
+		List<Retorno> indeferidos = map.get(false);
+		
+		int   deferidosCount = (  deferidos == null) ? 0 : deferidos  .size();
+		int indeferidosCount = (indeferidos == null) ? 0 : indeferidos.size();
+		
+		SwingUtilities.invokeLater(() -> {
+			
+			// Escondendo o label de status
+			labelStatus.setVisible(false);
+			
+			// Atualizando estatísticas
+			textDeferidos  .setText(Integer.toString(deferidosCount  ));
+			textIndeferidos.setText(Integer.toString(indeferidosCount));
+			textTotal      .setText(Integer.toString(indeferidosCount + deferidosCount));
+			
+			// Exibindo estatísticas
+			panelResults.setVisible(true);
+			
+		});
+		
+	}
+	
+	/***************************** Threaded Methods Section *******************************/
+	
+	/** Carrega os dados de compilação do resultado preliminar para o sistema. */
+	private void threadRetriever() {
+		
+		try {
+			
+			// Recupera a compilação
+			this.listaRetornos = Compilation.retrieve(compilacao);
+			
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(2000L);
+			
+			// Atualiza a view com estatísticas do processamento
+			updateStatistics();
+			
+		}
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("final-retriever-title" ),
+					           bundle.getString("final-retriever-error"));
+			
+		}
+		finally {
+			
+			// Desbloqueia os botões
+			SwingUtilities.invokeLater(() -> {
+				
+				buttonCompilacaoReload.setEnabled(true);
+				buttonCompilacaoClear .setEnabled(true);
+				buttonCompilacaoSelect.setEnabled(true);
+				
+			});
+			
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 	private void selecionaArquivoSistac() {
 		
@@ -305,24 +480,6 @@ public class TelaRetornoFinal extends JFrame {
 		catch (BlankFieldException exception) { AlertDialog.error(exception.getMessage()); }
 		catch (NullPointerException exception) { }
 		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Excel!"); }
-	}
-	
-	private void selecionaCompilacao() {
-		
-		try {
-			
-			compilacao = PhillFileUtils.loadFile("Selecione o arquivo de compilação", Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, null);
-			textCompilacao.setText(compilacao.getName());
-			
-			panelResults.setVisible(true);
-			
-			updateInfo(MSG_LOAD_FILE);
-			executeJob(BSF_READ);
-			
-		}
-		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.error("Não foi possível carregar a compilação!"); }
-		
 	}
 	
 	private void verificaLista() throws BlankFieldException {
@@ -409,21 +566,21 @@ public class TelaRetornoFinal extends JFrame {
 				case BSF_READ:
 					
 					listaRetornos = Compilation.retrieve(compilacao);
-					updateCompilationAnalysis();
+					updateStatistics();
 					
 				break;
 			
 				case TXT_READ:
 					
 					SistacFile.readRetorno(listaRetornos, retornoSistac);
-					updateCompilationAnalysis();
+					updateStatistics();
 					
 				break;
 					
 				case XLSX_READ:
 					
 					ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
-					updateCompilationAnalysis();
+					updateStatistics();
 					
 				break;
 					
@@ -447,10 +604,6 @@ public class TelaRetornoFinal extends JFrame {
 	private void updateInfo(String message, boolean visibility) {
 		Runnable job = new InfoUpdater(message, visibility);
 		SwingUtilities.invokeLater(job);
-	}
-	
-	private void updateCompilationAnalysis() {
-		new CompilationAnalysis().start();
 	}
 	
 	private void resetInfo() {
@@ -480,47 +633,4 @@ public class TelaRetornoFinal extends JFrame {
 		
 	}
 	
-	private class CompilationAnalysis extends Thread {
-		
-		@Override
-		public void run() {
-			
-			Map<Boolean,List<Retorno>> map = listaRetornos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido));
-			
-			List<Retorno>   deferidos = map.get(true );
-			List<Retorno> indeferidos = map.get(false);
-			
-			int   deferidosCount = (  deferidos == null) ? 0 : deferidos  .size();
-			int indeferidosCount = (indeferidos == null) ? 0 : indeferidos.size();
-		
-			try { sleep(1500L); }
-			catch (InterruptedException exception) { }
-			finally { resetInfo(); }
-			
-			Runnable job = new UpdateCompilationAnalysis(deferidosCount, indeferidosCount);
-			SwingUtilities.invokeLater(job);
-		}
-		
-	}
-	
-	private class UpdateCompilationAnalysis implements Runnable {
-
-		private final int deferidosCount, indeferidosCount, total;
-		
-		public UpdateCompilationAnalysis(int deferidosCount, int indeferidosCount) {
-			this.deferidosCount   = deferidosCount;
-			this.indeferidosCount = indeferidosCount;
-			this.total = (deferidosCount + indeferidosCount);
-		}
-		
-		@Override
-		public void run() {
-			textDeferidos.setText(Integer.toString(deferidosCount));
-			textIndeferidos.setText(Integer.toString(indeferidosCount));
-			textTotal.setText(Integer.toString(total));
-			
-			resetInfo();
-		}
-		
-	}
 }

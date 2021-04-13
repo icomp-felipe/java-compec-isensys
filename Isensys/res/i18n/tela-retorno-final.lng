@@ -34,3 +34,33 @@ hint-text-cabecalho = Título que fará parte do cabeçalho do edital
 
 hint-button-exit   = Sai desta tela
 hint-button-report = Gera o edital
+
+########## Métodos
+! TelaRetornoFinal::actionCompileReload
+final-compile-reload-thread = TelaRetornoFinal.class - Thread de recarregamento de arquivo de compilação
+
+! TelaRetornoFinal::actionCompileClear
+final-compile-clear-title  = Limpar seleção
+final-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?\n\
+                             Os arquivos de retorno do Sistac e planilha de erros também\n\
+                             serão desselecionados! 
+
+! TelaRetornoFinal::actionCompileSelect
+final-compile-select-title  = Selecione o arquivo de compilação
+final-compile-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de compilação
+
+! TelaRetornoFinal::threadRetriever
+final-retriever-title = Processando arquivo de entrada
+final-retriever-error = Falha ao processar arquivo!\n\
+                        Verifique se ele não foi corrompido.
+
+! TelaRetornoFinal::setInputProcessing
+final-compile-processing = Processando arquivo...
+
+
+
+
+
+
+
+
