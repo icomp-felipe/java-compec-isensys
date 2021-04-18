@@ -1,3 +1,4 @@
+Código de Erro;Situação;Descrição da Situação;
 3;NIS inválido;O NIS é inválido;
 4;NIS não cadastrado;O NIS não foi identificado na base de dados do Cadastro Único;
 5;NIS excluído;O NIS foi identificado na base de dados do Cadastro Único, porém com status excluído;

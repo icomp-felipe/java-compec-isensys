@@ -1,3 +1,4 @@
+Código de Erro;Situação;Descrição da Situação;
 1;Leiaute fora do padrão;O leiaute está fora do padrão definido;
 2;Arquivo já processado;O arquivo já foi processado na base de dados do Cadastro Único;
 3;NIS inválido;O NIS é inválido;
