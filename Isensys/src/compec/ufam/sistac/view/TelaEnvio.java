@@ -16,7 +16,7 @@ import compec.ufam.sistac.model.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 11/04/2021 */
+ *  @version 3.0, 18/04/2021 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -44,6 +44,7 @@ public class TelaEnvio extends JFrame {
 	
 	public TelaEnvio() {
 		
+		// Recuperando o título da janela
 		setTitle(bundle.getString("envio-window-title"));
 		
 		// Inicializando atributos gráficos
