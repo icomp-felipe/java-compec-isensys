@@ -1,8 +1,15 @@
-# Window title
+########## Título da Janela
 inicio-window-title = IsenSys v.3.0
 
-# Labels
+########## Labels
 inicio-panel-info = <html>Bem vindo ao IsenSys v.3.0!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
 
-# Popup buttons
-inicio-button-help = IsenSys v.3.0 - Build 20210412
+########## Dicas
+hint-button-envio = Abre o módulo de preparo do arquivo de envio
+hint-button-retorno-prelim = Abre o módulo de processamento do arquivo de retorno do Sistac + geração de relatório preliminar
+hint-button-retorno-final  = Abre o módulo de processamento do arquivo de retorno do Sistac + geração de relatório final
+
+########## Métodos
+! TelaInicioIsensys::actionEasterEgg
+inicio-button-help-title  = Notas de Versão
+inicio-button-help-dialog = IsenSys v.3.0 - Build 20210418

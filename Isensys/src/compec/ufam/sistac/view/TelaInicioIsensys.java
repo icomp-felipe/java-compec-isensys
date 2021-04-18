@@ -8,7 +8,7 @@ import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 2.9, 11/04/2021 */
+ *  @version 3.0, 18/04/2021 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;
@@ -23,7 +23,9 @@ public class TelaInicioIsensys extends JFrame {
 
 	/** Inicialização da view */
 	public TelaInicioIsensys() {
-		super(bundle.getString("inicio-window-title"));
+		
+		// Recuperando o título da janela
+		setTitle(bundle.getString("inicio-window-title"));
 				
 		// Carregando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
@@ -33,12 +35,15 @@ public class TelaInicioIsensys extends JFrame {
 		JPanel painel = new JPaintedPanel("img/initial-screen.jpg", dimension);
 		painel.setLayout(null);
 		
-		Icon iconEnvio  = ResourceManager.getIcon("img/botao-envio.png",442,30);
+		Icon iconEnvio  = ResourceManager.getIcon("img/botao-envio.png"     ,442,30);
 		Icon iconPrelim = ResourceManager.getIcon("img/botao-preliminar.png",442,30);
-		Icon iconFinal  = ResourceManager.getIcon("img/botao-final.png",442,30);
+		Icon iconFinal  = ResourceManager.getIcon("img/botao-final.png"     ,442,30);
+		
+		Icon isensysIcon  = ResourceManager.getIcon("img/isensys-logo.png",154,130);
 		
 		// Construindo janela
 		JButton buttonEnvio = new JButton(iconEnvio);
+		buttonEnvio.setToolTipText(bundle.getString("hint-button-envio"));
 		buttonEnvio.setBorderPainted(false);
 		buttonEnvio.setOpaque(false);
 		buttonEnvio.setContentAreaFilled(false);
@@ -47,6 +52,7 @@ public class TelaInicioIsensys extends JFrame {
 		painel.add(buttonEnvio);
 		
 		JButton buttonRetornoPrelim = new JButton(iconPrelim);
+		buttonRetornoPrelim.setToolTipText(bundle.getString("hint-button-retorno-prelim"));
 		buttonRetornoPrelim.addActionListener((event) -> new TelaRetornoPreliminar());
 		buttonRetornoPrelim.setBorderPainted(false);
 		buttonRetornoPrelim.setOpaque(false);
@@ -55,6 +61,7 @@ public class TelaInicioIsensys extends JFrame {
 		painel.add(buttonRetornoPrelim);
 		
 		JButton buttonRetornoFinal = new JButton(iconFinal);
+		buttonRetornoFinal.setToolTipText(bundle.getString("hint-button-retorno-final"));
 		buttonRetornoFinal.addActionListener((event) -> new TelaRetornoFinal());
 		buttonRetornoFinal.setBorderPainted(false);
 		buttonRetornoFinal.setOpaque(false);
@@ -62,20 +69,15 @@ public class TelaInicioIsensys extends JFrame {
 		buttonRetornoFinal.setBounds(20, 229, 442, 30);
 		painel.add(buttonRetornoFinal);
 		
-		Icon isensys_icon  = ResourceManager.getIcon("img/isensys-logo.png",154,130);
+		JButton buttonEasterEgg = new JButton(isensysIcon);
+		buttonEasterEgg.addActionListener((event) -> actionEasterEgg());
+		buttonEasterEgg.setBorderPainted(false);
+		buttonEasterEgg.setOpaque(false);
+		buttonEasterEgg.setContentAreaFilled(false);
+		buttonEasterEgg.setBounds(308, 12, 154, 121);
+		painel.add(buttonEasterEgg);
 		
-		JButton buttonAjuda = new JButton(isensys_icon);
-		buttonAjuda.addActionListener((event) -> function_help());
-		buttonAjuda.setBorderPainted(false);
-		buttonAjuda.setOpaque(false);
-		buttonAjuda.setContentAreaFilled(false);
-		buttonAjuda.setBounds(308, 12, 154, 121);
-		painel.add(buttonAjuda);
-		
-		// Carregando texto i18n
-		final String text_info = bundle.getString("inicio-panel-info");
-		
-		JLabel labelInfos = new JLabel(text_info);
+		JLabel labelInfos = new JLabel(bundle.getString("inicio-panel-info"));
 		labelInfos.setFont(instance.getFont(20));
 		labelInfos.setBounds(20, 12, 270, 121);
 		painel.add(labelInfos);
@@ -90,12 +92,15 @@ public class TelaInicioIsensys extends JFrame {
 	}
 	
 	/** Exibe um dialog com a ajuda do sistema */
-	private void function_help() {
+	private void actionEasterEgg() {
 		
 		// Carregando texto i18n
-		final String inicio_button_help = bundle.getString("inicio-button-help");
+		final String title  = bundle.getString("inicio-button-help-title");
+		final String dialog = bundle.getString("inicio-button-help-dialog");
 		
-		AlertDialog.info(inicio_button_help);
+		// Exibindo notas de versão na UI
+		AlertDialog.info(title,dialog);
+		
 	}
 	
 }
