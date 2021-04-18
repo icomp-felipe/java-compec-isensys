@@ -20,7 +20,7 @@ import compec.ufam.sistac.model.*;
 
 /** Classe que controla a view de processamento Retorno Final
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 13/04/2021 */
+ *  @version 3.0, 18/04/2021 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -51,10 +51,6 @@ public class TelaRetornoFinal extends JFrame {
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
-	
-	public static void main(String[] args) {
-		new TelaRetornoFinal();
-	}
 	
 	public TelaRetornoFinal() {
 		
