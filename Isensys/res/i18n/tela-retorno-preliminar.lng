@@ -1,0 +1,39 @@
+########## Título da Janela
+prelim-window-title = IsenSys v.3.0 - Resultado Preliminar
+
+########## Painéis
+prelim-panel-input-file = Arquivos de Entrada
+prelim-panel-results    = Análise do Arquivo
+prelim-panel-edital     = Edital
+prelim-panel-final      = Resultado Final
+
+########## Labels
+prelim-label-retorno = Retorno Sistac:
+prelim-label-erros   = Planilha Erros:
+
+prelim-label-deferidos   = Deferidos:
+prelim-label-indeferidos = Indeferidos
+prelim-label-total       = Total:
+
+prelim-label-cabecalho = Cabeçalho:
+
+prelim-label-compilacao = Compilação:
+
+########## Dicas
+hint-text-retorno = Arquivo de retorno do Sistac (.txt)
+hint-button-retorno-select = Busca o arquivo de retorno do Sistac
+hint-button-retorno-clear  = Limpa a seleção do arquivo de retorno do Sistac
+
+hint-text-erros = Arquivo de erros (.xlsx)
+hint-button-erros-select = Busca o arquivo de erros
+hint-button-erros-clear  = Limpa a seleção do arquivo de erros
+
+hint-text-cabecalho = Título que fará parte do cabeçalho do edital
+hint-button-cabecalho-clear = Limpa o texto de cabeçalho
+
+hint-text-compilacao = Arquivo de compilação (.bsf) que servirá para o resultado final
+hint-button-compilacao-select = Busca o arquivo de compilação
+hint-button-compilacao-clear  = Limpa a seleção do arquivo de compilação
+
+hint-button-exit   = Sai desta tela
+hint-button-report = Gera o edital

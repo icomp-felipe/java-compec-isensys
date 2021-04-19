@@ -3,32 +3,51 @@ package compec.ufam.sistac.view;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
+
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
+import com.phill.libs.i18n.*;
+import com.phill.libs.files.*;
+import com.phill.libs.mfvapi.*;
 
-import compec.ufam.sistac.exception.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
-import com.phill.libs.files.PhillFileUtils;
 
-/** Classe que controla a view de processamento Retorno Preliminar
- *  @author Felipe André
- *  @version 2.50, 08/07/2018 */
+import compec.ufam.sistac.exception.*;
+
+/** Classe que controla a view de processamento de Retorno Preliminar.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.0, 18/04/2021 */
 public class TelaRetornoPreliminar extends JFrame {
 
-	/****************** Bloco de Inicialização de Variáveis ********************/
+	// Serial
+	private static final long serialVersionUID = -4825877950903636399L;
 	
-	// Sempre coloco isso pra não dar warning :)
-	private static final long serialVersionUID = 1L;
+	// Carregando bundle de idiomas
+	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-retorno-preliminar", null);
+	private final static String windowTitle = bundle.getString("prelim-window-title");
+	
+	// Declaração de atributos gráficos
+	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
+	
+	
+	
+	
+	
+	
 	
 	// Mensagens de processamento (exibidas no rodapé) 
 	private static final String MSG_LOAD_FILE = "Processando Arquivo";
 	private static final String MSG_LOAD_PDF  = "Gerando Visualização";
 	
 	// Alguns componentes de texto da tela
-	private final JTextField textCompilacao,textRetornoSistac,textRetornoExcel,textCabecalho;
-	private final JLabel labelInfo;
+	private final JTextField textCompilacao,textRetorno,textErros,textCabecalho;
+	private final JLabel labelStatus;
+	
+	private final JLabel  textDeferidos, textIndeferidos, textTotal;
+	
+	private final JPanel panelResults;
 	
 	// Recursos de processamento
 	private File retornoSistac,retornoExcel,compilacao,sugestao;
@@ -42,159 +61,219 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	/** Construtor da classe inicializando a view */
 	public TelaRetornoPreliminar() {
-		super("IsenSys: Retorno (Preliminar)");
+
+		// Setando título da janela
+		setTitle(windowTitle);
 		
+		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
+		Dimension dimension = new Dimension(500,380);
 		
-		Icon searchIcon  = ResourceManager.getIcon("icon/search.png",20,20);
-		Icon exitIcon    = ResourceManager.getIcon("icon/exit.png",25,25);
-		Icon exportIcon  = ResourceManager.getIcon("icon/report.png",25,25);
-		
-		Font  fonte = instance.getFont ();
-		Color color = instance.getColor();
-		Dimension d = new Dimension(500,380);
-		
-		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",d);
+		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",dimension);
+		painel.setLayout(null);
 		setContentPane(painel);
 		
-		setSize(d);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		getContentPane().setLayout(null);
+		// Recuperando ícones
+		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png" ,20,20);
+		Icon searchIcon = ResourceManager.getIcon("icon/search.png",20,20);
+		Icon exitIcon   = ResourceManager.getIcon("icon/exit.png",25,25);
+		Icon reportIcon = ResourceManager.getIcon("icon/report.png",25,25);
 		
-		JPanel painelEntrada = new JPanel();
-		painelEntrada.setOpaque(false);
-		painelEntrada.setLayout(null);
-		painelEntrada.setBorder(instance.getTitledBorder("Arquivos de Entrada"));
-		painelEntrada.setBounds(12, 10, 476, 160);
-		getContentPane().add(painelEntrada);
+		// Recuperando fontes e cores
+		Font  fonte = instance.getFont ();
+		Color color = instance.getColor();
+				
+		// Painel 'Arquivos de Entrada'
+		JPanel panelInputFile = new JPanel();
+		panelInputFile.setOpaque(false);
+		panelInputFile.setLayout(null);
+		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-input-file")));
+		panelInputFile.setBounds(12, 10, 476, 160);
+		painel.add(panelInputFile);
 		
-		JLabel labelRetornoSistac = new JLabel("Retorno Sistac:");
-		labelRetornoSistac.setFont(fonte);
-		labelRetornoSistac.setBounds(10, 30, 110, 20);
-		painelEntrada.add(labelRetornoSistac);
+		JLabel labelRetorno = new JLabel(bundle.getString("prelim-label-retorno"));
+		labelRetorno.setHorizontalAlignment(JLabel.RIGHT);
+		labelRetorno.setFont(fonte);
+		labelRetorno.setBounds(10, 30, 110, 20);
+		panelInputFile.add(labelRetorno);
 		
-		textRetornoSistac = new JTextField();
-		textRetornoSistac.setForeground(color);
-		textRetornoSistac.setFont(fonte);
-		textRetornoSistac.setEditable(false);
-		textRetornoSistac.setColumns(10);
-		textRetornoSistac.setBounds(125, 30, 260, 25);
-		painelEntrada.add(textRetornoSistac);
+		textRetorno = new JTextField();
+		textRetorno.setToolTipText(bundle.getString("hint-text-retorno"));
+		textRetorno.setForeground(color);
+		textRetorno.setFont(fonte);
+		textRetorno.setEditable(false);
+		textRetorno.setBounds(125, 30, 260, 25);
+		panelInputFile.add(textRetorno);
 		
-		JButton botaoRetornoSistac = new JButton(searchIcon);
-		botaoRetornoSistac.setToolTipText("Buscar o arquivo de retorno do Sistac");
-		botaoRetornoSistac.addActionListener((event) -> selecionaArquivoSistac());
-		botaoRetornoSistac.setBounds(395, 30, 30, 25);
-		painelEntrada.add(botaoRetornoSistac);
+		JButton buttonRetornoSelect = new JButton(searchIcon);
+		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
+		buttonRetornoSelect.addActionListener((event) -> selecionaArquivoSistac());
+		buttonRetornoSelect.setBounds(395, 30, 30, 25);
+		panelInputFile.add(buttonRetornoSelect);
 		
-		JLabel labelRetornoExcel = new JLabel("Planilha Erros:");
-		labelRetornoExcel.setFont(fonte);
-		labelRetornoExcel.setBounds(10, 65, 110, 20);
-		painelEntrada.add(labelRetornoExcel);
+		JButton buttonRetornoClear = new JButton(clearIcon);
+		buttonRetornoClear.setToolTipText(bundle.getString("hint-button-retorno-clear"));
+		buttonRetornoClear.setBounds(435, 30, 30, 25);
+		panelInputFile.add(buttonRetornoClear);
 		
-		textRetornoExcel = new JTextField();
-		textRetornoExcel.setForeground(color);
-		textRetornoExcel.setFont(fonte);
-		textRetornoExcel.setEditable(false);
-		textRetornoExcel.setColumns(10);
-		textRetornoExcel.setBounds(125, 65, 260, 25);
-		painelEntrada.add(textRetornoExcel);
+		JLabel labelErros = new JLabel(bundle.getString("prelim-label-erros"));
+		labelErros.setHorizontalAlignment(JLabel.RIGHT);
+		labelErros.setFont(fonte);
+		labelErros.setBounds(10, 65, 110, 20);
+		panelInputFile.add(labelErros);
 		
-		JButton botaoRetornoExcel = new JButton(searchIcon);
-		botaoRetornoExcel.setToolTipText("Buscar a planilha de erros");
-		botaoRetornoExcel.addActionListener((event) -> selecionaArquivoExcel());
-		botaoRetornoExcel.setBounds(395, 65, 30, 25);
-		painelEntrada.add(botaoRetornoExcel);
+		textErros = new JTextField();
+		textErros.setToolTipText(bundle.getString("hint-text-erros"));
+		textErros.setForeground(color);
+		textErros.setFont(fonte);
+		textErros.setEditable(false);
+		textErros.setBounds(125, 65, 260, 25);
+		panelInputFile.add(textErros);
 		
-		JButton botaoRetornoSistac_1 = new JButton((Icon) null);
-		botaoRetornoSistac_1.setToolTipText("Buscar o arquivo de retorno do Sistac");
-		botaoRetornoSistac_1.setBounds(435, 30, 30, 25);
-		painelEntrada.add(botaoRetornoSistac_1);
+		JButton buttonErrosSelect = new JButton(searchIcon);
+		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
+		buttonErrosSelect.addActionListener((event) -> selecionaArquivoExcel());
+		buttonErrosSelect.setBounds(395, 65, 30, 25);
+		panelInputFile.add(buttonErrosSelect);
 		
-		JButton botaoRetornoSistac_1_1 = new JButton((Icon) null);
-		botaoRetornoSistac_1_1.setToolTipText("Buscar o arquivo de retorno do Sistac");
-		botaoRetornoSistac_1_1.setBounds(435, 65, 30, 25);
-		painelEntrada.add(botaoRetornoSistac_1_1);
+		JButton buttonErrosClear = new JButton(clearIcon);
+		buttonErrosClear.setToolTipText(bundle.getString("hint-button-erros-clear"));
+		buttonErrosClear.setBounds(435, 65, 30, 25);
+		panelInputFile.add(buttonErrosClear);
 		
-		JPanel painelSaida = new JPanel();
-		painelSaida.setOpaque(false);
-		painelSaida.setLayout(null);
-		painelSaida.setBorder(instance.getTitledBorder("Edital de Saída"));
-		painelSaida.setBounds(12, 170, 476, 65);
-		getContentPane().add(painelSaida);
+		// Painel 'Análise do Arquivo'
+		panelResults = new JPanel();
+		panelResults.setOpaque(false);
+		panelResults.setVisible(false);
+		panelResults.setLayout(null);
+		panelResults.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-results")));
+		panelResults.setBounds(12, 95, 453, 55);
+		panelInputFile.add(panelResults);
 		
-		JLabel labelCabecalho = new JLabel("Cabeçalho:");
+		JLabel labelDeferidos = new JLabel(bundle.getString("prelim-label-deferidos"));
+		labelDeferidos.setHorizontalAlignment(JLabel.RIGHT);
+		labelDeferidos.setFont(fonte);
+		labelDeferidos.setBounds(15, 25, 80, 20);
+		panelResults.add(labelDeferidos);
+		
+		textDeferidos = new JLabel();
+		textDeferidos.setHorizontalAlignment(JLabel.CENTER);
+		textDeferidos.setForeground(new Color(0x0D6B12));
+		textDeferidos.setFont(fonte);
+		textDeferidos.setBounds(100, 25, 45, 20);
+		panelResults.add(textDeferidos);
+		
+		JLabel labelIndeferidos = new JLabel(bundle.getString("prelim-label-indeferidos"));
+		labelIndeferidos.setHorizontalAlignment(JLabel.RIGHT);
+		labelIndeferidos.setFont(fonte);
+		labelIndeferidos.setBounds(175, 25, 90, 20);
+		panelResults.add(labelIndeferidos);
+		
+		textIndeferidos = new JLabel();
+		textIndeferidos.setHorizontalAlignment(JLabel.CENTER);
+		textIndeferidos.setForeground(new Color(0xBC1742));
+		textIndeferidos.setFont(fonte);
+		textIndeferidos.setBounds(270, 25, 45, 20);
+		panelResults.add(textIndeferidos);
+		
+		JLabel labelTotal = new JLabel(bundle.getString("prelim-label-total"));
+		labelTotal.setHorizontalAlignment(JLabel.RIGHT);
+		labelTotal.setFont(fonte);
+		labelTotal.setBounds(350, 25, 40, 20);
+		panelResults.add(labelTotal);
+		
+		textTotal = new JLabel();
+		textTotal.setHorizontalAlignment(JLabel.CENTER);
+		textTotal.setForeground(color);
+		textTotal.setFont(fonte);
+		textTotal.setBounds(395, 25, 45, 20);
+		panelResults.add(textTotal);
+		
+		// Painel 'Edital'
+		JPanel panelEdital = new JPanel();
+		panelEdital.setOpaque(false);
+		panelEdital.setLayout(null);
+		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-edital")));
+		panelEdital.setBounds(12, 170, 476, 65);
+		painel.add(panelEdital);
+		
+		JLabel labelCabecalho = new JLabel(bundle.getString("prelim-label-cabecalho"));
+		labelCabecalho.setHorizontalAlignment(JLabel.RIGHT);
 		labelCabecalho.setFont(fonte);
 		labelCabecalho.setBounds(10, 30, 80, 20);
-		painelSaida.add(labelCabecalho);
+		panelEdital.add(labelCabecalho);
 		
 		textCabecalho = new JTextField();
-		textCabecalho.setToolTipText("Título que fará parte do cabeçalho do edital");
+		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setColumns(10);
 		textCabecalho.setBounds(95, 30, 330, 25);
-		painelSaida.add(textCabecalho);
+		panelEdital.add(textCabecalho);
 		
-		JButton botaoRetornoSistac_1_1_1 = new JButton((Icon) null);
-		botaoRetornoSistac_1_1_1.setToolTipText("Buscar o arquivo de retorno do Sistac");
-		botaoRetornoSistac_1_1_1.setBounds(435, 30, 30, 25);
-		painelSaida.add(botaoRetornoSistac_1_1_1);
+		JButton buttonCabecalhoClear = new JButton(clearIcon);
+		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
+		buttonCabecalhoClear.setBounds(435, 30, 30, 25);
+		panelEdital.add(buttonCabecalhoClear);
 		
-		JButton botaoSair = new JButton(exitIcon);
-		botaoSair.setToolTipText("Sair do sistema");
-		botaoSair.addActionListener((event) -> dispose());
+		// Painel 'Resultado Final'
+		JPanel panelFinal = new JPanel();
+		panelFinal.setOpaque(false);
+		panelFinal.setLayout(null);
+		panelFinal.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-final")));
+		panelFinal.setBounds(12, 235, 476, 65);
+		painel.add(panelFinal);
 		
-		ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
-		
-		labelInfo = new JLabel("Processando Arquivo",loading,SwingConstants.LEFT);
-		labelInfo.setFont(fonte);
-		labelInfo.setVisible(false);
-		labelInfo.setBounds(12, 315, 215, 20);
-		getContentPane().add(labelInfo);
-		botaoSair.setBounds(406, 310, 35, 30);
-		getContentPane().add(botaoSair);
-		
-		JPanel painelCompilacao = new JPanel();
-		painelCompilacao.setOpaque(false);
-		painelCompilacao.setLayout(null);
-		painelCompilacao.setBorder(instance.getTitledBorder("Compilação"));
-		painelCompilacao.setBounds(12, 235, 476, 65);
-		getContentPane().add(painelCompilacao);
-		
-		JLabel labelCompilacao = new JLabel("Arquivo BSF:");
+		JLabel labelCompilacao = new JLabel(bundle.getString("prelim-label-compilacao"));
+		labelCompilacao.setHorizontalAlignment(JLabel.RIGHT);
 		labelCompilacao.setFont(fonte);
 		labelCompilacao.setBounds(10, 30, 90, 20);
-		painelCompilacao.add(labelCompilacao);
+		panelFinal.add(labelCompilacao);
 		
 		textCompilacao = new JTextField();
+		textCompilacao.setToolTipText(bundle.getString("hint-text-compilacao"));
 		textCompilacao.setForeground(color);
 		textCompilacao.setFont(fonte);
 		textCompilacao.setEditable(false);
-		textCompilacao.setColumns(10);
 		textCompilacao.setBounds(105, 30, 280, 25);
-		painelCompilacao.add(textCompilacao);
+		panelFinal.add(textCompilacao);
 		
-		JButton botaoCompilacao = new JButton(searchIcon);
-		botaoCompilacao.setToolTipText("Escolher aonde salvar o arquivo de compilação");
-		botaoCompilacao.addActionListener((event) -> selecionaCompilacao());
-		botaoCompilacao.setBounds(395, 30, 30, 25);
-		painelCompilacao.add(botaoCompilacao);
+		JButton buttonCompilacaoSelect = new JButton(searchIcon);
+		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
+		buttonCompilacaoSelect.addActionListener((event) -> selecionaCompilacao());
+		buttonCompilacaoSelect.setBounds(395, 30, 30, 25);
+		panelFinal.add(buttonCompilacaoSelect);
 		
-		JButton botaoCompilacao_1 = new JButton((Icon) null);
-		botaoCompilacao_1.setToolTipText("Escolher aonde salvar o arquivo de compilação");
-		botaoCompilacao_1.setBounds(435, 30, 30, 25);
-		painelCompilacao.add(botaoCompilacao_1);
+		JButton buttonCompilacaoClear = new JButton(clearIcon);
+		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
+		buttonCompilacaoClear.setBounds(435, 30, 30, 25);
+		panelFinal.add(buttonCompilacaoClear);
 		
-		JButton botaoAbrir = new JButton(exportIcon);
-		botaoAbrir.setToolTipText("Gerar o edital");
-		botaoAbrir.setBounds(453, 310, 35, 30);
-		getContentPane().add(botaoAbrir);
-		botaoAbrir.addActionListener((event) -> gerarVisualizacao());
+		// Fundo da janela
+		labelStatus = new JLabel(loadingIcon);
+		labelStatus.setHorizontalAlignment(JLabel.LEFT);
+		labelStatus.setFont(fonte);
+		labelStatus.setVisible(false);
+		labelStatus.setBounds(12, 315, 215, 20);
+		painel.add(labelStatus);
 		
+		JButton buttonSair = new JButton(exitIcon);
+		buttonSair.setToolTipText(bundle.getString("hint-button-exit"));
+		buttonSair.addActionListener((event) -> dispose());
+		buttonSair.setBounds(406, 310, 35, 30);
+		painel.add(buttonSair);
+		
+		JButton buttonReport = new JButton(reportIcon);
+		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
+		buttonReport.setBounds(453, 310, 35, 30);
+		buttonReport.addActionListener((event) -> gerarVisualizacao());
+		painel.add(buttonReport);
+		
+		// Mostrando a janela
+		setSize(dimension);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 		
 	}
@@ -215,7 +294,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			sugestao = new File(retornoSistac.getParent());
 			
 			// Atualizando o nome do arquivo no textfield de seleção
-			textRetornoSistac.setText(retornoSistac.getName());
+			textRetorno.setText(retornoSistac.getName());
 			
 			// Atualizando as informações da tela e executando a leitura do arquivo
 			updateInfo(MSG_LOAD_FILE);
@@ -240,7 +319,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			sugestao = new File(retornoExcel.getParent());
 			
 			// Atualizando o nome do arquivo no textfield de seleção
-			textRetornoExcel.setText(retornoExcel.getName());
+			textErros.setText(retornoExcel.getName());
 			
 			// Atualizando as informações da tela e executando a leitura do arquivo
 			updateInfo(MSG_LOAD_FILE);
@@ -391,9 +470,9 @@ public class TelaRetornoPreliminar extends JFrame {
 	/** Implementação da atualização de infos da GUI */
 	private void swingInfoUpdate(String message, boolean visibility) {
 		
-		labelInfo.setText(message);
-		labelInfo.setVisible(visibility);
-		labelInfo.repaint();
+		labelStatus.setText(message);
+		labelStatus.setVisible(visibility);
+		labelStatus.repaint();
 		
 	}
 }
