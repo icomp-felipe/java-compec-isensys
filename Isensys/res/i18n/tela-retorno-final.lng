@@ -49,7 +49,7 @@ final-compile-reload-thread = TelaRetornoFinal.class - Thread de recarregamento 
 final-compile-clear-title  = Limpar seleção
 final-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?\n\
                              Os arquivos de retorno do Sistac e planilha de erros também\n\
-                             serão desselecionados! 
+                             serão desselecionados!
 
 ! TelaRetornoFinal::actionCompileSelect
 final-compile-select-dtitle   = Selecionando novo arquivo de compilação

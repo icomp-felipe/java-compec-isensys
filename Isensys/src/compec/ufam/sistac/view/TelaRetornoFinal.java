@@ -359,7 +359,7 @@ public class TelaRetornoFinal extends JFrame {
 				// Exibe o diálogo de confirmação
 				final int choice = AlertDialog.dialog(dialogTitle, dialogMessage);
 				
-				// Limpa os campos se o usuário escolheu 'OK'
+				// Sobrescreve dados se o usuário escolheu 'OK'
 				if (choice == AlertDialog.OK_OPTION) {
 					
 					this.retornoSistac = this.retornoExcel = null;
