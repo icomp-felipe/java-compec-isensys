@@ -1,6 +1,11 @@
 ########## Título da Janela
 prelim-window-title = IsenSys v.3.0 - Resultado Preliminar
 
+########## Mensagens de erro da API MFV
+prelim-mfv-retorno    = Selecione o arquivo de retorno do Sistac
+prelim-mfv-cabecalho  = Informe o cabeçalho do edital
+prelim-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
+
 ########## Painéis
 prelim-panel-input-file = Arquivos de Entrada
 prelim-panel-results    = Análise do Arquivo
@@ -76,10 +81,27 @@ prelim-compile-select-dialog = Deseja mesmo sobrescrever o arquivo de compilaç�
 prelim-compile-clear-title  = Arquivo de compilação
 prelim-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?
 
+! TelaRetornoPreliminar::actionExport
+prelim-export-title  = Gerando edital
+prelim-export-thread = TelaRetornoPreliminar.class - Thread de geração de relatório Jasper
+
 ! TelaRetornoPreliminar::setInputProcessing
 prelim-input-processing = Processando arquivo...
 
-! TelaRetornoFinal::threadSistac
+! TelaRetornoPreliminar::setExportProcessing
+prelim-export-processing = Gerando visualização...
+
+! TelaRetornoPreliminar::threadSistac
 prelim-thread-sistac-title = Processando arquivo de retorno
 prelim-thread-sistac-error = Falha ao processar arquivo!\n\
-                            Verifique se vocẽ selecionou o arquivo correto.
+                             Verifique se vocẽ selecionou o arquivo correto.
+
+! TelaRetornoPreliminar::threadErros
+final-thread-erros-title = Processando arquivo de erros
+final-thread-erros-error = Falha ao processar arquivo!\n\
+                           Verifique se vocẽ selecionou o arquivo correto.
+
+! TelaRetornoPreliminar::threadExport
+prelim-thread-export-title = Gerando visualização de edital
+prelim-thread-export-error = Falha ao gerar visualização.\n\
+                             Verifique o console para mais informações.

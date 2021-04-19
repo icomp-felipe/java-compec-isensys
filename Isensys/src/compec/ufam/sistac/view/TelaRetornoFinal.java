@@ -483,7 +483,6 @@ public class TelaRetornoFinal extends JFrame {
 		thread_export.setName(bundle.getString("final-export-thread"));
 		thread_export.start();
 		
-		
 	}
 	
 	/************************* Utility Methods Section ************************************/

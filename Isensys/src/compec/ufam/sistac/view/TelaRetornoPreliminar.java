@@ -34,6 +34,11 @@ public class TelaRetornoPreliminar extends JFrame {
 	// Declaração de atributos gráficos
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
+	// MFV API
+	private final MandatoryFieldsManager fieldValidator;
+	private final MandatoryFieldsLogger  fieldLogger;
+	
+	
 	
 	
 	private File lastFileSelected;
@@ -59,6 +64,9 @@ public class TelaRetornoPreliminar extends JFrame {
 	private JButton buttonErrosSelect;
 	private JButton buttonErrosClear;
 	private JButton buttonReport;
+	private JButton buttonCabecalhoClear;
+	private JButton buttonCompilacaoSelect;
+	private JButton buttonCompilacaoClear;
 
 	/******************* Bloco do Método Principal ******************************/
 	
@@ -222,7 +230,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCabecalho.setBounds(95, 30, 330, 25);
 		panelEdital.add(textCabecalho);
 		
-		JButton buttonCabecalhoClear = new JButton(clearIcon);
+		buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
 		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
 		buttonCabecalhoClear.setBounds(435, 30, 30, 25);
@@ -250,13 +258,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCompilacao.setBounds(105, 30, 280, 25);
 		panelFinal.add(textCompilacao);
 		
-		JButton buttonCompilacaoSelect = new JButton(searchIcon);
+		buttonCompilacaoSelect = new JButton(searchIcon);
 		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
 		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
 		buttonCompilacaoSelect.setBounds(395, 30, 30, 25);
 		panelFinal.add(buttonCompilacaoSelect);
 		
-		JButton buttonCompilacaoClear = new JButton(clearIcon);
+		buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
 		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
 		buttonCompilacaoClear.setBounds(435, 30, 30, 25);
@@ -279,8 +287,16 @@ public class TelaRetornoPreliminar extends JFrame {
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
 		buttonReport.setBounds(453, 310, 35, 30);
-		buttonReport.addActionListener((event) -> gerarVisualizacao());
+		buttonReport.addActionListener((event) -> actionExport());
 		painel.add(buttonReport);
+		
+		// Cadastrando validação de campos
+		this.fieldValidator = new MandatoryFieldsManager();
+		this.fieldLogger    = new MandatoryFieldsLogger ();
+		
+		fieldValidator.addPermanent(labelRetorno   , () -> this.retornoSistac != null        , bundle.getString("prelim-mfv-retorno"   ), false);
+		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().isBlank(), bundle.getString("prelim-mfv-cabecalho" ), false);
+		fieldValidator.addPermanent(labelCompilacao, () -> this.compilacao != null           , bundle.getString("prelim-mfv-compilacao"), false);
 		
 		// Mostrando a janela
 		setSize(dimension);
@@ -558,6 +574,28 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
+	/** Gera o edital de resultado preliminar. */
+	private void actionExport() {
+		
+		// Realizando validação dos campos antes de prosseguir
+		fieldValidator.validate(fieldLogger);
+					
+		// Só prossigo se todas os campos foram devidamente preenchidos
+		if (fieldLogger.hasErrors()) {
+						
+			AlertDialog.error(bundle.getString("prelim-export-title"), fieldLogger.getErrorString());
+			fieldLogger.clear(); return;
+			
+		}
+		
+		// Processando o edital
+		Thread thread_export = new Thread(() -> threadExport());
+										
+		thread_export.setName(bundle.getString("prelim-export-thread"));
+		thread_export.start();
+		
+	}
+	
 	/************************* Utility Methods Section ************************************/
 	
 	/** Método de atualização de UI relacionado aos métodos <method>actionRetornoSelect</method> e <method>actionErrosSelect</method>. */
@@ -598,6 +636,45 @@ public class TelaRetornoPreliminar extends JFrame {
 			});
 			
 		}
+		
+	}
+	
+	/** Controla a visualização de alguns campos e botões durante a geração do edital. */
+	private void setExportProcessing(final boolean isProcessing) {
+		
+		SwingUtilities.invokeLater(() -> {
+			
+			// Controlando visualização dos botões e campos de texto
+			buttonRetornoSelect.setEnabled( !isProcessing );
+			buttonRetornoClear .setEnabled( !isProcessing );
+			
+			textCabecalho       .setEditable( !isProcessing );
+			buttonCabecalhoClear.setEnabled ( !isProcessing );
+			
+			buttonCompilacaoSelect.setEnabled( !isProcessing );
+			buttonCompilacaoClear .setEnabled( !isProcessing );
+			
+			buttonReport.setEnabled( !isProcessing );
+			
+			labelStatus.setVisible( isProcessing );
+			
+			if (isProcessing) {
+				
+				buttonErrosSelect  .setEnabled(false);
+				buttonErrosClear   .setEnabled(false);
+				
+				
+				labelStatus.setText(bundle.getString("prelim-export-processing"));
+				
+			}
+			else {
+				
+				buttonErrosSelect.setEnabled( this.retornoSistac != null );
+				buttonErrosClear .setEnabled( this.retornoSistac != null );
+				
+			}
+			
+		});
 		
 	}
 	
@@ -703,87 +780,42 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
-	
-	
-	
-	/** Constrói o edital */
-	private void gerarVisualizacao() {
+	/** Gera a visualização do edital. */
+	private void threadExport() {
 		
 		try {
 			
-			dependenciaVisualizacao();				// Verificação de dependências
-			updateInfo(MSG_LOAD_PDF);				// Atualização de infos na GUI
-			new Thread(this::exportPDF).start();	// Visualização do relatório (edital)
+			// Bloqueando botões e campos de texto
+			setExportProcessing(true);
+		
+			// Recuperando cabeçalho
+			final String cabecalho = textCabecalho.getText().trim();
 			
-		}
-		catch (BlankFieldException | FileNotSelectedException exception) {
-			AlertDialog.error(exception.getMessage());
-		}
-		
-	}
-	
-	
-	/** Prepara e exibe o edital com o resultado preliminar das solicitações de isenção */
-	private void exportPDF() {
-		
-		try {
-			
-			// Preparando o cabeçalho do edital
-			String cabecalho  = textCabecalho.getText().trim();
-		
-			// Ordenando a lista de retornos (deferidos primeiro)
+			// Ordenando dados
 			listaRetornos.sort();
-		
-			// Gerando a visualização do relatório e salvando o arquivo de compilação
-			PDFExport.export(listaRetornos, cabecalho, "cu", Resultado.PRELIMINAR);
+			
+			// Gerando visualização
+			PDFExport.export(listaRetornos, cabecalho, windowTitle, Resultado.PRELIMINAR);
 			Compilation.save(listaRetornos, compilacao);
 			
-			// Take it easy :)
-			Thread.sleep(2000);
+		}
+		catch (Exception exception) {
 			
-		} catch (Exception exception) {
 			exception.printStackTrace();
-			AlertDialog.error("Falha ao gerar visualização!");
+			
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("prelim-thread-export-title" ),
+					           bundle.getString("prelim-thread-export-error"));
+			
 		}
 		finally {
-			updateInfo(null,false);
+			
+			// Desbloqueando botões e campos de texto
+			setExportProcessing(false);
+			
 		}
 		
 	}
 	
-	/** Verifica se todas as dependências para geração do edital foram satisfeitas */
-	private void dependenciaVisualizacao() throws BlankFieldException,FileNotSelectedException {
-		
-		if (listaRetornos == null)
-			throw new FileNotSelectedException("Selecione ao menos um arquivo de entrada!");
-		
-		if (textCabecalho.getText().trim().equals(""))
-			throw new BlankFieldException("Informe o cabeçalho do edital!");
-		
-		if (compilacao == null)
-			throw new FileNotSelectedException("Selecione o arquivo de compilação!");
-		
-	}
-	
-	/**************** Métodos para atualização da GUI *************************/
-	
-	/** Atualiza informações da GUI (redirecionamento) */
-	private void updateInfo(String message, boolean visibility) {
-		Runnable job = () -> swingInfoUpdate(message, visibility);
-		SwingUtilities.invokeLater(job);
-	}
-	
-	/** Atualiza informações da GUI (redirecionamento) */
-	private void updateInfo(String message) {
-		updateInfo(message, true);
-	}
-	
-	/** Implementação da atualização de infos da GUI */
-	private void swingInfoUpdate(String message, boolean visibility) {
-		
-		labelStatus.setText(message);
-		labelStatus.setVisible(visibility);
-		labelStatus.repaint();
-		
-	}
 }
