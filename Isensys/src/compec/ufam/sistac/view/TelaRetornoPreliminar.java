@@ -1,11 +1,12 @@
 package compec.ufam.sistac.view;
 
 import java.io.*;
+import java.awt.*;
+import javax.swing.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.awt.*;
-import javax.swing.*;
 
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
@@ -17,11 +18,9 @@ import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
 
-import compec.ufam.sistac.exception.*;
-
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 18/04/2021 */
+ *  @version 3.0, 19/04/2021 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -34,45 +33,31 @@ public class TelaRetornoPreliminar extends JFrame {
 	// Declaração de atributos gráficos
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
+	private final JTextField textRetorno, textErros;
+	private final JButton buttonRetornoSelect, buttonRetornoClear, buttonErrosSelect, buttonErrosClear;
+	
+	private final JPanel panelResults;
+	private final JLabel textDeferidos, textIndeferidos, textTotal;
+	
+	private final JTextField textCabecalho;
+	private final JButton buttonCabecalhoClear;
+	
+	private final JTextField textCompilacao;
+	private final JButton buttonCompilacaoSelect, buttonCompilacaoClear;
+	
+	private final JLabel labelStatus;
+	private final JButton buttonReport;
+	
+	// Atributos dinâmicos
+	private File lastFileSelected;
+	private File retornoSistac, retornoExcel, compilacao;
+	private ListaRetornos listaRetornos, lastListaRetornos;
+	
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
-	
-	
-	
-	
-	private File lastFileSelected;
-	
-	
-	
-	
-	private static final String MSG_LOAD_PDF  = "Gerando Visualização";
-	
-	// Alguns componentes de texto da tela
-	private final JTextField textCompilacao,textRetorno,textErros,textCabecalho;
-	private final JLabel labelStatus;
-	
-	private final JLabel  textDeferidos, textIndeferidos, textTotal;
-	
-	private final JPanel panelResults;
-	
-	// Recursos de processamento
-	private File retornoSistac,retornoExcel,compilacao;
-	private ListaRetornos listaRetornos, lastListaRetornos;
-	private JButton buttonRetornoSelect;
-	private JButton buttonRetornoClear;
-	private JButton buttonErrosSelect;
-	private JButton buttonErrosClear;
-	private JButton buttonReport;
-	private JButton buttonCabecalhoClear;
-	private JButton buttonCompilacaoSelect;
-	private JButton buttonCompilacaoClear;
 
 	/******************* Bloco do Método Principal ******************************/
-	
-	public static void main(String[] args) {
-		new TelaRetornoPreliminar();
-	}
 	
 	/** Construtor da classe inicializando a view */
 	public TelaRetornoPreliminar() {
