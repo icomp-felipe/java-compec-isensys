@@ -6,8 +6,8 @@ import java.util.stream.*;
 
 /** Classe que armazena e trata uma lista de objetos do tipo 'Retorno', utilizada para
  *  operações de escrita e leitura do arquivo de compilação no disco.
- *  @author Felipe André
- *  @version 2.50, 08/07/2018
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.0, 19/04/2021
  *  @see Retorno */
 public class ListaRetornos implements Serializable {
 
@@ -17,6 +17,12 @@ public class ListaRetornos implements Serializable {
 	/** Construtor apenas criando uma lista vazia */
 	public ListaRetornos() {
 		this.listaRetornos = new ArrayList<Retorno>();
+	}
+	
+	/** Construtor usado pelo método <code>clone()</code>.
+	 *  @since 3.00 */
+	private ListaRetornos(final int size) {
+		this.listaRetornos = new ArrayList<Retorno>(size);
 	}
 	
 	/** Recupera um 'Retorno' da lista de acordo com sua posição na lista, indicada por 'index' */
@@ -32,6 +38,19 @@ public class ListaRetornos implements Serializable {
 	/** Recupera a lista de 'Retorno' */
 	public ArrayList<Retorno> getList() {
 		return listaRetornos;
+	}
+	
+	@Override
+	/** Retorna uma clone desta classe.
+	 *  @since 3.00 */
+	public ListaRetornos clone() {
+		
+		ListaRetornos nova = new ListaRetornos(this.listaRetornos.size());
+		
+		for (Retorno retorno: this.listaRetornos)
+			nova.add(retorno);
+		
+		return nova;
 	}
 	
 	/** Adiciona um 'Retorno' na lista de 'Retorno' já tratando o deferimento do candidato */
