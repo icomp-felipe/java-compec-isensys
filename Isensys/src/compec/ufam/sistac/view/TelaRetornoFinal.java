@@ -18,7 +18,7 @@ import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.model.*;
 
-/** Classe que controla a view de processamento Retorno Final
+/** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
  *  @version 3.0, 18/04/2021 */
 public class TelaRetornoFinal extends JFrame {
@@ -43,7 +43,7 @@ public class TelaRetornoFinal extends JFrame {
 	
 	private final JTextField textCabecalho;
 	private final JLabel labelStatus;
-	private final JButton buttonExport;
+	private final JButton buttonReport;
 	
 	// Atributos dinâmicos
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
@@ -55,7 +55,7 @@ public class TelaRetornoFinal extends JFrame {
 	
 	public TelaRetornoFinal() {
 		
-		// Recuperando o título da janela
+		// Setando título da janela
 		setTitle(windowTitle);
 		
 		// Inicializando atributos gráficos
@@ -251,11 +251,11 @@ public class TelaRetornoFinal extends JFrame {
 		buttonSair.setBounds(406, 315, 35, 30);
 		painel.add(buttonSair);
 		
-		buttonExport = new JButton(reportIcon);
-		buttonExport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonExport.setBounds(453, 315, 35, 30);
-		buttonExport.addActionListener((event) -> actionExport());
-		painel.add(buttonExport);
+		buttonReport = new JButton(reportIcon);
+		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
+		buttonReport.setBounds(453, 315, 35, 30);
+		buttonReport.addActionListener((event) -> actionExport());
+		painel.add(buttonReport);
 		
 		// Cadastrando validação de campos
 		this.fieldValidator = new MandatoryFieldsManager();
@@ -517,7 +517,7 @@ public class TelaRetornoFinal extends JFrame {
 			buttonErrosSelect  .setEnabled(false);
 			
 			// Bloqueando botão de exportar
-			buttonExport.setEnabled(false);
+			buttonReport.setEnabled(false);
 			
 		}
 		else {
@@ -535,7 +535,7 @@ public class TelaRetornoFinal extends JFrame {
 				buttonErrosSelect  .setEnabled( this.retornoExcel  == null );
 				
 				// Desbloqueando botão 'Exportar'
-				buttonExport.setEnabled(true);
+				buttonReport.setEnabled(true);
 				
 			});
 			
@@ -554,7 +554,7 @@ public class TelaRetornoFinal extends JFrame {
 			buttonCompilacaoSelect.setEnabled( !isProcessing );
 			
 			// Controlando visualização do botão 'Exportar'
-			buttonExport.setEnabled( !isProcessing );
+			buttonReport.setEnabled( !isProcessing );
 			
 			// Controlando visualização do texto de cabeçalho
 			textCabecalho.setEditable( !isProcessing );

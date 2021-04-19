@@ -1,4 +1,4 @@
-########## Window title
+########## Título da Janela
 final-window-title = IsenSys v.3.0 - Resultado Final
 
 ########## Mensagens de erro da API MFV
@@ -27,16 +27,14 @@ final-label-cabecalho = Cabeçalho:
 hint-text-compilacao = Arquivo de compilação (.bsf)
 
 hint-button-compilacao-reload = Recarrega o arquivo de compilação
-hint-button-compilacao-clear  = Limpa a seleção de arquivo
+hint-button-compilacao-clear  = Limpa a seleção do arquivo de compilação
 hint-button-compilacao-select = Busca o arquivo de compilação
 
 hint-text-retorno = Arquivo de retorno do Sistac (.txt)
 hint-button-retorno-select = Busca o arquivo de retorno do Sistac
-hint-button-retorno-clear  = Limpa a seleção do arquivo de retorno do Sistac
 
 hint-text-erros = Arquivo de erros (.xlsx)
 hint-button-erros-select = Busca o arquivo de erros
-hint-button-erros-clear  = Limpa a seleção do arquivo de erros
 
 hint-text-cabecalho = Título que fará parte do cabeçalho do edital
 
