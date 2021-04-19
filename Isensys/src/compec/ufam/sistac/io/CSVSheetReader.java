@@ -1,63 +1,95 @@
 package compec.ufam.sistac.io;
 
 import java.io.*;
-import com.phill.libs.files.CSVUtils;
+import com.phill.libs.files.*;
 import compec.ufam.sistac.model.*;
 import compec.ufam.sistac.exception.*;
 
 /** Classe que lê e processa os dados de um arquivo .csv proveniente do PSCONCURSOS
- *  @author Felipe André
- *  @version 2.50, 07/07/2018 */
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.0, 19/04/2021 */
 public class CSVSheetReader {
 
-	/** Processa o arquivo .csv 'planilha' e retorna um 'ParseResult' que é um ArrayList com todas as entradas de sucesso e erro */
-	public static ParseResult read(File planilha, int[] indexes) throws IOException {
+	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
+	 *  @param planilha - caminho do arquivo .csv
+	 *  @param indexes - índices dos campos de importação de dados
+	 *  @return Objeto com TODAS as entradas lidas do arquivo .csv.
+	 *  @throws IOException quando há alguma falha na leitura da planilha. */
+	public static ParseResult read(final File planilha, final int[] indexes) throws IOException {
 		
+		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo .csv 
 		int linha = 2;
-		String row,csvDelimiter;
 		
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha),"UTF8"));
+		// Variável auxiliar ao loop de leitura do .csv
+		String row;
+		
+		// Abrindo planilha para leitura
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), "UTF8"));
 		ParseResult resultados = new ParseResult();
 		
-		csvDelimiter = CSVUtils.getCSVDelimiter(stream);
+		// Recuperando delimitador do .csv
+		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
 		
+		// Iterando as linhas do .csv
 		while ( (row = stream.readLine()) != null ) {
 			
-			String[] args = readLine(row,csvDelimiter,indexes);
+			// Recuperando os dados de uma linha já separados em um array
+			String[] dados = readLine(row, csvDelimiter, indexes);
 			
 			try {
-				Candidato candidato = CandidatoBuilder.parse(linha,args);
+				
+				// Montando uma classe candidato com os 'dados' lidos da 'linha'
+				Candidato candidato = CandidatoBuilder.parse(linha, dados);
+				
+				// Se não houve nenhum erro de processamento, o candidato é adicionado a uma lista própria
 				resultados.addCandidato(candidato);
-			} catch (RowParseException exception) {
+				
+			}
+			catch (RowParseException exception) {
+				
+				// Se houver um erro no processamento dos campos, este é adicionado a uma lista separada da lista de candidatos
 				resultados.addExcecao(exception);
+				
 			}
 			finally {
+				
+				// Incrementando a contagem de linhas de arquivo processadas
 				linha++;
+				
 			}
 			
 		}
 		
+		// Liberando recursos
 		stream.close();
 		
 		return resultados;
 		
 	}
 	
-	/** Processa cada linha do arquivo .csv */
-	private static String[] readLine(String row, String csvDelimiter, int[] indexes) {
+	/** Monta um array de {@link String} com os dados extraídos da 'linha' e organizados de acordo com os 'indexes'.
+	 *  @param linha - linha extraída do arquivo .csv
+	 *  @param csvDelimiter - string delimitadora do .csv
+	 *  @param indexes - índices de importação de dados
+	 *  @return Um array de {@link String} com os dados extraídos de uma linha do .csv. */
+	private static String[] readLine(final String linha, final String csvDelimiter, final int[] indexes) {
 		
-		String[] args  = new String[9];		// Array que armazena os dados lidos e formatados de cada linha do arquivo .csv
-		String[] split;						// Array que armazena temporariamente os dados lidos do .csv
+		String[] dados = new String[9];		// Array que armazena os dados lidos e formatados de cada linha do arquivo .csv
+		String[] aux;						// Array que armazena temporariamente os dados lidos do .csv
 		
-		split = row.trim().toUpperCase().split(csvDelimiter);
+		// Separando dados de uma linha em um array de Strings
+		aux = linha.trim().toUpperCase().split(csvDelimiter);
 		
-		// Copia as colunas descritas por 'indexes' para 'args'
+		// Copia as colunas descritas por 'indexes' para 'dados'. A ordem do objeto de retornos é SEMPRE igual a descrita abaixo:
+		// Nome, NIS, Data de Nascimento, Sexo, RG, Data de Emissão do RG, órgão Emissor do RG, CPF, Nome da Mãe
 		for (short i=0; i<indexes.length; i++) {
-			int currentField = indexes[i];
-			args[i] = split[currentField];
+			
+			int currentField = indexes[i];		// Recupera o índice atual de 'indexes'
+			dados[i] = aux[currentField];		// Copia os dados de 'aux' para 'dados' de acordo com os 'indexes'
+			
 		}
 		
-		return args;
+		return dados;
 	}
 	
 }
