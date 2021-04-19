@@ -37,6 +37,7 @@ hint-text-erros = Arquivo de erros (.xlsx)
 hint-button-erros-select = Busca o arquivo de erros
 
 hint-text-cabecalho = Título que fará parte do cabeçalho do edital
+hint-button-cabecalho-clear = Limpa o texto de cabeçalho
 
 hint-button-exit   = Sai desta tela
 hint-button-report = Gera o edital
@@ -65,6 +66,10 @@ final-retorno-select-thread = TelaRetornoFinal.class - Thread de carregamento de
 ! TelaRetornoFinal::actionErrosSelect
 final-erros-select-title  = Selecione o arquivo de erros
 final-erros-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de erros
+
+! TelaRetornoPreliminar::actionHeaderClear
+final-header-clear-dtitle = Limpando texto de cabeçalho
+final-header-clear-dialog = Deseja mesmo limpar o texto de cabeçalho?
 
 ! TelaRetornoFinal::actionExport
 final-export-title  = Gerando edital

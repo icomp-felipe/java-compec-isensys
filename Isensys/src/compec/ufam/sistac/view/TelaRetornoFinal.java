@@ -20,7 +20,7 @@ import compec.ufam.sistac.model.*;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 18/04/2021 */
+ *  @version 3.0, 19/04/2021 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -43,7 +43,7 @@ public class TelaRetornoFinal extends JFrame {
 	
 	private final JTextField textCabecalho;
 	private final JLabel labelStatus;
-	private final JButton buttonReport;
+	private final JButton buttonCabecalhoClear, buttonReport;
 	
 	// Atributos dinâmicos
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
@@ -234,8 +234,14 @@ public class TelaRetornoFinal extends JFrame {
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 369, 25);
+		textCabecalho.setBounds(95, 30, 330, 25);
 		panelEdital.add(textCabecalho);
+		
+		buttonCabecalhoClear = new JButton(clearIcon);
+		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
+		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
+		buttonCabecalhoClear.setBounds(435, 30, 30, 25);
+		panelEdital.add(buttonCabecalhoClear);
 		
 		// Fundo da janela
 		labelStatus = new JLabel(loadingIcon);
@@ -463,6 +469,33 @@ public class TelaRetornoFinal extends JFrame {
 		
 	}
 	
+	/** Limpa o texto do cabeçalho. */
+	private void actionHeaderClear() {
+		
+		// Recuperando texto de cabeçalho
+		final String cabecalho = textCabecalho.getText();
+		
+		// Exibe um diálogo de confirmação caso haja algum texto neste campo
+		if (!cabecalho.isBlank()) {
+			
+			// Recuperando strings do diálogo
+			final String dtitle = bundle.getString("final-header-clear-dtitle");
+			final String dialog = bundle.getString("final-header-clear-dialog");
+			
+			// Exibe o diálogo de confirmação
+			final int choice = AlertDialog.dialog(dtitle, dialog);
+						
+			// Limpa o campo se o usuário escolheu 'OK'
+			if (choice == AlertDialog.OK_OPTION)
+				textCabecalho.setText(null);
+			
+		}
+		
+		// Recuperando foco
+		textCabecalho.requestFocus();
+		
+	}
+	
 	/** Gera o edital de resultado final. */
 	private void actionExport() {
 		
@@ -556,7 +589,8 @@ public class TelaRetornoFinal extends JFrame {
 			buttonReport.setEnabled( !isProcessing );
 			
 			// Controlando visualização do texto de cabeçalho
-			textCabecalho.setEditable( !isProcessing );
+			textCabecalho       .setEditable( !isProcessing );
+			buttonCabecalhoClear.setEnabled ( !isProcessing );
 			
 			// Controlando visualização dos botões do painel 'Arquivos de Entrada' e do label de status
 			if (isProcessing) {
@@ -757,5 +791,4 @@ public class TelaRetornoFinal extends JFrame {
 		}
 		
 	}
-	
 }
