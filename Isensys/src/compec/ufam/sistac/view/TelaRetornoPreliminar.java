@@ -36,6 +36,10 @@ public class TelaRetornoPreliminar extends JFrame {
 
 	/******************* Bloco do Método Principal ******************************/
 	
+	public static void main(String[] args) {
+		new TelaRetornoPreliminar();
+	}
+	
 	/** Construtor da classe inicializando a view */
 	public TelaRetornoPreliminar() {
 		super("IsenSys: Retorno (Preliminar)");
@@ -49,7 +53,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
-		Dimension d = new Dimension(460,340);
+		Dimension d = new Dimension(500,380);
 		
 		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",d);
 		setContentPane(painel);
@@ -64,12 +68,12 @@ public class TelaRetornoPreliminar extends JFrame {
 		painelEntrada.setOpaque(false);
 		painelEntrada.setLayout(null);
 		painelEntrada.setBorder(instance.getTitledBorder("Arquivos de Entrada"));
-		painelEntrada.setBounds(12, 12, 436, 95);
+		painelEntrada.setBounds(12, 10, 476, 160);
 		getContentPane().add(painelEntrada);
 		
 		JLabel labelRetornoSistac = new JLabel("Retorno Sistac:");
 		labelRetornoSistac.setFont(fonte);
-		labelRetornoSistac.setBounds(12, 30, 118, 15);
+		labelRetornoSistac.setBounds(10, 30, 110, 20);
 		painelEntrada.add(labelRetornoSistac);
 		
 		textRetornoSistac = new JTextField();
@@ -77,18 +81,18 @@ public class TelaRetornoPreliminar extends JFrame {
 		textRetornoSistac.setFont(fonte);
 		textRetornoSistac.setEditable(false);
 		textRetornoSistac.setColumns(10);
-		textRetornoSistac.setBounds(130, 29, 252, 25);
+		textRetornoSistac.setBounds(125, 30, 260, 25);
 		painelEntrada.add(textRetornoSistac);
 		
 		JButton botaoRetornoSistac = new JButton(searchIcon);
 		botaoRetornoSistac.setToolTipText("Buscar o arquivo de retorno do Sistac");
 		botaoRetornoSistac.addActionListener((event) -> selecionaArquivoSistac());
-		botaoRetornoSistac.setBounds(394, 28, 30, 25);
+		botaoRetornoSistac.setBounds(395, 30, 30, 25);
 		painelEntrada.add(botaoRetornoSistac);
 		
 		JLabel labelRetornoExcel = new JLabel("Planilha Erros:");
 		labelRetornoExcel.setFont(fonte);
-		labelRetornoExcel.setBounds(12, 59, 118, 15);
+		labelRetornoExcel.setBounds(10, 65, 110, 20);
 		painelEntrada.add(labelRetornoExcel);
 		
 		textRetornoExcel = new JTextField();
@@ -96,25 +100,35 @@ public class TelaRetornoPreliminar extends JFrame {
 		textRetornoExcel.setFont(fonte);
 		textRetornoExcel.setEditable(false);
 		textRetornoExcel.setColumns(10);
-		textRetornoExcel.setBounds(130, 58, 252, 25);
+		textRetornoExcel.setBounds(125, 65, 260, 25);
 		painelEntrada.add(textRetornoExcel);
 		
 		JButton botaoRetornoExcel = new JButton(searchIcon);
 		botaoRetornoExcel.setToolTipText("Buscar a planilha de erros");
 		botaoRetornoExcel.addActionListener((event) -> selecionaArquivoExcel());
-		botaoRetornoExcel.setBounds(394, 57, 30, 25);
+		botaoRetornoExcel.setBounds(395, 65, 30, 25);
 		painelEntrada.add(botaoRetornoExcel);
+		
+		JButton botaoRetornoSistac_1 = new JButton((Icon) null);
+		botaoRetornoSistac_1.setToolTipText("Buscar o arquivo de retorno do Sistac");
+		botaoRetornoSistac_1.setBounds(435, 30, 30, 25);
+		painelEntrada.add(botaoRetornoSistac_1);
+		
+		JButton botaoRetornoSistac_1_1 = new JButton((Icon) null);
+		botaoRetornoSistac_1_1.setToolTipText("Buscar o arquivo de retorno do Sistac");
+		botaoRetornoSistac_1_1.setBounds(435, 65, 30, 25);
+		painelEntrada.add(botaoRetornoSistac_1_1);
 		
 		JPanel painelSaida = new JPanel();
 		painelSaida.setOpaque(false);
 		painelSaida.setLayout(null);
 		painelSaida.setBorder(instance.getTitledBorder("Edital de Saída"));
-		painelSaida.setBounds(12, 119, 436, 64);
+		painelSaida.setBounds(12, 170, 476, 65);
 		getContentPane().add(painelSaida);
 		
 		JLabel labelCabecalho = new JLabel("Cabeçalho:");
 		labelCabecalho.setFont(fonte);
-		labelCabecalho.setBounds(12, 26, 90, 20);
+		labelCabecalho.setBounds(10, 30, 80, 20);
 		painelSaida.add(labelCabecalho);
 		
 		textCabecalho = new JTextField();
@@ -122,8 +136,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
 		textCabecalho.setColumns(10);
-		textCabecalho.setBounds(105, 26, 319, 25);
+		textCabecalho.setBounds(95, 30, 330, 25);
 		painelSaida.add(textCabecalho);
+		
+		JButton botaoRetornoSistac_1_1_1 = new JButton((Icon) null);
+		botaoRetornoSistac_1_1_1.setToolTipText("Buscar o arquivo de retorno do Sistac");
+		botaoRetornoSistac_1_1_1.setBounds(435, 30, 30, 25);
+		painelSaida.add(botaoRetornoSistac_1_1_1);
 		
 		JButton botaoSair = new JButton(exitIcon);
 		botaoSair.setToolTipText("Sair do sistema");
@@ -134,21 +153,21 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelInfo = new JLabel("Processando Arquivo",loading,SwingConstants.LEFT);
 		labelInfo.setFont(fonte);
 		labelInfo.setVisible(false);
-		labelInfo.setBounds(12, 271, 214, 20);
+		labelInfo.setBounds(12, 315, 215, 20);
 		getContentPane().add(labelInfo);
-		botaoSair.setBounds(363, 268, 35, 30);
+		botaoSair.setBounds(406, 310, 35, 30);
 		getContentPane().add(botaoSair);
 		
 		JPanel painelCompilacao = new JPanel();
 		painelCompilacao.setOpaque(false);
 		painelCompilacao.setLayout(null);
 		painelCompilacao.setBorder(instance.getTitledBorder("Compilação"));
-		painelCompilacao.setBounds(12, 195, 436, 64);
+		painelCompilacao.setBounds(12, 235, 476, 65);
 		getContentPane().add(painelCompilacao);
 		
 		JLabel labelCompilacao = new JLabel("Arquivo BSF:");
 		labelCompilacao.setFont(fonte);
-		labelCompilacao.setBounds(12, 30, 103, 15);
+		labelCompilacao.setBounds(10, 30, 90, 20);
 		painelCompilacao.add(labelCompilacao);
 		
 		textCompilacao = new JTextField();
@@ -156,18 +175,23 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCompilacao.setFont(fonte);
 		textCompilacao.setEditable(false);
 		textCompilacao.setColumns(10);
-		textCompilacao.setBounds(122, 26, 260, 25);
+		textCompilacao.setBounds(105, 30, 280, 25);
 		painelCompilacao.add(textCompilacao);
 		
 		JButton botaoCompilacao = new JButton(searchIcon);
 		botaoCompilacao.setToolTipText("Escolher aonde salvar o arquivo de compilação");
 		botaoCompilacao.addActionListener((event) -> selecionaCompilacao());
-		botaoCompilacao.setBounds(394, 26, 30, 25);
+		botaoCompilacao.setBounds(395, 30, 30, 25);
 		painelCompilacao.add(botaoCompilacao);
+		
+		JButton botaoCompilacao_1 = new JButton((Icon) null);
+		botaoCompilacao_1.setToolTipText("Escolher aonde salvar o arquivo de compilação");
+		botaoCompilacao_1.setBounds(435, 30, 30, 25);
+		painelCompilacao.add(botaoCompilacao_1);
 		
 		JButton botaoAbrir = new JButton(exportIcon);
 		botaoAbrir.setToolTipText("Gerar o edital");
-		botaoAbrir.setBounds(410, 268, 35, 30);
+		botaoAbrir.setBounds(453, 310, 35, 30);
 		getContentPane().add(botaoAbrir);
 		botaoAbrir.addActionListener((event) -> gerarVisualizacao());
 		
@@ -372,5 +396,4 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelInfo.repaint();
 		
 	}
-	
 }
