@@ -311,7 +311,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			listaRetornos.sort();
 		
 			// Gerando a visualização do relatório e salvando o arquivo de compilação
-			PDFExport.export(listaRetornos, cabecalho, Resultado.PRELIMINAR);
+			PDFExport.export(listaRetornos, cabecalho, "cu", Resultado.PRELIMINAR);
 			Compilation.save(listaRetornos, compilacao);
 			
 			// Take it easy :)

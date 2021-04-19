@@ -28,6 +28,7 @@ public class TelaRetornoFinal extends JFrame {
 	
 	// Carregando bundle de idiomas
 	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-retorno-final", null);
+	private final static String windowTitle = bundle.getString("final-window-title");
 	
 	// Declaração de atributos gráficos
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
@@ -55,7 +56,7 @@ public class TelaRetornoFinal extends JFrame {
 	public TelaRetornoFinal() {
 		
 		// Recuperando o título da janela
-		setTitle(bundle.getString("final-window-title"));
+		setTitle(windowTitle);
 		
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
@@ -731,7 +732,7 @@ public class TelaRetornoFinal extends JFrame {
 			listaRetornos.sort();
 			
 			// Gerando visualização
-			PDFExport.export(listaRetornos, cabecalho, Resultado.FINAL);
+			PDFExport.export(listaRetornos, cabecalho, windowTitle, Resultado.FINAL);
 			
 		}
 		catch (Exception exception) {

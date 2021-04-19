@@ -6,7 +6,6 @@ import javax.imageio.*;
 import java.awt.image.*;
 
 import com.phill.libs.*;
-import com.phill.libs.i18n.PropertyBundle;
 
 import compec.ufam.sistac.model.*;
 import net.sf.jasperreports.view.*;
@@ -21,10 +20,11 @@ public class PDFExport {
 	/** Monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo já compilado (.jasper).
 	 *  @param retornos - lista de retornos de processamento
 	 *  @param cabecalho - cabeçalho do edital
+	 *  @param windowTitle - título da janela
 	 *  @param tipoResultado - tipo de resultado (preliminar ou final)
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final ListaRetornos retornos, final String cabecalho, final Resultado tipoResultado) throws JRException, IOException {
+	public static void export(final ListaRetornos retornos, final String cabecalho, final String windowTitle, final Resultado tipoResultado) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
@@ -34,11 +34,6 @@ public class PDFExport {
 		String reportPath = ResourceManager.getResource("relatorios/Edital.jasper");
 		JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(reportPath);
 		
-		// Carregando texto i18n
-		final PropertyBundle bundle = new PropertyBundle("i18n/pdf-export", null);
-		final String title  = bundle.getString("pdf-export-title");
-		final String edital = (tipoResultado == Resultado.PRELIMINAR) ? bundle.getString("pdf-export-prelim") : bundle.getString("pdf-export-final");
-		
 		// Preparando parâmetros do relatório
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		
@@ -53,7 +48,7 @@ public class PDFExport {
 		
 		// Exibindo resultados
 		JasperViewer jrv = new JasperViewer(prints,false);
-		jrv.setTitle(title + edital);
+		jrv.setTitle(windowTitle);
 		jrv.setVisible(true);
 		
 	}
@@ -61,10 +56,11 @@ public class PDFExport {
 	/** Monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo fonte (.jrxml).
 	 *  @param retornos - lista de retornos de processamento
 	 *  @param cabecalho - cabeçalho do edital
+	 *  @param windowTitle - título da janela
 	 *  @param tipoResultado - tipo de resultado (preliminar ou final)
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void compileAndExport(final ListaRetornos retornos, final String cabecalho, final Resultado tipoResultado) throws JRException, IOException {
+	public static void compileAndExport(final ListaRetornos retornos, final String cabecalho, final String windowTitle, final Resultado tipoResultado) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
@@ -74,11 +70,6 @@ public class PDFExport {
 		String reportPath = ResourceManager.getResource("relatorios/Edital.jrxml");
 		JasperReport report = JasperCompileManager.compileReport(reportPath);
 		
-		// Carregando texto i18n
-		final PropertyBundle bundle = new PropertyBundle("i18n/pdf-export", null);
-		final String title  = bundle.getString("pdf-export-title");
-		final String edital = (tipoResultado == Resultado.PRELIMINAR) ? bundle.getString("pdf-export-prelim") : bundle.getString("pdf-export-final");
-		
 		// Preparando parâmetros do relatório
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		
@@ -93,7 +84,7 @@ public class PDFExport {
 		
 		// Exibindo resultados
 		JasperViewer jrv = new JasperViewer(prints,false);
-		jrv.setTitle(title + edital);
+		jrv.setTitle(windowTitle);
 		jrv.setVisible(true);
 		
 	}

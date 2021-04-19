@@ -1,5 +1,0 @@
-########## Métodos
-! PDFExport::export
-pdf-export-title  = IsenSys 3.0 - Edital 
-pdf-export-prelim = Preliminar
-pdf-export-final  = Final
