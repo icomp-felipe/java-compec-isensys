@@ -1,6 +1,9 @@
 package compec.ufam.sistac.view;
 
 import java.io.*;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.awt.*;
 import javax.swing.*;
 
@@ -33,12 +36,11 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	
 	
+	private File lastFileSelected;
 	
 	
 	
 	
-	// Mensagens de processamento (exibidas no rodapé) 
-	private static final String MSG_LOAD_FILE = "Processando Arquivo";
 	private static final String MSG_LOAD_PDF  = "Gerando Visualização";
 	
 	// Alguns componentes de texto da tela
@@ -50,8 +52,13 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final JPanel panelResults;
 	
 	// Recursos de processamento
-	private File retornoSistac,retornoExcel,compilacao,sugestao;
-	private ListaRetornos listaRetornos;
+	private File retornoSistac,retornoExcel,compilacao;
+	private ListaRetornos listaRetornos, lastListaRetornos;
+	private JButton buttonRetornoSelect;
+	private JButton buttonRetornoClear;
+	private JButton buttonErrosSelect;
+	private JButton buttonErrosClear;
+	private JButton buttonReport;
 
 	/******************* Bloco do Método Principal ******************************/
 	
@@ -106,14 +113,15 @@ public class TelaRetornoPreliminar extends JFrame {
 		textRetorno.setBounds(125, 30, 260, 25);
 		panelInputFile.add(textRetorno);
 		
-		JButton buttonRetornoSelect = new JButton(searchIcon);
+		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
-		buttonRetornoSelect.addActionListener((event) -> selecionaArquivoSistac());
+		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
 		buttonRetornoSelect.setBounds(395, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
 		
-		JButton buttonRetornoClear = new JButton(clearIcon);
+		buttonRetornoClear = new JButton(clearIcon);
 		buttonRetornoClear.setToolTipText(bundle.getString("hint-button-retorno-clear"));
+		buttonRetornoClear.addActionListener((event) -> actionRetornoClear());
 		buttonRetornoClear.setBounds(435, 30, 30, 25);
 		panelInputFile.add(buttonRetornoClear);
 		
@@ -131,14 +139,17 @@ public class TelaRetornoPreliminar extends JFrame {
 		textErros.setBounds(125, 65, 260, 25);
 		panelInputFile.add(textErros);
 		
-		JButton buttonErrosSelect = new JButton(searchIcon);
+		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
-		buttonErrosSelect.addActionListener((event) -> selecionaArquivoExcel());
+		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
+		buttonErrosSelect.setEnabled(false);
 		buttonErrosSelect.setBounds(395, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
 		
-		JButton buttonErrosClear = new JButton(clearIcon);
+		buttonErrosClear = new JButton(clearIcon);
 		buttonErrosClear.setToolTipText(bundle.getString("hint-button-erros-clear"));
+		buttonErrosClear.addActionListener((event) -> actionErrosClear());
+		buttonErrosClear.setEnabled(false);
 		buttonErrosClear.setBounds(435, 65, 30, 25);
 		panelInputFile.add(buttonErrosClear);
 		
@@ -213,6 +224,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		JButton buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
+		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
 		buttonCabecalhoClear.setBounds(435, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
@@ -240,12 +252,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		JButton buttonCompilacaoSelect = new JButton(searchIcon);
 		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
-		buttonCompilacaoSelect.addActionListener((event) -> selecionaCompilacao());
+		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
 		buttonCompilacaoSelect.setBounds(395, 30, 30, 25);
 		panelFinal.add(buttonCompilacaoSelect);
 		
 		JButton buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
+		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
 		buttonCompilacaoClear.setBounds(435, 30, 30, 25);
 		panelFinal.add(buttonCompilacaoClear);
 		
@@ -263,7 +276,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		buttonSair.setBounds(406, 310, 35, 30);
 		painel.add(buttonSair);
 		
-		JButton buttonReport = new JButton(reportIcon);
+		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
 		buttonReport.setBounds(453, 310, 35, 30);
 		buttonReport.addActionListener((event) -> gerarVisualizacao());
@@ -278,75 +291,420 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
-	/************* Bloco de Tratamento de Eventos de Botão *********************/
-
-	/** Carrega o arquivo de exportação do sistac para o sistema */
-	private void selecionaArquivoSistac() {
+	/********************** Tratamento de Eventos de Botões *******************************/
+	
+	/** Carrega o arquivo de retorno do Sistac e atualiza as informações da janela. */
+	private void actionRetornoSelect() {
 		
-		inicializaLista();
-		
-		try {
+		// Recuperando título da janela
+		final String title = bundle.getString("prelim-retorno-select-title");
+						
+		// Recuperando o arquivo de retorno
+		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected);
+						
+		// Faz algo somente se algum arquivo foi selecionado
+		if (selected != null) {
 			
-			// Abrindo a GUI de seleção de arquivo
-			retornoSistac = PhillFileUtils.loadFile("Selecione o arquivo de texto Sistac", Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, sugestao);
+			// Atualizando último arquivo selecionado
+			this.lastFileSelected = selected;
 			
-			// Atualizando o arquivo de sugestão (último diretório selecionado)
-			sugestao = new File(retornoSistac.getParent());
+			// Se já existe um arquivo de retorno previamente selecionado, um diálogo de sobrescrever é exibido
+			if (this.retornoSistac != null) {
+				
+				// Recuperando strings do diálogo
+				final String dtitle = bundle.getString("prelim-retorno-select-dtitle");
+				final String dialog = bundle.getString("prelim-retorno-select-dialog");
+				
+				// Exibe o diálogo de confirmação
+				final int choice = AlertDialog.dialog(dtitle, dialog);
+				
+				// Limpa os campos do arquivo de erro apenas se o usuário escolheu 'OK'
+				if (choice == AlertDialog.OK_OPTION) {
+					
+					this.retornoExcel = null;
+					textErros.setText(null);
+					
+				}
+				else return;
+				
+			}
 			
-			// Atualizando o nome do arquivo no textfield de seleção
+			// Salvando arquivo
+			this.retornoSistac = selected;
+							
+			// Atualizando a view
 			textRetorno.setText(retornoSistac.getName());
-			
-			// Atualizando as informações da tela e executando a leitura do arquivo
-			updateInfo(MSG_LOAD_FILE);
-			new Thread(this::readTXT).start();
-			
+			setInputProcessing(true);
+				
+			// Processando o arquivo
+			Thread thread_sistac = new Thread(() -> threadSistac());
+				
+			thread_sistac.setName(bundle.getString("prelim-retorno-select-thread"));
+			thread_sistac.start();
+							
 		}
-		catch (NullPointerException exception) { }
-		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Sistac!"); }
+			
 	}
 	
-	/** Carrega a planilha de erros para o sistema */
-	private void selecionaArquivoExcel() {
+	/** Limpa a seleção do arquivo de retorno do Sistac. */
+	private void actionRetornoClear() {
 		
-		inicializaLista();
+		// Faz algo somente se algum arquivo de retorno já foi previamente selecionado 
+		if (this.retornoSistac != null) {
+			
+			// Recuperando strings do diálogo
+			final String dtitle = bundle.getString("prelim-retorno-clear-dtitle");
+			final String dialog = bundle.getString("prelim-retorno-clear-dialog");
+						
+			// Exibe o diálogo de confirmação
+			final int choice = AlertDialog.dialog(dtitle, dialog);
+									
+			// Limpa o campo se o usuário escolheu 'OK'
+			if (choice == AlertDialog.OK_OPTION) {
+				
+				// Limpando atributos
+				this.listaRetornos = null;
+				this.retornoSistac = null;
+				this.retornoExcel  = null;
+				
+				// Limpando campos de texto
+				textRetorno.setText(null);
+				textErros  .setText(null);
+				
+				// Bloquenado botões relacionados à planilha de erros
+				buttonErrosSelect.setEnabled(false);
+				buttonErrosClear .setEnabled(false);
+				
+				// Ocultando painel de processamento
+				panelResults.setVisible(false);
+				
+			}
+			
+		}
 		
-		try {
+	}
+	
+	/** Carrega o arquivo de erros e atualiza as informações da janela. */
+	private void actionErrosSelect() {
+		
+		// Recuperando título da janela
+		final String title = bundle.getString("prelim-erros-select-title");
+								
+		// Recuperando o arquivo de retorno
+		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected);
+							
+		// Faz algo somente se algum arquivo foi selecionado
+		if (selected != null) {
+					
+			// Atualizando último arquivo selecionado
+			this.lastFileSelected = selected;
 			
-			// Abrindo a GUI de seleção de arquivo
-			retornoExcel = PhillFileUtils.loadFile("Selecione a planilha", Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, sugestao);
+			// Se já existe um arquivo de erros previamente selecionado, um diálogo de sobrescrever é exibido
+			if (this.retornoExcel != null) {
+							
+				// Recuperando strings do diálogo
+				final String dtitle = bundle.getString("prelim-erros-select-dtitle");
+				final String dialog = bundle.getString("prelim-erros-select-dialog");
+							
+				// Exibe o diálogo de confirmação
+				final int choice = AlertDialog.dialog(dtitle, dialog);
+
+				// Recupera o estado anterior se o usuário selecionou 'OK'
+				if (choice == AlertDialog.OK_OPTION)
+					this.listaRetornos = this.lastListaRetornos;
+				else return;
+							
+			}
 			
-			// Atualizando o arquivo de sugestão (último diretório selecionado)
-			sugestao = new File(retornoExcel.getParent());
+			// Salvando estado anterior ao processamento dos erros
+			this.lastListaRetornos = this.listaRetornos.clone();
 			
-			// Atualizando o nome do arquivo no textfield de seleção
+			// Salvando arquivo
+			this.retornoExcel = selected;
+			
+			// Atualizando a view
 			textErros.setText(retornoExcel.getName());
+			setInputProcessing(true);
+	
+			// Processando o arquivo
+			Thread thread_erros = new Thread(() -> threadErros());
 			
-			// Atualizando as informações da tela e executando a leitura do arquivo
-			updateInfo(MSG_LOAD_FILE);
-			new Thread(this::readExcel).start();
+			thread_erros.setName(bundle.getString("prelim-erros-select-thread"));
+			thread_erros.start();
 			
 		}
-		catch (NullPointerException exception) { exception.printStackTrace(); }
-		catch (Exception exception) { AlertDialog.error("Não foi possível carregar o arquivo Excel!"); }
+		
 	}
 	
-	/** Seleciona o arquivo de compilação do sistema */
-	private void selecionaCompilacao() {
+	/** Limpa a seleção do arquivo de erros e reverte o processamento ao estado anterior. */
+	private void actionErrosClear() {
+		
+		// Faz algo somente se algum arquivo de erros foi previamente selecionado
+		if (this.retornoExcel != null) {
+			
+			// Recuperando strings do diálogo
+			final String dtitle = bundle.getString("prelim-erros-clear-dtitle");
+			final String dialog = bundle.getString("prelim-erros-clear-dialog");
+						
+			// Exibe o diálogo de confirmação
+			final int choice = AlertDialog.dialog(dtitle, dialog);
+									
+			// Prossegue apenas se o usuário escolheu 'OK'
+			if (choice == AlertDialog.OK_OPTION) {
+				
+				// Limpando campos
+				this.retornoExcel = null;
+				textErros.setText(null);
+				
+				// Recuperando estado anterior
+				this.listaRetornos = this.lastListaRetornos;
+				
+				// Atualizando estatísticas
+				updateStatistics();
+				
+			}
+			
+		}
+		
+	}
+	
+	/** Limpa o texto do cabeçalho. */
+	private void actionHeaderClear() {
+		
+		// Recuperando texto de cabeçalho
+		final String cabecalho = textCabecalho.getText();
+		
+		// Exibe um diálogo de confirmação caso haja algum texto neste campo
+		if (!cabecalho.isBlank()) {
+			
+			// Recuperando strings do diálogo
+			final String dtitle = bundle.getString("prelim-header-clear-dtitle");
+			final String dialog = bundle.getString("prelim-header-clear-dialog");
+			
+			// Exibe o diálogo de confirmação
+			final int choice = AlertDialog.dialog(dtitle, dialog);
+						
+			// Limpa o campo se o usuário escolheu 'OK'
+			if (choice == AlertDialog.OK_OPTION)
+				textCabecalho.setText(null);
+			
+		}
+		
+		// Recuperando foco
+		textCabecalho.requestFocus();
+		
+	}
+	
+	/** Seleciona o arquivo de compilação. */
+	private void actionCompileSelect() {
+		
+		// Recuperando título da janela
+		final String title = bundle.getString("prelim-compile-select-title");
+								
+		// Recuperando o arquivo de retorno
+		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, this.lastFileSelected);
+								
+		// Faz algo somente se algum arquivo foi selecionado
+		if (selected != null) {
+			
+			// Atualizando último arquivo selecionado
+			this.lastFileSelected = selected;
+			
+			// Tratamento de sobrescrição de arquivo
+			if (selected.exists()) {
+				
+				// Recuperando strings do diálogo
+				final String dtitle = bundle.getString("prelim-compile-select-dtitle");
+				final String dialog = bundle.getString("prelim-compile-select-dialog");
+				
+				// Exibe o diálogo de confirmação
+				final int choice = AlertDialog.dialog(dtitle, dialog);
+							
+				// Sai aqui se o usuário não selecionou 'OK'
+				if (choice != AlertDialog.OK_OPTION) return;
+				
+			}
+			
+			// Atualizando campos
+			this.compilacao = selected;
+			textCompilacao.setText(selected.getName());
+			
+		}
+		
+	}
+	
+	/** Limpa a seleção do arquivo de compilação */
+	private void actionCompileClear() {
+		
+		// Faz algo somente se algum arquivo foi selecionado
+		if (this.compilacao != null) {
+			
+			// Recuperando strings do diálogo
+			final String title   = bundle.getString("prelim-compile-clear-title");
+			final String message = bundle.getString("prelim-compile-clear-dialog");
+					
+			// Exibe o diálogo de confirmação
+			final int choice = AlertDialog.dialog(title, message);
+						
+			// Limpa os campos se o usuário escolheu 'OK'
+			if (choice == AlertDialog.OK_OPTION) {
+				
+				this.compilacao = null;
+				textCompilacao.setText(null);
+				
+			}
+			
+		}
+		
+	}
+	
+	/************************* Utility Methods Section ************************************/
+	
+	/** Método de atualização de UI relacionado aos métodos <method>actionRetornoSelect</method> e <method>actionErrosSelect</method>. */
+	private void setInputProcessing(final boolean isProcessing) {
+		
+		if (isProcessing) {
+			
+			// Atualizando a view
+			labelStatus.setText(bundle.getString("prelim-input-processing"));
+			labelStatus.setVisible(true);
+			
+			panelResults.setVisible(false);
+
+			// Bloqueando os botões do painel 'Arquivos de Entrada'
+			buttonRetornoSelect.setEnabled(false);
+			buttonRetornoClear .setEnabled(false);
+			buttonErrosSelect  .setEnabled(false);
+			buttonErrosClear   .setEnabled(false);
+			
+			// Bloqueando botão de exportar
+			buttonReport.setEnabled(false);
+			
+		}
+		else {
+			
+			// Desbloqueia os botões
+			SwingUtilities.invokeLater(() -> {
+				
+				// Desbloqueando os botões do painel 'Arquivos de Entrada'
+				buttonRetornoSelect.setEnabled(true);
+				buttonRetornoClear .setEnabled(true);
+				buttonErrosSelect  .setEnabled( this.retornoSistac != null );
+				buttonErrosClear   .setEnabled( this.retornoSistac != null );
+				
+				// Desbloqueando botão 'Exportar'
+				buttonReport.setEnabled(true);
+				
+			});
+			
+		}
+		
+	}
+	
+	/** Atualiza os totais de candidatos processados. */
+	private void updateStatistics() {
+		
+		// Recuperando dados
+		Map<Boolean,List<Retorno>> map = listaRetornos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido));
+		
+		List<Retorno>   deferidos = map.get(true );
+		List<Retorno> indeferidos = map.get(false);
+		
+		int   deferidosCount = (  deferidos == null) ? 0 : deferidos  .size();
+		int indeferidosCount = (indeferidos == null) ? 0 : indeferidos.size();
+		
+		SwingUtilities.invokeLater(() -> {
+			
+			// Escondendo o label de status
+			labelStatus.setVisible(false);
+			
+			// Atualizando estatísticas
+			textDeferidos  .setText(Integer.toString(deferidosCount  ));
+			textIndeferidos.setText(Integer.toString(indeferidosCount));
+			textTotal      .setText(Integer.toString(indeferidosCount + deferidosCount));
+			
+			// Exibindo estatísticas
+			panelResults.setVisible(true);
+			
+		});
+		
+	}
+	
+	/***************************** Threaded Methods Section *******************************/
+	
+	/** Processa o arquivo de retorno do Sistac. */
+	private void threadSistac() {
 		
 		try {
 			
-			// Abrindo a GUI de seleção de arquivo
-			compilacao = PhillFileUtils.loadFile("Selecione o arquivo de compilação", Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, sugestao);
+			// Inicializando lista de retornos
+			this.listaRetornos = new ListaRetornos();
 			
-			// Atualizando o arquivo de sugestão (último diretório selecionado)
-			sugestao = new File(compilacao.getParent());
+			// Processa a lista de retornos do Sistac
+			SistacFile.readRetorno(listaRetornos, retornoSistac);
 			
-			// Atualizando o nome do arquivo no textfield de seleção
-			textCompilacao.setText(compilacao.getName());
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(2000L);
+						
+			// Atualiza a view com estatísticas do processamento
+			updateStatistics();
 			
-		} catch (NullPointerException exception) { exception.printStackTrace(); }
+		}
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("prelim-thread-sistac-title" ),
+					           bundle.getString("prelim-thread-sistac-error"));
+			
+		}
+		finally {
+			
+			// Desbloqueando campos
+			setInputProcessing(false);
+			
+		}
 		
 	}
+	
+	/** Processa o arquivo de erros do Excel mesclando os resultados de retorno do sistac. */
+	private void threadErros() {
+		
+		try {
+			
+			// Processa a lista de erros
+			ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
+			
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(2000L);
+						
+			// Atualiza a view com estatísticas do processamento
+			updateStatistics();
+			
+		}
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			
+			// Atualizando a view em caso de erro
+			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
+			AlertDialog.error( bundle.getString("final-thread-erros-title" ),
+					           bundle.getString("final-thread-erros-error"));
+			
+		}
+		finally {
+			
+			// Desbloqueando campos
+			setInputProcessing(false);
+			
+		}
+		
+	}
+	
+	
+	
 	
 	/** Constrói o edital */
 	private void gerarVisualizacao() {
@@ -364,43 +722,6 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
-	/************ Bloco de Processamento de Arquivos e Relatórios **************/
-	
-	/** Carrega a lista de retornos a partir de um arquivo CSV */
-	private void readTXT() {
-		
-		try {
-			
-			SistacFile.readRetorno(listaRetornos, retornoSistac);
-			Thread.sleep(2000);
-			
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			AlertDialog.error("Falha ao carregar o arquivo de retorno do Sistac!");
-		}
-		finally {
-			updateInfo(null,false);
-		}
-		
-	}
-	
-	/** Carrega a planilha de erros */
-	private void readExcel() {
-		
-		try {
-			
-			ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
-			Thread.sleep(2000);
-			
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			AlertDialog.error("Falha ao carregar o arquivo de retorno do Excel!");
-		}
-		finally {
-			updateInfo(null,false);
-		}
-		
-	}
 	
 	/** Prepara e exibe o edital com o resultado preliminar das solicitações de isenção */
 	private void exportPDF() {
@@ -427,16 +748,6 @@ public class TelaRetornoPreliminar extends JFrame {
 		finally {
 			updateInfo(null,false);
 		}
-		
-	}
-	
-	/************** Bloco de Métodos Auxiliares ********************************/	
-	
-	/** Inicializa a lista de retornos, caso ela não esteja inicializada */
-	private void inicializaLista() {
-		
-		if (listaRetornos == null)
-			listaRetornos = new ListaRetornos();
 		
 	}
 	

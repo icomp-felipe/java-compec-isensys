@@ -37,3 +37,49 @@ hint-button-compilacao-clear  = Limpa a seleção do arquivo de compilação
 
 hint-button-exit   = Sai desta tela
 hint-button-report = Gera o edital
+
+########## Métodos
+! TelaRetornoPreliminar::actionRetornoSelect
+prelim-retorno-select-title  = Selecione o arquivo de retorno do Sistac
+prelim-retorno-select-dtitle = Selecionando novo arquivo de retorno do Sistac
+prelim-retorno-select-dialog = Tem certeza que deseja selecionar outro arquivo de retorno do Sistac?\n\
+                               Ao prosseguir, o arquivo de erro (se houver) será desselecionado!
+prelim-retorno-select-thread = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de retorno
+
+! TelaRetornoPreliminar::actionRetornoClear
+prelim-retorno-clear-dtitle = Arquivo de retorno do Sistac
+prelim-retorno-clear-dialog = Tem certeza que deseja desselecionar o arquivo de retorno do Sistac?\n\
+                              Ao prosseguir, o arquivo de erro (se houver) também será desselecionado!  
+
+! TelaRetornoPreliminar::actionErrosSelect
+prelim-erros-select-title  = Selecione o arquivo de erros
+prelim-erros-select-dtitle = Selecionando novo arquivo de erros
+prelim-erros-select-dialog = Tem certeza que deseja selecionar outro arquivo de erros?\n\
+                             Ao prosseguir, o sistema reprocessará os arquivos com a nova seleção!
+prelim-erros-select-thread = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de erros
+
+! TelaRetornoPreliminar::actionErrosClear
+prelim-erros-clear-dtitle = Arquivo de erros
+prelim-erros-clear-dialog = Tem certeza que deseja desselecionar o arquivo de erros?\n\
+                            Ao prosseguir, o sistema voltará ao estado anterior à sua seleção!  
+
+! TelaRetornoPreliminar::actionHeaderClear
+prelim-header-clear-dtitle = Limpando texto de cabeçalho
+prelim-header-clear-dialog = Deseja mesmo limpar o texto de cabeçalho?
+
+! TelaRetornoPreliminar::actionCompileSelect
+prelim-compile-select-title = Selecione o arquivo de compilação
+prelim-compile-select-dtitle = Sobrescrevendo arquivo de compilação
+prelim-compile-select-dialog = Deseja mesmo sobrescrever o arquivo de compilação?
+
+! TelaRetornoPreliminar::actionCompileClear
+prelim-compile-clear-title  = Arquivo de compilação
+prelim-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?
+
+! TelaRetornoPreliminar::setInputProcessing
+prelim-input-processing = Processando arquivo...
+
+! TelaRetornoFinal::threadSistac
+prelim-thread-sistac-title = Processando arquivo de retorno
+prelim-thread-sistac-error = Falha ao processar arquivo!\n\
+                            Verifique se vocẽ selecionou o arquivo correto.
