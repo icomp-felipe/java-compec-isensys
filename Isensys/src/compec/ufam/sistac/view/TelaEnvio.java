@@ -379,14 +379,15 @@ public class TelaEnvio extends JFrame {
 			final String sequencia = String.format("%03d", spinnerOutputSequencia.getValue());
 			
 			// Criando arquivo de saída - Sistac
-			final File saidaSistac = SistacFile.getSistacExportName(this.inputFile, edital, sequencia);
+			final File saidaSistac = SistacFile.getSistacExportName(this.outputDir, edital, sequencia);
+			
 			SistacFile.generate(resultList.getListaCandidatos(), saidaSistac);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
 			if (this.resultList.getListaExcecoes().size() > 0) {
 				
 				final String filename = String.format("errors-%s-%s.xlsx", edital, sequencia);
-				final File saidaExcel = new File(this.inputFile, filename);
+				final File saidaExcel = new File(this.outputDir, filename);
 				
 				ExcelSheetWriter.write(resultList.getListaExcecoes(), saidaExcel);
 				

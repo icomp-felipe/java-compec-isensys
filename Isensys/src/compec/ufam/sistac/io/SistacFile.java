@@ -14,12 +14,12 @@ public class SistacFile {
 	public static final String UFAM_HEADER = "0;04378626000197;UNIVERSIDADE FEDERAL DO AMAZONAS;FUNDACAO UNIVERSIDADE DO AMAZONAS;";
 	public static final String UFAM_CNPJ   = "04378626000197";
 	
-	/** Escreve o arquivo para envio ao Sistac */
+	/** Escreve o arquivo para envio ao Sistac 
+	 * @throws UnsupportedEncodingException 
+	 * @throws FileNotFoundException */
 	@SuppressWarnings("resource")
-	public static boolean generate(ArrayList<Candidato> listaCandidatos, File arquivo) {
+	public static void generate(ArrayList<Candidato> listaCandidatos, File arquivo) throws IOException {
 		
-		try {
-			
 			int i;
 			PrintWriter stream = new PrintWriter(arquivo,"UTF8");
 			
@@ -34,13 +34,6 @@ public class SistacFile {
 			stream.print(listaCandidatos.get(i).getResume());
 			stream.close();
 			
-			return true;
-		}
-		catch (IOException exception) {
-			exception.printStackTrace();
-		}
-		
-		return false;
 	}
 
 	/** Lẽ e processa o arquivo de retorno do Sistac lendo suas entradas e inserindo-as na 'listaRetornos' */
@@ -80,7 +73,7 @@ public class SistacFile {
 
 	/** Monta o nome de exportação do arquivo Sistac */
 	public static File getSistacExportName(File path, String edital, String sequencia) {
-		String filename = String.format("%s/%s_%s_%s_%s.txt",path.getParent(),UFAM_CNPJ,edital,getDataAtual(),sequencia);
+		String filename = String.format("%s/%s_%s_%s_%s.txt",path,UFAM_CNPJ,edital,getDataAtual(),sequencia);
 		return new File(filename);
 	}
 	
