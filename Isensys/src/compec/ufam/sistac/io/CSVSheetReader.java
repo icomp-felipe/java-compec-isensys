@@ -5,7 +5,10 @@ import com.phill.libs.files.*;
 import compec.ufam.sistac.model.*;
 import compec.ufam.sistac.exception.*;
 
-/** Classe que lê e processa os dados de um arquivo .csv proveniente do PSCONCURSOS
+/** Classe que lê e processa os dados de um arquivo .csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
+ *  Aqui são realizadas verificações na planilha e geradas uma lista de candidatos aptos a serem exportados para o Sistac e uma lista de erros,
+ *  útil para a construção do edital.
+ *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
  *  @author Felipe André - felipeandresouza@hotmail.com
  *  @version 3.0, 19/04/2021 */
 public class CSVSheetReader {
