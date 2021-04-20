@@ -20,7 +20,7 @@ public class CSVSheetReader {
 	 *  @throws IOException quando há alguma falha na leitura da planilha. */
 	public static ParseResult read(final File planilha, final int[] indexes) throws IOException {
 		
-		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo .csv 
+		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo .csv
 		int linha = 2;
 		
 		// Variável auxiliar ao loop de leitura do .csv
@@ -77,8 +77,8 @@ public class CSVSheetReader {
 	 *  @return Um array de {@link String} com os dados extraídos de uma linha do .csv. */
 	private static String[] readLine(final String linha, final String csvDelimiter, final int[] indexes) {
 		
-		String[] dados = new String[9];		// Array que armazena os dados lidos e formatados de cada linha do arquivo .csv
-		String[] aux;						// Array que armazena temporariamente os dados lidos do .csv
+		String[] dados = new String[indexes.length];	// Array que armazena os dados lidos e formatados de cada linha do arquivo .csv
+		String[] aux;									// Array que armazena temporariamente os dados lidos do .csv
 		
 		// Separando dados de uma linha em um array de Strings
 		aux = linha.trim().toUpperCase().split(csvDelimiter);
