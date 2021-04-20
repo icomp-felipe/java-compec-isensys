@@ -737,7 +737,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 			
 			// Processa a lista de erros
-			ExcelSheetReader.readRetorno(listaRetornos, retornoExcel);
+			ExcelSheetReader.readErros(listaRetornos, retornoExcel);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(2000L);
