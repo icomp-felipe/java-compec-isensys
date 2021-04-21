@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.constants;
 
 /** Enum que representa os tipos de edital.
  *  Utilizado na construção do relatório final.

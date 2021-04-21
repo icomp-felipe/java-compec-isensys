@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.constants;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 

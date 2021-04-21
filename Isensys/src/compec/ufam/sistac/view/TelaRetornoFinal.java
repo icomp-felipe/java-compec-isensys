@@ -14,9 +14,11 @@ import com.phill.libs.i18n.*;
 import com.phill.libs.files.*;
 import com.phill.libs.mfvapi.*;
 
+import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
-import compec.ufam.sistac.model.*;
+import compec.ufam.sistac.model.retorno.ListaRetornos;
+import compec.ufam.sistac.model.retorno.Retorno;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com

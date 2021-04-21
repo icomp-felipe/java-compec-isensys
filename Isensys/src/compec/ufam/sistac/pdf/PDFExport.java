@@ -7,7 +7,8 @@ import java.awt.image.*;
 
 import com.phill.libs.*;
 
-import compec.ufam.sistac.model.*;
+import compec.ufam.sistac.constants.*;
+import compec.ufam.sistac.model.retorno.ListaRetornos;
 import net.sf.jasperreports.view.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.*;

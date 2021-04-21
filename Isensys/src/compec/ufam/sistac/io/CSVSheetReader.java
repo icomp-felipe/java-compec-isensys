@@ -2,7 +2,13 @@ package compec.ufam.sistac.io;
 
 import java.io.*;
 import com.phill.libs.files.*;
-import compec.ufam.sistac.model.*;
+
+import compec.ufam.sistac.model.envio.Candidato;
+import compec.ufam.sistac.model.envio.CandidatoBuilder;
+import compec.ufam.sistac.model.envio.ParseResult;
+import compec.ufam.sistac.model.retorno.ListaRetornos;
+import compec.ufam.sistac.model.retorno.Retorno;
+import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.exception.*;
 
 /** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.

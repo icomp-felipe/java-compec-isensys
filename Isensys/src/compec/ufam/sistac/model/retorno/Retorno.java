@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.model.retorno;
 
 import java.io.Serializable;
 import com.phill.libs.StringUtils;

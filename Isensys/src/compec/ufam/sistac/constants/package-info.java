@@ -3,4 +3,4 @@
  * @author Felipe André
  * @version 2.50, 08/07/2018
  */
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.constants;

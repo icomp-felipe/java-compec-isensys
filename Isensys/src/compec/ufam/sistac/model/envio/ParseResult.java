@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.model.envio;
 
 import java.util.*;
 import compec.ufam.sistac.exception.*;

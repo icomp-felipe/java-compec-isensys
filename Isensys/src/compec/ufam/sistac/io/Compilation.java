@@ -1,7 +1,10 @@
 package compec.ufam.sistac.io;
 
 import java.io.*;
-import compec.ufam.sistac.model.*;
+
+import compec.ufam.sistac.constants.*;
+import compec.ufam.sistac.model.retorno.ListaRetornos;
+import compec.ufam.sistac.model.retorno.Retorno;
 
 /** Classe de I/O da compilação do sistema
  *  @author Felipe André - felipeandresouza@hotmail.com

@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.model.envio;
 
 import org.joda.time.*;
 import com.phill.libs.*;
@@ -89,7 +89,7 @@ public class CandidatoBuilder {
 	private static String parseNome(String nome, final boolean isNomeMae) throws FieldException {
 		
 		nome = StringUtils.wipeSpecialCharacters(nome);
-		nome = StringUtils.extractAlphaNumeric  (nome, " ", false);
+		nome = StringUtils.extractAlphabet      (nome, " ", false);
 		nome = StringUtils.wipeMultipleSpaces   (nome);
 		
 		if (!StringUtils.isAlphaStringOnly(nome))

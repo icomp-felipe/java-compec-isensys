@@ -1,7 +1,10 @@
-package compec.ufam.sistac.model;
+package compec.ufam.sistac.model.envio;
 
 import org.joda.time.*;
 import com.phill.libs.time.*;
+
+import compec.ufam.sistac.constants.Constants;
+import compec.ufam.sistac.constants.Constants.StringFormat;
 
 /** Classe que representa um candidato processado com sucesso pelo sistema. Se houve algum erro
  *  durante o processo de leitura e parse dos arquivos, o objeto criado será o 'RowParseException'

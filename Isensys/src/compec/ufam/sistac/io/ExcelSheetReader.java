@@ -3,10 +3,17 @@ package compec.ufam.sistac.io;
 import java.io.*;
 import java.text.*;
 import java.util.*;
-import compec.ufam.sistac.model.*;
+
+import compec.ufam.sistac.model.envio.Candidato;
+import compec.ufam.sistac.model.envio.CandidatoBuilder;
+import compec.ufam.sistac.model.envio.ParseResult;
+import compec.ufam.sistac.model.retorno.ListaRetornos;
+import compec.ufam.sistac.model.retorno.Retorno;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+
+import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.exception.*;
 import org.apache.poi.xssf.usermodel.*;
 

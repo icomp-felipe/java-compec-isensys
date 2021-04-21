@@ -11,8 +11,9 @@ import com.phill.libs.i18n.*;
 import com.phill.libs.files.*;
 import com.phill.libs.mfvapi.*;
 
+import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
-import compec.ufam.sistac.model.*;
+import compec.ufam.sistac.model.envio.ParseResult;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
