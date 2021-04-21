@@ -4,27 +4,23 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-import compec.ufam.sistac.model.envio.Candidato;
-import compec.ufam.sistac.model.envio.CandidatoBuilder;
-import compec.ufam.sistac.model.envio.ParseResult;
-import compec.ufam.sistac.model.retorno.ListaRetornos;
-import compec.ufam.sistac.model.retorno.Retorno;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.openxml4j.exceptions.*;
 
 import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.exception.*;
-import org.apache.poi.xssf.usermodel.*;
+import compec.ufam.sistac.model.envio.*;
+import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que lê e processa os dados de um arquivo .xlsx com os dados necessários para solicitação de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 20/04/2021 */
+ *  @version 3.0, 21/04/2021 */
 public class ExcelSheetReader {
 
 	// Forma
-	private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
-	private static final DataFormatter    DATA_FORMATTER = new DataFormatter(Locale.getDefault());
+	private static final SimpleDateFormat XLS_DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
+	private static final DataFormatter    RAW_DATE_FORMATTER = new DataFormatter(Locale.getDefault());
 	
 	/** Processa o arquivo .xlsx 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
 	 *  @param planilha - caminho do arquivo .xlsx
@@ -83,43 +79,37 @@ public class ExcelSheetReader {
 		
 	}
 
-	
-	public static void readErros(ListaRetornos listaRetornos, File planilhaRetorno) throws IOException {
+	/** Incorpora os erros contidos na <code>planilhaErros</code> à <code>listaRetornos</code>.
+	 *  @param planilhaErros - arquivo da planilha de erros
+	 *  @param listaRetornos - lista de retornos
+	 *  @throws IOException quando há alguma falha na leitura da planilha.
+	 *  @throws InvalidFormatException quando a planilha está com um formato desconhecido ou corrompida. */
+	public static void readErros(final File planilhaErros, final ListaRetornos listaRetornos) throws IOException, InvalidFormatException {
 		
-		FileInputStream stream = new FileInputStream(planilhaRetorno);
+		// Abrindo planilha para leitura
+		XSSFWorkbook  workbook = new XSSFWorkbook   (planilhaErros);
+		XSSFSheet    xssfSheet = workbook.getSheetAt(0);
 		
-		XSSFWorkbook workbook = new XSSFWorkbook(stream);
-		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = xssfSheet.iterator();	//Preparando loop
+		rowIterator.next();									// Pulando a primeira linha (cabeçalho)
 		
-		Iterator<Row> rowIterator = sheet.iterator();
-		rowIterator.next();
-		
+		// Recuperando dados das linhas da planilha
 		while (rowIterator.hasNext()) {
 			
-			Row row = rowIterator.next();
-			String[] args = readLine(row, 3, Constants.Index.XLSX_ERROR_SHEET);
+			Row row = rowIterator.next();											// Recuperando uma linha da planilha
+			String[] dados = readLine(row, Constants.SheetIndex.XLSX_ERROR_SHEET);	// Recuperando os dados de uma linha já separados em um array
 
-			Retorno retorno = new Retorno();
-			retorno.setNIS ( args[0] );
-			retorno.setNome( args[1] );
-			retorno.setCPF ( args[2] );
-			retorno.setSituacao("N");
-			retorno.setMotivo  ("-1");
-			
+			// Montando objeto 'Retorno'
+			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], "N", "-1" );
+						
+			// Adicionando novo objeto retorno à lista recebida via parâmetro
 			listaRetornos.add(retorno);
 			
 		}
 		
+		// Liberando recursos
 		workbook.close();
 		
-	}
-	
-	/** Monta um array de {@link String} com os dados extraídos da 'row' e organizados de acordo com os 'indexes'.
-	 *  @param row - linha extraída do arquivo .xlsx
-	 *  @param indexes - índices de importação de dados
-	 *  @return Um array de {@link String} com os dados extraídos de uma linha do .xlsx. */
-	private static String[] readLine(final Row row, final int[] indexes) {
-		return readLine(row, indexes.length, indexes);
 	}
 	
 	/** Monta um array de {@link String} com os dados extraídos da 'row' e organizados de acordo com os 'indexes'.
@@ -127,14 +117,14 @@ public class ExcelSheetReader {
 	 *  @param size - tamanho do vetor de Strings a ser retornado
 	 *  @param indexes - índices de importação de dados
 	 *  @return Um array de {@link String} com os dados extraídos de uma linha do .xlsx. */
-	private static String[] readLine(final Row row, final int size, final int[] indexes) {
+	private static String[] readLine(final Row row, final int[] indexes) {
 		
 		// Instanciando o array de strings
-		String[] dados = new String[size];
+		String[] dados = new String[indexes.length];
 		
 		// Copia as colunas descritas por 'indexes' para 'dados'. A ordem do objeto de retornos é SEMPRE igual a descrita abaixo:
 		// Nome, NIS, Data de Nascimento, Sexo, RG, Data de Emissão do RG, órgão Emissor do RG, CPF, Nome da Mãe
-		for (short i=0; i<size; i++) {
+		for (short i=0; i<indexes.length; i++) {
 			
 			Cell currentCell = row.getCell(indexes[i]);						// Recuperando a 'indexes-ésima' célula de uma linha
 			dados[i] = getCellContent(currentCell).trim().toUpperCase();	// Recupera os dados da célula sempre como String
@@ -161,9 +151,9 @@ public class ExcelSheetReader {
 				
 			case NUMERIC:
 				if (DateUtil.isCellDateFormatted(celula))
-					return DATE_FORMATTER.format(celula.getDateCellValue());
+					return XLS_DATE_FORMATTER.format(celula.getDateCellValue());
 				else
-					return DATA_FORMATTER.formatCellValue(celula);
+					return RAW_DATE_FORMATTER.formatCellValue(celula);
 			
 			default:
 				break;

@@ -1,22 +1,20 @@
 package compec.ufam.sistac.io;
 
 import java.io.*;
+
 import com.phill.libs.files.*;
 
-import compec.ufam.sistac.model.envio.Candidato;
-import compec.ufam.sistac.model.envio.CandidatoBuilder;
-import compec.ufam.sistac.model.envio.ParseResult;
-import compec.ufam.sistac.model.retorno.ListaRetornos;
-import compec.ufam.sistac.model.retorno.Retorno;
 import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.exception.*;
+import compec.ufam.sistac.model.envio.*;
+import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
  *  Aqui são realizadas verificações na planilha e geradas uma lista de candidatos aptos a serem exportados para o Sistac e uma lista de erros,
  *  útil para a construção do edital.
  *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 19/04/2021 */
+ *  @version 3.0, 21/04/2021 */
 public class CSVSheetReader {
 
 	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
@@ -76,14 +74,17 @@ public class CSVSheetReader {
 		
 	}
 	
-	/** Lẽ e processa o arquivo de retorno do Sistac lendo suas entradas e inserindo-as na 'listaRetornos' */
-	public static void readRetorno(final ListaRetornos listaRetornos, final File arquivo) throws IOException {
+	/** Incorpora os retornos contidos na <code>planilha</code> do Sistac à <code>listaRetornos</code>.
+	 *  @param planilha - arquivo de retorno do Sistac
+	 *  @param listaRetornos - lista de retornos
+	 *  @throws IOException quando a planilha não pode ser lida. */
+	public static void readRetorno(final File planilha, final ListaRetornos listaRetornos) throws IOException {
 		
-		// Variável auxiliar ao loop de leitura do .csv
+		// Variável auxiliar ao loop de leitura do csv
 		String row;
 		
 		// Abrindo planilha para leitura
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo), "UTF8"));
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), "UTF8"));
 
 		// Recuperando delimitador do csv
 		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
@@ -92,16 +93,10 @@ public class CSVSheetReader {
 		while ( (row = stream.readLine() ) != null) {
 			
 			// Recuperando os dados de uma linha já separados em um array
-			String[] dados = readLine(row, csvDelimiter, Constants.Index.CSV_RETURN_SHEET);
+			String[] dados = readLine(row, csvDelimiter, Constants.SheetIndex.CSV_RETURN_SHEET);
 			
 			// Montando objeto 'Retorno'
-			Retorno retorno = new Retorno();
-			
-			retorno.setNome    ( dados[0] );
-			retorno.setNIS     ( dados[1] );
-			retorno.setCPF     ( dados[2] );
-			retorno.setSituacao( dados[3] );
-			retorno.setMotivo  ( dados[4] );
+			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], dados[3], dados[4] );
 			
 			// Adicionando novo objeto retorno à lista recebida via parâmetro
 			listaRetornos.add(retorno);

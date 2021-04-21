@@ -17,7 +17,7 @@ public class Constants {
 		
 	}
 	
-	public static class Index {
+	public static class SheetIndex {
 		
 		/** Índices dos campos aproveitados da planilha de erros. */
 		public static final int[] CSV_RETURN_SHEET = {
@@ -25,11 +25,11 @@ public class Constants {
                                                        2,   // NIS
                                                        8,   // CPF
                                                        10,  // Situação ('N' para indeferido ou 'S' para deferido
-                                                       11   // Código de situação, caso esta seja 'N' (ver manual do Sistac)
+                                                       11   // Código de situação (motivo), caso esta seja 'N' (ver manual do Sistac)
                                                      };
 		
-		public static final int XLSX_ERROR_SHEET[] = { 0,   // NIS
-				                                       1,   // Nome do solicitante
+		public static final int XLSX_ERROR_SHEET[] = { 1,   // Nome do solicitante
+				                                       0,   // NIS
 				                                       2    // CPF
 				                                     };
 		

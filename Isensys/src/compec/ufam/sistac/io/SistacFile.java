@@ -3,8 +3,6 @@ package compec.ufam.sistac.io;
 import java.io.*;
 import java.text.*;
 import java.util.*;
-
-import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.model.envio.Candidato;
 
 /** Classe de manipulação do arquivo Sistac
