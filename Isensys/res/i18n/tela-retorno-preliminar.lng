@@ -7,12 +7,17 @@ prelim-mfv-cabecalho  = Informe o cabeçalho do edital
 prelim-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
 
 ########## Painéis
-prelim-panel-input-file = Arquivos de Entrada
-prelim-panel-results    = Análise do Arquivo
-prelim-panel-edital     = Edital
-prelim-panel-final      = Resultado Final
+prelim-panel-instituicao = Dados da Instituição
+prelim-panel-input-file  = Arquivos de Entrada
+prelim-panel-results     = Análise do Arquivo
+prelim-panel-edital      = Edital
+prelim-panel-final       = Resultado Final
 
 ########## Labels
+prelim-label-cnpj          = CNPJ:
+prelim-label-nome-fantasia = Nome Fantasia:
+prelim-label-razao-social  = Razão Social:
+
 prelim-label-retorno = Retorno Sistac:
 prelim-label-erros   = Planilha Erros:
 

@@ -4,25 +4,27 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
+import com.phill.libs.time.*;
 import com.phill.libs.i18n.*;
 import com.phill.libs.files.*;
 import com.phill.libs.mfvapi.*;
 
-import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
-import compec.ufam.sistac.model.retorno.ListaRetornos;
-import compec.ufam.sistac.model.retorno.Retorno;
+import compec.ufam.sistac.constants.*;
+import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 19/04/2021 */
+ *  @version 3.0, 21/04/2021 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -50,6 +52,9 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final JLabel labelStatus;
 	private final JButton buttonReport;
 	
+	// Dados da instituição
+	private final String cnpj, nomeFantasia, razaoSocial;
+	
 	// Atributos dinâmicos
 	private File lastFileSelected;
 	private File retornoSistac, retornoExcel, compilacao;
@@ -61,6 +66,10 @@ public class TelaRetornoPreliminar extends JFrame {
 
 	/******************* Bloco do Método Principal ******************************/
 	
+	public static void main(String[] args) {
+		new TelaRetornoPreliminar();
+	}
+	
 	/** Construtor da classe inicializando a view */
 	public TelaRetornoPreliminar() {
 
@@ -70,7 +79,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
-		Dimension dimension = new Dimension(500,380);
+		Dimension dimension = new Dimension(500,485);
 		
 		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",dimension);
 		painel.setLayout(null);
@@ -85,13 +94,64 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Recuperando fontes e cores
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
+		
+		// Recuperando dados da instituição
+		this.cnpj         = PropertiesManager.getString("inst.cnpj" , "config/program.properties");
+		this.nomeFantasia = PropertiesManager.getString("inst.nome" , "config/program.properties");
+		this.razaoSocial  = PropertiesManager.getString("inst.razao", "config/program.properties");
+		
+		// Painel 'Dados da Instituição'
+		JPanel panelInstituicao = new JPanel();
+		panelInstituicao.setOpaque(false);
+		panelInstituicao.setLayout(null);
+		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-instituicao")));
+		panelInstituicao.setBounds(12, 10, 476, 105);
+		painel.add(panelInstituicao);
+		
+		JLabel labelCNPJ = new JLabel(bundle.getString("prelim-label-cnpj"));
+		labelCNPJ.setHorizontalAlignment(JLabel.RIGHT);
+		labelCNPJ.setFont(fonte);
+		labelCNPJ.setBounds(10, 25, 115, 20);
+		panelInstituicao.add(labelCNPJ);
+		
+		JLabel textCNPJ = new JLabel(StringUtils.BR.formataCNPJ(this.cnpj));
+		textCNPJ.setFont(fonte);
+		textCNPJ.setForeground(color);
+		textCNPJ.setBounds(130, 25, 145, 20);
+		panelInstituicao.add(textCNPJ);
+		
+		JLabel labelNomeFantasia = new JLabel(bundle.getString("prelim-label-nome-fantasia"));
+		labelNomeFantasia.setHorizontalAlignment(JLabel.RIGHT);
+		labelNomeFantasia.setFont(fonte);
+		labelNomeFantasia.setBounds(10, 50, 115, 20);
+		panelInstituicao.add(labelNomeFantasia);
+		
+		JLabel textNomeFantasia = new JLabel(this.nomeFantasia);
+		textNomeFantasia.setFont(fonte);
+		textNomeFantasia.setForeground(color);
+		textNomeFantasia.setToolTipText(this.nomeFantasia);
+		textNomeFantasia.setBounds(130, 50, 334, 20);
+		panelInstituicao.add(textNomeFantasia);
+		
+		JLabel labelRazaoSocial = new JLabel(bundle.getString("prelim-label-razao-social"));
+		labelRazaoSocial.setHorizontalAlignment(JLabel.RIGHT);
+		labelRazaoSocial.setFont(fonte);
+		labelRazaoSocial.setBounds(10, 75, 115, 20);
+		panelInstituicao.add(labelRazaoSocial);
+		
+		JLabel textRazaoSocial = new JLabel(this.razaoSocial);
+		textRazaoSocial.setFont(fonte);
+		textRazaoSocial.setForeground(color);
+		textRazaoSocial.setToolTipText(this.razaoSocial);
+		textRazaoSocial.setBounds(130, 75, 334, 20);
+		panelInstituicao.add(textRazaoSocial);
 				
 		// Painel 'Arquivos de Entrada'
 		JPanel panelInputFile = new JPanel();
 		panelInputFile.setOpaque(false);
 		panelInputFile.setLayout(null);
 		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-input-file")));
-		panelInputFile.setBounds(12, 10, 476, 160);
+		panelInputFile.setBounds(12, 115, 476, 160);
 		painel.add(panelInputFile);
 		
 		JLabel labelRetorno = new JLabel(bundle.getString("prelim-label-retorno"));
@@ -201,7 +261,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-edital")));
-		panelEdital.setBounds(12, 170, 476, 65);
+		panelEdital.setBounds(12, 275, 476, 65);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel(bundle.getString("prelim-label-cabecalho"));
@@ -228,7 +288,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelFinal.setOpaque(false);
 		panelFinal.setLayout(null);
 		panelFinal.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-final")));
-		panelFinal.setBounds(12, 235, 476, 65);
+		panelFinal.setBounds(12, 340, 476, 65);
 		painel.add(panelFinal);
 		
 		JLabel labelCompilacao = new JLabel(bundle.getString("prelim-label-compilacao"));
@@ -262,18 +322,18 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(12, 315, 215, 20);
+		labelStatus.setBounds(12, 420, 215, 20);
 		painel.add(labelStatus);
 		
 		JButton buttonSair = new JButton(exitIcon);
 		buttonSair.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonSair.addActionListener((event) -> dispose());
-		buttonSair.setBounds(406, 310, 35, 30);
+		buttonSair.setBounds(406, 415, 35, 30);
 		painel.add(buttonSair);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(453, 310, 35, 30);
+		buttonReport.setBounds(453, 415, 35, 30);
 		buttonReport.addActionListener((event) -> actionExport());
 		painel.add(buttonReport);
 		
@@ -701,8 +761,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		try {
 			
+			// Recuperando dados do arquivo de retorno
+			final String[] aux  = retornoSistac.getName().split("_");
+			final String edital = aux[2];
+			final DateTime dataEdital = PhillsDateParser.createDate(aux[3]);
+			
 			// Inicializando lista de retornos
-			this.listaRetornos = new ListaRetornos();
+			this.listaRetornos = new ListaRetornos(cnpj, nomeFantasia, razaoSocial, edital, dataEdital);
 			
 			// Processa a lista de retornos do Sistac
 			CSVSheetReader.readRetorno(retornoSistac, listaRetornos);
@@ -804,5 +869,4 @@ public class TelaRetornoPreliminar extends JFrame {
 		}
 		
 	}
-	
 }
