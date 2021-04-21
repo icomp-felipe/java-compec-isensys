@@ -4,25 +4,66 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
-/** Classe que armazena e trata uma lista de objetos do tipo 'Retorno', utilizada para
- *  operações de escrita e leitura do arquivo de compilação no disco.
+import org.joda.time.*;
+
+/** Armazena uma lista de {@link Retorno}, classe utilizada na construção dos editais
+ *  e que também pode ser escrita em disco, por ser serializável. Também armazena alguns
+ *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
+ *  arquivo(s) de retorno sendo atualmente processado(s).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 19/04/2021
+ *  @version 3.0, 21/04/2021
  *  @see Retorno */
 public class ListaRetornos implements Serializable {
 
-	private static final transient long serialVersionUID = 1L;
+	// Serial de versionamento da classe
+	private static final transient long serialVersionUID = 3;
+	
+	// Lista de retornos
 	private ArrayList<Retorno> listaRetornos;
 	
-	/** Construtor apenas criando uma lista vazia */
-	public ListaRetornos() {
+	// Atributos da instituição geradora
+	private final String cnpj, nomeFantasia, razaoSocial;
+	
+	// Atributos do(s) arquivo(s) de retorno em processamento
+	private final String   edital;
+	private final DateTime dataEdital;
+	
+	/************************ Bloco de Construtores ****************************/
+	
+	public ListaRetornos(final String cnpj, final String nomeFantasia, final String razaoSocial, final String edital, final DateTime dataEdital) {
+		
+		// Inicializando atributos
+		this.cnpj         = cnpj;
+		this.nomeFantasia = nomeFantasia;
+		this.razaoSocial  = razaoSocial;
+		
+		this.edital       = edital;
+		this.dataEdital   = dataEdital;
+		
+		// Inicializando lista de retornos
 		this.listaRetornos = new ArrayList<Retorno>();
+		
 	}
 	
 	/** Construtor usado pelo método <code>clone()</code>.
 	 *  @since 3.00 */
-	private ListaRetornos(final int size) {
-		this.listaRetornos = new ArrayList<Retorno>(size);
+	private ListaRetornos(final ListaRetornos listaRetornos) {
+		
+		// Inicializando atributos
+		this.cnpj         = listaRetornos.cnpj;
+		this.nomeFantasia = listaRetornos.nomeFantasia;
+		this.razaoSocial  = listaRetornos.razaoSocial;
+		
+		this.edital       = listaRetornos.edital;
+		this.dataEdital   = listaRetornos.dataEdital;
+		
+		// Inicializando lista de retornos (tamanho otimizado)
+		this.listaRetornos = new ArrayList<Retorno>(listaRetornos.size());
+		
+		// Copiando dados
+		for (Retorno retorno: listaRetornos.getList())
+			add(retorno);
+		
 	}
 	
 	/** Recupera um 'Retorno' da lista de acordo com sua posição na lista, indicada por 'index' */
@@ -44,13 +85,7 @@ public class ListaRetornos implements Serializable {
 	/** Retorna uma clone desta classe.
 	 *  @since 3.00 */
 	public ListaRetornos clone() {
-		
-		ListaRetornos nova = new ListaRetornos(this.listaRetornos.size());
-		
-		for (Retorno retorno: this.listaRetornos)
-			nova.add(retorno);
-		
-		return nova;
+		return new ListaRetornos(this);
 	}
 	
 	/** Adiciona um 'Retorno' na lista de 'Retorno' já tratando o deferimento do candidato */

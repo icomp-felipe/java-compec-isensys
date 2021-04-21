@@ -2,12 +2,15 @@ package compec.ufam.sistac.model.retorno;
 
 import java.io.Serializable;
 
-/** Classe que representa um retorno do Sistac. Encapsula também
- *  alguns tratamentos de dados pertinentes a esta classe.
+/** Entidade principal da parte de processamento de arquivos de retornos do sistema.
+ *  Encapsula apenas neste objeto tanto os candidatos válidos (vindos do arquivo do Sistac),
+ *  quanto os erros de processamento (vindos da planilha de erros do Excel).
+ *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandresouza@hotmail.com
  *  @version 3.2, 21/04/2021 */
 public class Retorno implements Serializable {
 
+	// Serial de versionamento da classe
 	private static final transient long serialVersionUID = 3;
 	
 	private String nome, nis, cpf;
