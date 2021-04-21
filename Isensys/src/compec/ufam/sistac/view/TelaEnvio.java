@@ -379,9 +379,11 @@ public class TelaEnvio extends JFrame {
 			final String edital    = textOutputEdital.getText().trim();
 			final String sequencia = String.format("%03d", spinnerOutputSequencia.getValue());
 			
+			// Ordenando listas
+			resultList.sort();
+			
 			// Criando arquivo de saída - Sistac
 			final File saidaSistac = SistacFile.getSistacExportName(this.outputDir, edital, sequencia);
-			
 			SistacFile.generate(resultList.getListaCandidatos(), saidaSistac);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)

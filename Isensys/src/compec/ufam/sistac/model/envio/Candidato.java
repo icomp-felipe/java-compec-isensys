@@ -2,9 +2,7 @@ package compec.ufam.sistac.model.envio;
 
 import org.joda.time.*;
 import com.phill.libs.time.*;
-
-import compec.ufam.sistac.constants.Constants;
-import compec.ufam.sistac.constants.Constants.StringFormat;
+import compec.ufam.sistac.constants.*;
 
 /** Classe que representa um candidato processado com sucesso pelo sistema. Se houve algum erro
  *  durante o processo de leitura e parse dos arquivos, o objeto criado será o 'RowParseException'
@@ -50,6 +48,13 @@ public class Candidato {
 	public String getResume() {
 		return String.format(Constants.StringFormat.ROW_DATA_FORMAT,
 				             this.nome, this.nis, getDataNascimento(), this.sexo, this.rg, getDataEmissaoRG(), this.orgaoEmissorRG, this.cpf, this.nomeMae);
+	}
+	
+	/** Comparador de nome de candidato. Útil para métodos de ordenação.
+	 *  @param candidato - candidato a ser comparado com esta instância
+	 *  @since 3.0, 21/04/2021 */
+	public int compareTo(final Candidato candidato) {
+		return this.nome.compareTo(candidato.nome);
 	}
 	
 }

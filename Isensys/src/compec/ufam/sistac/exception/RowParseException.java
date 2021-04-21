@@ -66,4 +66,11 @@ public class RowParseException extends Exception {
 		return new String[]{nis,nome,cpf,"Indeferido",listMotivos()};
 	}
 	
+	/** Comparador de nome de candidato. Útil para métodos de ordenação.
+	 *  @param exception - objeto de erros de processamento de dados de candidato a ser comparado com esta instância
+	 *  @since 3.0, 21/04/2021 */
+	public int compareTo(final RowParseException exception) {
+		return this.nome.compareTo(exception.nome);
+	}
+	
 }
