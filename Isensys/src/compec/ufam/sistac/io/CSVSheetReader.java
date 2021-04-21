@@ -5,7 +5,7 @@ import com.phill.libs.files.*;
 import compec.ufam.sistac.model.*;
 import compec.ufam.sistac.exception.*;
 
-/** Classe que lê e processa os dados de um arquivo .csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
+/** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
  *  Aqui são realizadas verificações na planilha e geradas uma lista de candidatos aptos a serem exportados para o Sistac e uma lista de erros,
  *  útil para a construção do edital.
  *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
@@ -14,16 +14,16 @@ import compec.ufam.sistac.exception.*;
 public class CSVSheetReader {
 
 	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
-	 *  @param planilha - caminho do arquivo .csv
+	 *  @param planilha - caminho da planilha csv
 	 *  @param indexes - índices dos campos de importação de dados
-	 *  @return Objeto com TODAS as entradas lidas do arquivo .csv.
+	 *  @return Objeto com TODAS as entradas lidas do arquivo csv.
 	 *  @throws IOException quando há alguma falha na leitura da planilha. */
 	public static ParseResult read(final File planilha, final int[] indexes) throws IOException {
 		
-		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo .csv
+		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo csv
 		int linha = 2;
 		
-		// Variável auxiliar ao loop de leitura do .csv
+		// Variável auxiliar ao loop de leitura do csv
 		String row;
 		
 		// Abrindo planilha para leitura
@@ -63,10 +63,47 @@ public class CSVSheetReader {
 			
 		}
 		
-		// Liberando recursos
+		// Fechando a planilha
 		stream.close();
 		
 		return resultados;
+		
+	}
+	
+	/** Lẽ e processa o arquivo de retorno do Sistac lendo suas entradas e inserindo-as na 'listaRetornos' */
+	public static void readRetorno(final ListaRetornos listaRetornos, final File arquivo) throws IOException {
+		
+		// Variável auxiliar ao loop de leitura do .csv
+		String row;
+		
+		// Abrindo planilha para leitura
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo), "UTF8"));
+
+		// Recuperando delimitador do csv
+		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
+		
+		// Lendo e processando as linhas de retorno do arquivo
+		while ( (row = stream.readLine() ) != null) {
+			
+			// Recuperando os dados de uma linha já separados em um array
+			String[] dados = readLine(row, csvDelimiter, Constants.Index.CSV_RETURN_SHEET);
+			
+			// Montando objeto 'Retorno'
+			Retorno retorno = new Retorno();
+			
+			retorno.setNome    ( dados[0] );
+			retorno.setNIS     ( dados[1] );
+			retorno.setCPF     ( dados[2] );
+			retorno.setSituacao( dados[3] );
+			retorno.setMotivo  ( dados[4] );
+			
+			// Adicionando novo objeto retorno à lista recebida via parâmetro
+			listaRetornos.add(retorno);
+			
+		}
+		
+		// Fechando a planilha
+		stream.close();
 		
 	}
 	
@@ -80,8 +117,8 @@ public class CSVSheetReader {
 		String[] dados = new String[indexes.length];	// Array que armazena os dados lidos e formatados de cada linha do arquivo .csv
 		String[] aux;									// Array que armazena temporariamente os dados lidos do .csv
 		
-		// Separando dados de uma linha em um array de Strings
-		aux = linha.trim().toUpperCase().split(csvDelimiter);
+		// Separando dados de uma linha em um array de Strings. Aqui os espaços em branco não são ignorados!
+		aux = linha.trim().toUpperCase().split(csvDelimiter, -1);
 		
 		// Copia as colunas descritas por 'indexes' para 'dados'. A ordem do objeto de retornos é SEMPRE igual a descrita abaixo:
 		// Nome, NIS, Data de Nascimento, Sexo, RG, Data de Emissão do RG, órgão Emissor do RG, CPF, Nome da Mãe

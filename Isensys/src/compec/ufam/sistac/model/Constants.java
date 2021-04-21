@@ -16,5 +16,30 @@ public class Constants {
 		public static final FileNameExtensionFilter[] SISTAC_INPUT = new FileNameExtensionFilter[]{CSV_N,TSV,XLSX};
 		
 	}
+	
+	public static class Index {
+		
+		/** Índices dos campos aproveitados da planilha de erros. */
+		public static final int[] CSV_RETURN_SHEET = {
+				                                       1,   // Nome do solicitante
+                                                       2,   // NIS
+                                                       8,   // CPF
+                                                       10,  // Situação ('N' para indeferido ou 'S' para deferido
+                                                       11   // Código de situação, caso esta seja 'N' (ver manual do Sistac)
+                                                     };
+		
+		public static final int XLSX_ERROR_SHEET[] = { 0,   // NIS
+				                                       1,   // Nome do solicitante
+				                                       2    // CPF
+				                                     };
+		
+	}
+	
+	public static class StringFormat {
+		
+		/** Máscara de String de acordo com o formato Sistac. */
+		public static final String ROW_DATA_FORMAT = "1;%s;%s;%s;%c;%s;%s;%s;%s;%s;";
+		
+	}
 
 }

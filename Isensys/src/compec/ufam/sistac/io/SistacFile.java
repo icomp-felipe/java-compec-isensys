@@ -36,41 +36,6 @@ public class SistacFile {
 			
 	}
 
-	/** Lẽ e processa o arquivo de retorno do Sistac lendo suas entradas e inserindo-as na 'listaRetornos' */
-	public static void readRetorno(ListaRetornos listaRetornos, File arquivo) throws IOException {
-		
-		String row;
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo),"UTF8"));
-
-		// Pulando a linha de cabeçalho
-		stream.readLine();
-		
-		// Lendo e processando as linhas de retorno do arquivo
-		while ( (row = stream.readLine() ) != null) {
-			
-			Retorno retorno = parseLine(row);
-			listaRetornos.add(retorno);
-				
-		}
-		
-		// Fechando o arquivo
-		stream.close();
-		
-	}
-	
-	/** Monta um objeto 'Retorno' de acordo com a linha 'infos' proveniente do arquivo Sistac */
-	private static Retorno parseLine(String infos) {
-		
-		String[] splitted = infos.split(";");
-		
-		String nome = splitted[1];
-		String nis  = splitted[2];
-		String cpf  = splitted[8];
-		String cod  = splitted[splitted.length-1];
-		
-		return new Retorno(nis, nome, cpf, cod);
-	}
-
 	/** Monta o nome de exportação do arquivo Sistac */
 	public static File getSistacExportName(File path, String edital, String sequencia) {
 		String filename = String.format("%s/%s_%s_%s_%s.txt",path,UFAM_CNPJ,edital,getDataAtual(),sequencia);

@@ -4,101 +4,85 @@ import java.io.Serializable;
 import com.phill.libs.StringUtils;
 
 /** Classe que representa um retorno do Sistac. Encapsula também
- *  alguns tratamentos de dados pertinentes a esta classe
- *  @author Felipe André
- *  @version 2.50, 08/07/2018 */
+ *  alguns tratamentos de dados pertinentes a esta classe.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.0, 20/04/2021 */
 public class Retorno implements Serializable {
 
-	private static final transient long serialVersionUID = 1L;
-	private String nis,nome,cpf;
-	private String situacao,codigo;
+	private static final transient long serialVersionUID = 3;
 	
-	/****************** Bloco de Construtores **********************************/
+	private String nome, nis, cpf;
+	private char situacao;
+	private int motivo;
+
+	/*************************** Bloco de Setters ******************************/
 	
-	/** Construtor utilizado em 'SistacFile.class' */
-	public Retorno(String nis, String nome, String cpf, String codigo) {
-		this(new String[]{nis,nome,cpf,codigo});
+	public void setNome(final String nome) {
+		this.nome = StringUtils.trim(nome);
 	}
 	
-	/** Construtor principal da classe, inicializa os atributos já com
-	 *  os devidos tratamento de dados */
-	public Retorno(String[] args) {
-		this.nis      = parseNIS(args[0].trim());
-		this.nome     = args[1].trim();
-		this.cpf      = args[2].trim();
-		this.codigo   = args[3].trim();
-		this.situacao = parseSituacao(codigo);
-	}
-	
-	/****************** Bloco de Parsers ***************************************/
-	
-	/** Trata o Número de Identicação Social (NIS) do candidato.
-	 *  Caso este seja vazio, o preencho com um caractere '-' */
-	private String parseNIS(String nis) {
+	/** Setter para o Número de Identicação Social (NIS) do candidato.
+	 *  Caso este seja vazio, é preenchido com um caractere '-'. */
+	public void setNIS(final String nis) {
 		
-		nis = StringUtils.extractNumbers(nis);
+		final String aux = StringUtils.extractNumbers(nis);
 		
-		return ((nis.length() == 0)) ? "-" : nis;
+		this.nis = aux.isEmpty() ? "-" : aux;
 	}
 	
-	/** Trata a situação de defetimento do candidato em formato de texto */
-	private String parseSituacao(String codigo) {
-		return deferido() ? "Deferido" : "Indeferido";
+	public void setCPF(final String cpf) {
+		this.cpf = StringUtils.trim(cpf);
 	}
 	
-	/******************** Bloco de Getters *************************************/
-	
-	/** Recupera os dados para exibição no PDF */
-	public String[] getResume() {
-		return new String[] {nis,nome,situacao,codigo};
+	public void setSituacao(final String situacao) {
+		this.situacao = situacao.charAt(0);
 	}
 	
-	/** Getter para o nome do candidato */
-	public String getNome() {
-		return nome;
+	public void setMotivo(final String motivo) {
+		this.motivo = motivo.isEmpty() ? 0 : Integer.parseInt(motivo);
 	}
 	
-	/** Getter para o Número de Identicação Social (NIS) do candidato */
-	public String getNis() {
-		return nis;
+	/** Defere o pedido de isenção de um candidato */
+	public void defere() {
+		
+		this.situacao = 'S';
+		this.motivo   =  0 ;
+		
+		System.out.println("Deferido(a) candidato(a): " + nome);
+		
 	}
+	
+	/*************************** Bloco de Getters ******************************/
 	
 	/** Getter para o CPF do candidato */
 	public String getCPF() {
 		return cpf;
 	}
 	
-	/** Getter para a situação do candidato */
-	public String getSituacao() {
-		return situacao;
-	}
-	
-	/** Getter para o código de indeferimento do candidato.
-	 *  Caso este esteja deferido, não há código de retorno, sendo assim, retorno uma String vazia */
-	public String getCodigo() {
-		return deferido() ? "" : codigo;
-	}
-	
 	/** Verifica se o candidato teve seu pedido de isenção deferido */
 	public boolean deferido() {
-		return codigo.equals("0") || codigo.equals("S");
+		return (this.situacao == 'S');
 	}
 	
-	/********************* Bloco de Setters *************************************/
+	/******************** Bloco de Getters (Jasper) ****************************/
 	
-	/** Setter para o Número de Identicação Social (NIS) do candidato */
-	public void setNIS(String nis) {
-		this.nis = parseNIS(nis);
+	/** Getter para o nome do candidato */
+	public String getNome() {
+		return this.nome;
 	}
 	
-	/** Defere o pedido de isenção de um candidato */
-	public void defere() {
-		
-		this.codigo   = "S";
-		this.situacao = "Deferido";
-		
-		System.out.println("Deferido candidato: " + nome);
-		
+	/** Getter para o Número de Identicação Social (NIS) do candidato */
+	public String getNis() {
+		return this.nis;
+	}
+	
+	/** Getter para a situação do candidato */
+	public char getSituacao() {
+		return this.situacao;
+	}
+	
+	public int getMotivo() {
+		return this.motivo;
 	}
 	
 }

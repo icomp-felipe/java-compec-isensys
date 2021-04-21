@@ -15,8 +15,6 @@ import org.apache.poi.xssf.usermodel.*;
  *  @version 3.0, 20/04/2021 */
 public class ExcelSheetReader {
 
-	public static final int RETURN_INDEXES[] = new int[]{0,1,2};
-	
 	// Forma
 	private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 	private static final DataFormatter    DATA_FORMATTER = new DataFormatter(Locale.getDefault());
@@ -92,10 +90,15 @@ public class ExcelSheetReader {
 		while (rowIterator.hasNext()) {
 			
 			Row row = rowIterator.next();
-			String[] args = readLine(row, 3, RETURN_INDEXES);
-			args[3] = "*";
+			String[] args = readLine(row, 3, Constants.Index.XLSX_ERROR_SHEET);
+
+			Retorno retorno = new Retorno();
+			retorno.setNIS ( args[0] );
+			retorno.setNome( args[1] );
+			retorno.setCPF ( args[2] );
+			retorno.setSituacao("N");
+			retorno.setMotivo  ("-1");
 			
-			Retorno retorno = new Retorno(args);
 			listaRetornos.add(retorno);
 			
 		}

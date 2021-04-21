@@ -703,7 +703,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.listaRetornos = new ListaRetornos();
 			
 			// Processa a lista de retornos do Sistac
-			SistacFile.readRetorno(listaRetornos, retornoSistac);
+			CSVSheetReader.readRetorno(listaRetornos, retornoSistac);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(2000L);

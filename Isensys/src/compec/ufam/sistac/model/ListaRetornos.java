@@ -127,17 +127,5 @@ public class ListaRetornos implements Serializable {
 		}
 		
 	}
-	
-	/** Método utilizado apenas para testes com o Jaspersoft Studio */
-	public static ArrayList<Retorno> getArray() {
-		
-		ArrayList<Retorno> listaRetornos = new ArrayList<Retorno>();
-		
-		listaRetornos.add(new Retorno(new String[]{"12345", "TESTE 1", "4"}));
-		listaRetornos.add(new Retorno(new String[]{"67890", "TESTE 2", "5"}));
-		listaRetornos.add(new Retorno(new String[]{"54321", "TESTE 3", "6"}));
-		
-		return listaRetornos;
-	}
 
 }
