@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Edital" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="78698fe4-ba81-48be-9d34-a2158f025af4">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Retornos"/>
 	<property name="com.jaspersoft.studio.report.description" value="Relatório do Edital de resultado de solicitações de isenção do sistema IsenSys. Atualizado em 11/03/2020."/>
@@ -95,11 +95,11 @@
 		<field name="nome" class="java.lang.String">
 			<fieldDescription><![CDATA[nome]]></fieldDescription>
 		</field>
-		<field name="situacao" class="java.lang.String">
+		<field name="situacao" class="java.lang.Character">
 			<fieldDescription><![CDATA[situacao]]></fieldDescription>
 		</field>
-		<field name="codigo" class="java.lang.String">
-			<fieldDescription><![CDATA[codigo]]></fieldDescription>
+		<field name="motivo" class="java.lang.Integer">
+			<fieldDescription><![CDATA[motivo]]></fieldDescription>
 		</field>
 	</subDataset>
 	<parameter name="PAR_LOGO" class="java.awt.image.BufferedImage"/>
@@ -114,7 +114,7 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<title>
-		<band height="220" splitType="Stretch">
+		<band height="200" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image>
 				<reportElement x="0" y="0" width="555" height="60" uuid="e9317160-9cbf-411c-b343-e3a7d8dd53cf">
@@ -136,12 +136,13 @@
 				<textFieldExpression><![CDATA[$P{PAR_CABECALHO}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="0" y="140" width="555" height="80" uuid="2993cf75-802e-4652-96da-07d2669bcfea">
+				<reportElement x="0" y="140" width="555" height="60" uuid="2993cf75-802e-4652-96da-07d2669bcfea">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="DatasetErros" uuid="7045e0eb-67d1-4dce-9b42-cfdb15958710">
@@ -155,12 +156,6 @@
 								<text><![CDATA[Legenda de Erros de Processamento]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement style="Corpo Tabela (Esquerda)" x="0" y="0" width="555" height="20" uuid="21cfee2d-8fa8-403b-b126-cc08ee0331bd"/>
-								<text><![CDATA[* Envio impossibilitado ao órgão gestor/CadÚnico, devido a inconsistência nos dados pessoais.]]></text>
-							</staticText>
-						</jr:columnFooter>
 						<jr:column width="40" uuid="3337ef4e-6d17-4c02-bb8c-78a7dca31273">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 							<jr:columnHeader style="Table_CH" height="20" rowSpan="1">
@@ -170,7 +165,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement style="Corpo Tabela (Centro)" x="0" y="0" width="40" height="20" uuid="c6fb541c-240e-4248-b4df-ae7fca7edc4c"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
@@ -186,7 +181,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement style="Corpo Tabela (Esquerda)" x="0" y="0" width="200" height="20" uuid="b7781233-6d9d-4eeb-aa77-8b2f3115c098"/>
 									<textFieldExpression><![CDATA[$F{motivo}]]></textFieldExpression>
 								</textField>
@@ -201,7 +196,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement style="Corpo Tabela (Esquerda)" x="0" y="0" width="315" height="20" uuid="a356d8da-a170-4179-85dc-82230a87903e"/>
 									<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 								</textField>
@@ -253,7 +248,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement style="Corpo Tabela (Centro)" x="0" y="0" width="40" height="20" uuid="3eb7ee20-bf23-4a5e-b5d9-643678a3e0ee"/>
 									<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 								</textField>
@@ -268,8 +263,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement style="Corpo Tabela (Centro)" x="0" y="0" width="100" height="20" uuid="dfac6169-bc8e-4b06-baf8-0a2174c43eed"/>
+									<textElement verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{nis}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
@@ -283,7 +279,7 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement style="Corpo Tabela (Esquerda)" x="0" y="0" width="240" height="20" uuid="2818af28-675b-4b84-a17d-4efde40f4d92"/>
 									<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 								</textField>
@@ -298,9 +294,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement style="Corpo Tabela (Centro)" x="0" y="0" width="90" height="20" uuid="3ccf24b1-ca57-469d-bbc6-716bb506f4a7"/>
-									<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[($F{situacao} == 'S') ? "Deferido" : "Indeferido"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -313,9 +309,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="Table 1_TD" height="20">
-								<textField isStretchWithOverflow="true">
+								<textField>
 									<reportElement style="Corpo Tabela (Centro)" x="0" y="0" width="85" height="20" uuid="51c6609f-fae8-48a2-bbbe-b8cd2080cc49"/>
-									<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[($F{motivo} == 0) ? "" : $F{motivo}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
