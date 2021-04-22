@@ -33,6 +33,9 @@ public class TelaEnvio extends JFrame {
 	private final JLabel labelInputStatus, labelInputOK, labelInputError, labelInputTotal;
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
+	// Dados da instituição
+	private final String cnpj, nomeFantasia, razaoSocial;
+	
 	// Atributos dinâmicos
 	private ParseResult resultList;
 	private File inputFile, outputDir;
@@ -51,7 +54,7 @@ public class TelaEnvio extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
-		Dimension dimension = new Dimension(500,300);
+		Dimension dimension = new Dimension(500,405);
 		
 		JPanel painel = new JPaintedPanel("img/envio-screen.jpg",dimension);
 		painel.setLayout(null);
@@ -68,11 +71,62 @@ public class TelaEnvio extends JFrame {
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
 		
+		// Recuperando dados da instituição
+		this.cnpj         = PropertiesManager.getString("inst.cnpj" , "config/program.properties");
+		this.nomeFantasia = PropertiesManager.getString("inst.nome" , "config/program.properties");
+		this.razaoSocial  = PropertiesManager.getString("inst.razao", "config/program.properties");
+		
+		// Painel 'Dados da Instituição'
+		JPanel panelInstituicao = new JPanel();
+		panelInstituicao.setOpaque(false);
+		panelInstituicao.setLayout(null);
+		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("envio-panel-instituicao")));
+		panelInstituicao.setBounds(12, 10, 476, 105);
+		painel.add(panelInstituicao);
+				
+		JLabel labelCNPJ = new JLabel(bundle.getString("envio-label-cnpj"));
+		labelCNPJ.setHorizontalAlignment(JLabel.RIGHT);
+		labelCNPJ.setFont(fonte);
+		labelCNPJ.setBounds(10, 25, 115, 20);
+		panelInstituicao.add(labelCNPJ);
+				
+		JLabel textCNPJ = new JLabel(StringUtils.BR.formataCNPJ(this.cnpj));
+		textCNPJ.setFont(fonte);
+		textCNPJ.setForeground(color);
+		textCNPJ.setBounds(130, 25, 145, 20);
+		panelInstituicao.add(textCNPJ);
+				
+		JLabel labelNomeFantasia = new JLabel(bundle.getString("envio-label-nome-fantasia"));
+		labelNomeFantasia.setHorizontalAlignment(JLabel.RIGHT);
+		labelNomeFantasia.setFont(fonte);
+		labelNomeFantasia.setBounds(10, 50, 115, 20);
+		panelInstituicao.add(labelNomeFantasia);
+				
+		JLabel textNomeFantasia = new JLabel(this.nomeFantasia);
+		textNomeFantasia.setFont(fonte);
+		textNomeFantasia.setForeground(color);
+		textNomeFantasia.setToolTipText(this.nomeFantasia);
+		textNomeFantasia.setBounds(130, 50, 334, 20);
+		panelInstituicao.add(textNomeFantasia);
+				
+		JLabel labelRazaoSocial = new JLabel(bundle.getString("envio-label-razao-social"));
+		labelRazaoSocial.setHorizontalAlignment(JLabel.RIGHT);
+		labelRazaoSocial.setFont(fonte);
+		labelRazaoSocial.setBounds(10, 75, 115, 20);
+		panelInstituicao.add(labelRazaoSocial);
+				
+		JLabel textRazaoSocial = new JLabel(this.razaoSocial);
+		textRazaoSocial.setFont(fonte);
+		textRazaoSocial.setForeground(color);
+		textRazaoSocial.setToolTipText(this.razaoSocial);
+		textRazaoSocial.setBounds(130, 75, 334, 20);
+		panelInstituicao.add(textRazaoSocial);
+		
 		// Painel 'Arquivo de Entrada'
 		JPanel painelEntrada = new JPanel();
 		painelEntrada.setOpaque(false);
-		painelEntrada.setBorder(instance.getTitledBorder(bundle.getString("envio-input-panel")));
-		painelEntrada.setBounds(12, 10, 476, 105);
+		painelEntrada.setBorder(instance.getTitledBorder(bundle.getString("envio-panel-input")));
+		painelEntrada.setBounds(12, 115, 476, 105);
 		painelEntrada.setLayout(null);
 		painel.add(painelEntrada);
 		
@@ -136,8 +190,8 @@ public class TelaEnvio extends JFrame {
 		// Painel 'Arquivos de Saída'
 		JPanel painelSaida = new JPanel();
 		painelSaida.setOpaque(false);
-		painelSaida.setBorder(instance.getTitledBorder(bundle.getString("envio-output-panel")));
-		painelSaida.setBounds(12, 115, 476, 105);
+		painelSaida.setBorder(instance.getTitledBorder(bundle.getString("envio-panel-output")));
+		painelSaida.setBounds(12, 220, 476, 105);
 		painelSaida.setLayout(null);
 		painel.add(painelSaida);
 		
@@ -211,13 +265,13 @@ public class TelaEnvio extends JFrame {
 		JButton buttonExit = new JButton(exitIcon);
 		buttonExit.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonExit.addActionListener((event) -> dispose());
-		buttonExit.setBounds(406, 232, 35, 30);
+		buttonExit.setBounds(406, 340, 35, 30);
 		painel.add(buttonExit);
 		
 		JButton buttonExport = new JButton(exportIcon);
 		buttonExport.setToolTipText(bundle.getString("hint-button-export"));
 		buttonExport.addActionListener((event) -> actionExport());
-		buttonExport.setBounds(453, 232, 35, 30);
+		buttonExport.setBounds(453, 340, 35, 30);
 		painel.add(buttonExport);
 
 		// Cadastrando validação de campos

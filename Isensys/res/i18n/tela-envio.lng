@@ -7,10 +7,15 @@ envio-mfv-edital = Informe o número do edital com exatamente 6 caracteres alfan
 envio-mfv-output = Selecione a pasta de saída
 
 ########## Painéis
-envio-input-panel  = Arquivo de Entrada
-envio-output-panel = Arquivos de Saída
+envio-panel-instituicao = Dados da Instituição
+envio-panel-input       = Arquivo de Entrada
+envio-panel-output      = Arquivos de Saída
 
 ########## Labels
+envio-label-cnpj          = CNPJ:
+envio-label-nome-fantasia = Nome Fantasia:
+envio-label-razao-social  = Razão Social:
+
 envio-label-input-name = Nome:
 
 envio-label-output-edital    = Num. do Edital:
