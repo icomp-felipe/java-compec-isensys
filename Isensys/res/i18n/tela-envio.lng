@@ -1,6 +1,13 @@
 ########## Título da Janela
 envio-window-title = IsenSys v.3.0 - Exportação
 
+########## Mensagem de erro no construtor
+envio-inst-error = Alguns erros foram encontrados ao carregar os dados de sua instituição:\n\
+                   \n\
+                   %s\n\
+                   \n\
+                   Por favor, configure corretamente estes dados e tente novamente.
+
 ########## Mensagens de erro da API MFV
 envio-mfv-input  = Selecione um arquivo de entrada válido
 envio-mfv-edital = Informe o número do edital com exatamente 6 caracteres alfanuméricos

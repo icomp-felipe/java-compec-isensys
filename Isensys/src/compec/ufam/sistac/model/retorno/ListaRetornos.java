@@ -22,15 +22,19 @@ public class ListaRetornos implements Serializable {
 	private ArrayList<Retorno> listaRetornos;
 	
 	// Atributos da instituição geradora
-	private final String cnpj, nomeFantasia, razaoSocial;
+	private String cnpj, nomeFantasia, razaoSocial;
 	
 	// Atributos do(s) arquivo(s) de retorno em processamento
-	private final String   edital;
-	private final DateTime dataEdital;
+	private String   edital;
+	private DateTime dataEdital;
 	
 	/************************ Bloco de Construtores ****************************/
 	
-	public ListaRetornos(final String cnpj, final String nomeFantasia, final String razaoSocial, final String edital, final DateTime dataEdital) {
+	public ListaRetornos() {
+		this.listaRetornos = new ArrayList<Retorno>();
+	}
+	
+	/*public ListaRetornos(final String cnpj, final String nomeFantasia, final String razaoSocial, final String edital, final DateTime dataEdital) {
 		
 		// Inicializando atributos
 		this.cnpj         = cnpj;
@@ -43,7 +47,7 @@ public class ListaRetornos implements Serializable {
 		// Inicializando lista de retornos
 		this.listaRetornos = new ArrayList<Retorno>();
 		
-	}
+	}*/
 	
 	/** Construtor usado pelo método <code>clone()</code>.
 	 *  @since 3.00 */

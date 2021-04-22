@@ -108,6 +108,27 @@ public class CSVSheetReader {
 		
 	}
 	
+	/** Carrega os dados institucionais do cabeçalho do arquivo Sistac.
+	 *  @param planilha - arquivo de texto do Sistac
+	 *  @return Um objeto contendo os dados institucionais carregados do arquivo Sistac.
+	 *  @throws IOException quando a planilha não pode ser lida.
+	 *  @since 3.0, 21/04/2021 */
+	public static Instituicao getInstituicao(final File planilha) throws IOException {
+		
+		// Abrindo planilha para leitura
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), "UTF8"));
+		
+		// Lendo cabeçalho
+		final String firstLine = stream.readLine();
+		final String csvDelimiter = CSVUtils.getCSVDelimiter(firstLine);
+		
+		// Fechando a planilha 
+		stream.close();
+		
+		// Retornando os dados institucionais
+		return new Instituicao(firstLine, csvDelimiter);
+	}
+	
 	/** Monta um array de {@link String} com os dados extraídos da 'linha' e organizados de acordo com os 'indexes'.
 	 *  @param linha - linha extraída do arquivo .csv
 	 *  @param csvDelimiter - string delimitadora do .csv

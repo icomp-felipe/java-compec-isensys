@@ -14,6 +14,7 @@ import com.phill.libs.mfvapi.*;
 import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.model.envio.ParseResult;
+import compec.ufam.sistac.model.retorno.Instituicao;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
@@ -34,7 +35,7 @@ public class TelaEnvio extends JFrame {
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
 	// Dados da instituição
-	private final String cnpj, nomeFantasia, razaoSocial;
+	private final Instituicao instituicao;
 	
 	// Atributos dinâmicos
 	private ParseResult resultList;
@@ -46,7 +47,30 @@ public class TelaEnvio extends JFrame {
 	
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
+	public static void main(String[] args) {
+		new TelaEnvio();
+	}
+	
 	public TelaEnvio() {
+		
+		// Recuperando dados da instituição do arquivo de propriedades
+		// Caso haja alguma falha, a tela nem é exibida, pois este é
+		// um dado de suma importância para o funcionamento desta classe.
+		this.instituicao = Config.getInstituicao();
+		
+		// Validando dados institucionais
+		final String msg = this.instituicao.validate();
+		
+		// Caso haja algum dado inconsistente, uma mensagem de erro com esses dados é exibida.
+		// Infelizmente a janela não pode ser quebrada aqui, por causa dos atributos 'final'.
+		if (msg != null) {
+			
+			final String title  = bundle.getString("envio-window-title");
+			final String dialog = String.format(bundle.getString("envio-inst-error"), msg);
+			
+			AlertDialog.error(title, dialog);
+		
+		}
 		
 		// Recuperando o título da janela
 		setTitle(bundle.getString("envio-window-title"));
@@ -71,11 +95,6 @@ public class TelaEnvio extends JFrame {
 		Font  fonte = instance.getFont ();
 		Color color = instance.getColor();
 		
-		// Recuperando dados da instituição
-		this.cnpj         = PropertiesManager.getString("inst.cnpj" , "config/program.properties");
-		this.nomeFantasia = PropertiesManager.getString("inst.nome" , "config/program.properties");
-		this.razaoSocial  = PropertiesManager.getString("inst.razao", "config/program.properties");
-		
 		// Painel 'Dados da Instituição'
 		JPanel panelInstituicao = new JPanel();
 		panelInstituicao.setOpaque(false);
@@ -90,7 +109,7 @@ public class TelaEnvio extends JFrame {
 		labelCNPJ.setBounds(10, 25, 115, 20);
 		panelInstituicao.add(labelCNPJ);
 				
-		JLabel textCNPJ = new JLabel(StringUtils.BR.formataCNPJ(this.cnpj));
+		JLabel textCNPJ = new JLabel(StringUtils.BR.formataCNPJ(this.instituicao.getCNPJ()));
 		textCNPJ.setFont(fonte);
 		textCNPJ.setForeground(color);
 		textCNPJ.setBounds(130, 25, 145, 20);
@@ -102,10 +121,10 @@ public class TelaEnvio extends JFrame {
 		labelNomeFantasia.setBounds(10, 50, 115, 20);
 		panelInstituicao.add(labelNomeFantasia);
 				
-		JLabel textNomeFantasia = new JLabel(this.nomeFantasia);
+		JLabel textNomeFantasia = new JLabel(this.instituicao.getNomeFantasia());
 		textNomeFantasia.setFont(fonte);
 		textNomeFantasia.setForeground(color);
-		textNomeFantasia.setToolTipText(this.nomeFantasia);
+		textNomeFantasia.setToolTipText(this.instituicao.getNomeFantasia());
 		textNomeFantasia.setBounds(130, 50, 334, 20);
 		panelInstituicao.add(textNomeFantasia);
 				
@@ -115,10 +134,10 @@ public class TelaEnvio extends JFrame {
 		labelRazaoSocial.setBounds(10, 75, 115, 20);
 		panelInstituicao.add(labelRazaoSocial);
 				
-		JLabel textRazaoSocial = new JLabel(this.razaoSocial);
+		JLabel textRazaoSocial = new JLabel(this.instituicao.getRazaoSocial());
 		textRazaoSocial.setFont(fonte);
 		textRazaoSocial.setForeground(color);
-		textRazaoSocial.setToolTipText(this.razaoSocial);
+		textRazaoSocial.setToolTipText(this.instituicao.getRazaoSocial());
 		textRazaoSocial.setBounds(130, 75, 334, 20);
 		panelInstituicao.add(textRazaoSocial);
 		
@@ -290,7 +309,8 @@ public class TelaEnvio extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setVisible(true);
+		
+		if (msg == null) setVisible(true); else dispose();
 		
 	}
 

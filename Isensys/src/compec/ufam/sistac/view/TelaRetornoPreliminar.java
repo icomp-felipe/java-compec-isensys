@@ -35,7 +35,10 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final static String windowTitle = bundle.getString("prelim-window-title");
 	
 	// Declaração de atributos gráficos
+	private final Color padrao, yellow = new Color(0xE9EF84);
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
+	
+	private final JLabel textCNPJ, textNomeFantasia, textRazaoSocial;
 	
 	private final JTextField textRetorno, textErros;
 	private final JButton buttonRetornoSelect, buttonRetornoClear, buttonErrosSelect, buttonErrosClear;
@@ -53,7 +56,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final JButton buttonReport;
 	
 	// Dados da instituição
-	private final String cnpj, nomeFantasia, razaoSocial;
+	private Instituicao header;
 	
 	// Atributos dinâmicos
 	private File lastFileSelected;
@@ -93,12 +96,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		// Recuperando fontes e cores
 		Font  fonte = instance.getFont ();
-		Color color = instance.getColor();
+		Color color = this.padrao = instance.getColor();
 		
 		// Recuperando dados da instituição
-		this.cnpj         = PropertiesManager.getString("inst.cnpj" , "config/program.properties");
-		this.nomeFantasia = PropertiesManager.getString("inst.nome" , "config/program.properties");
-		this.razaoSocial  = PropertiesManager.getString("inst.razao", "config/program.properties");
+		this.header = new Instituicao( PropertiesManager.getString("inst.cnpj" , "config/program.properties"),
+								  PropertiesManager.getString("inst.nome" , "config/program.properties"),
+								  PropertiesManager.getString("inst.razao", "config/program.properties")
+								);
 		
 		// Painel 'Dados da Instituição'
 		JPanel panelInstituicao = new JPanel();
@@ -114,7 +118,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelCNPJ.setBounds(10, 25, 115, 20);
 		panelInstituicao.add(labelCNPJ);
 		
-		JLabel textCNPJ = new JLabel(StringUtils.BR.formataCNPJ(this.cnpj));
+		textCNPJ = new JLabel();
 		textCNPJ.setFont(fonte);
 		textCNPJ.setForeground(color);
 		textCNPJ.setBounds(130, 25, 145, 20);
@@ -126,10 +130,9 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelNomeFantasia.setBounds(10, 50, 115, 20);
 		panelInstituicao.add(labelNomeFantasia);
 		
-		JLabel textNomeFantasia = new JLabel(this.nomeFantasia);
+		textNomeFantasia = new JLabel();
 		textNomeFantasia.setFont(fonte);
 		textNomeFantasia.setForeground(color);
-		textNomeFantasia.setToolTipText(this.nomeFantasia);
 		textNomeFantasia.setBounds(130, 50, 334, 20);
 		panelInstituicao.add(textNomeFantasia);
 		
@@ -139,10 +142,9 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelRazaoSocial.setBounds(10, 75, 115, 20);
 		panelInstituicao.add(labelRazaoSocial);
 		
-		JLabel textRazaoSocial = new JLabel(this.razaoSocial);
+		textRazaoSocial = new JLabel();
 		textRazaoSocial.setFont(fonte);
 		textRazaoSocial.setForeground(color);
-		textRazaoSocial.setToolTipText(this.razaoSocial);
 		textRazaoSocial.setBounds(130, 75, 334, 20);
 		panelInstituicao.add(textRazaoSocial);
 				
@@ -766,8 +768,13 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String edital = aux[2];
 			final DateTime dataEdital = PhillsDateParser.createDate(aux[3]);
 			
+			
+			// Recuperando dados institucionais do arquivo
+			final Instituicao dados = CSVSheetReader.getInstituicao(retornoSistac);
+			
+			
 			// Inicializando lista de retornos
-			this.listaRetornos = new ListaRetornos(cnpj, nomeFantasia, razaoSocial, edital, dataEdital);
+			this.listaRetornos = new ListaRetornos();
 			
 			// Processa a lista de retornos do Sistac
 			CSVSheetReader.readRetorno(retornoSistac, listaRetornos);
