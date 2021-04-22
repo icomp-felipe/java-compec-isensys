@@ -4,15 +4,12 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 
-import org.joda.time.DateTime;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.*;
 
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
-import com.phill.libs.time.*;
 import com.phill.libs.i18n.*;
 import com.phill.libs.files.*;
 import com.phill.libs.mfvapi.*;
@@ -24,7 +21,7 @@ import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021 */
+ *  @version 3.0, 22/04/2021 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -68,10 +65,6 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final MandatoryFieldsLogger  fieldLogger;
 
 	/******************* Bloco do Método Principal ******************************/
-	
-	public static void main(String[] args) {
-		new TelaRetornoPreliminar();
-	}
 	
 	/** Construtor da classe inicializando a view */
 	public TelaRetornoPreliminar() {
@@ -390,7 +383,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			}
 			
 			// Realiza uma série de verificações de integridade no arquivo de retorno,
-			// caso alguma falhe, este método é quebrado aqui. 
+			// caso alguma falhe, este método é quebrado aqui.
 			if (!retornoDependencies(selected)) return;
 
 			// Atualizando arquivo interno
@@ -482,6 +475,10 @@ public class TelaRetornoPreliminar extends JFrame {
 				else return;
 							
 			}
+			
+			// Realiza uma série de verificações de integridade na planilha de erros,
+			// caso alguma falhe, este método é quebrado aqui. 
+			if (!errosDependencies(selected)) return;
 			
 			// Salvando estado anterior ao processamento dos erros
 			this.lastListaRetornos = this.listaRetornos.clone();
@@ -649,7 +646,53 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	/************************* Utility Methods Section ************************************/
 	
-	/** Carrega dados institucionais do arquivo de propriedades do sistema. */
+	/** Realiza uma série de verificações de integridade nos dados contidos no nome de arquivo da planilha.
+	 *  @param planilha - planilha de erros de processamento
+	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
+	 *  @since 3.0, 22/04/2021 */
+	private boolean errosDependencies(final File planilha) {
+		
+		try {
+		
+			// Recuperando dados do arquivo de retorno do Sistac
+			final String[] retorno = this.retornoSistac.getName().split("_");
+		
+			final String retornoCNPJ   = retorno[1];
+			final String retornoEdital = retorno[2];
+			final String retornoData   = retorno[3];
+		
+			// Recuperando dados do arquivo de erros
+			final String[] erros   = planilha.getName().split("_");
+		
+			final String errosCNPJ   = erros[1];
+			final String errosEdital = erros[2];
+			final String errosData   = erros[3].substring(0,8);
+			
+			// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
+			if ( !retornoCNPJ.equals(errosCNPJ) || !retornoEdital.equals(errosEdital) || !retornoData.equals(errosData) ) {
+			
+				AlertDialog.error( bundle.getString("prelim-erros-dependencies-title" ),
+	                               bundle.getString("prelim-erros-dependencies-dialog"));
+			
+				return false;
+			}
+			
+		}
+		
+		// Acontece quando o nome de arquivo da planilha não está no mesmo padrão do Sistac
+		catch (Exception exception) {
+			
+			AlertDialog.error( bundle.getString("prelim-erros-dependencies-etitle" ),
+                               bundle.getString("prelim-erros-dependencies-edialog"));
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/** Carrega dados institucionais do arquivo de propriedades do sistema.
+	 *  @since 3.0, 22/04/2021 */
 	private void loadInstituicao() {
 		
 		// Recuperando dados da instituição do arquivo de propriedades
@@ -672,10 +715,16 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
+	/** Atualiza a instituicao interna + interface gráfica.
+	 *  @param instituicao - dados institucionais
+	 *  @param color - cor para pintar os campos de texto referentes aos dados institucionais
+	 *  @since 3.0, 22/04/2021 */
 	private void loadInstituicao(final Instituicao instituicao, final Color color) {
 		
+		// Atualizando a instituição padrão desta instância
 		this.instituicao = instituicao;
 		
+		// Atualizando a view
 		textCNPJ.setText      (StringUtils.BR.formataCNPJ(instituicao.getCNPJ()));
 		textCNPJ.setForeground(color);
 				
@@ -691,7 +740,8 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	/** Realiza uma série de verificações de integridade nos dados institucionais do sistema e do arquivo de retorno do Sistac.
 	 *  @param retorno - arquivo de retorno do Sistac
-	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário. */
+	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
+	 *  @since 3.0, 22/04/2021 */
 	private boolean retornoDependencies(final File retorno) {
 		
 		try {
@@ -865,11 +915,6 @@ public class TelaRetornoPreliminar extends JFrame {
 	private void threadSistac() {
 		
 		try {
-			
-			// Recuperando dados do arquivo de retorno
-			final String[] aux  = retornoSistac.getName().split("_");
-			final String edital = aux[2];
-			final DateTime dataEdital = PhillsDateParser.createDate(aux[3]);
 			
 			// Inicializando lista de retornos
 			this.listaRetornos = new ListaRetornos();

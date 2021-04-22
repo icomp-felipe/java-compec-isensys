@@ -90,6 +90,15 @@ prelim-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de 
 prelim-export-title  = Gerando edital
 prelim-export-thread = TelaRetornoPreliminar.class - Thread de geração de relatório Jasper
 
+! TelaRetornoPreliminar::errosDependencies
+prelim-erros-dependencies-title   = Planilha de Erros
+prelim-erros-dependencies-dialog  = O arquivo selecionado parece não pertencer ao processamento do retorno.\n\
+                                    A planilha de erros deve conter, em seu nome de arquivo, o mesmo CNPJ,\n\
+                                    número de edital e data do arquivo de retorno do Sistac.
+prelim-erros-dependencies-etitle  = Planilha de Erros
+prelim-erros-dependencies-edialog = Falha ao ler atributos de instituição e edital\n\
+                                    do nome do arquivo da planilha de erros.
+
 ! TelaRetornoPreliminar::loadInstituicao
 prelim-inst-title  = Dados Institucionais
 prelim-inst-dialog = Alguns erros foram encontrados ao carregar os dados de sua instituição:\n\
