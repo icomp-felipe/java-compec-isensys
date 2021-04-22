@@ -370,7 +370,7 @@ public class TelaEnvio extends JFrame {
 		final String title = bundle.getString("envio-input-select-title");
 		
 		// Recuperando o arquivo de entrada
-		this.inputFile  = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, null);
+		this.inputFile  = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, null, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (this.inputFile != null) {

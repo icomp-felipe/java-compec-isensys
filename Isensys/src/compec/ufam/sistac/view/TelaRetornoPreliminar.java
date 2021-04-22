@@ -353,7 +353,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		final String title = bundle.getString("prelim-retorno-select-title");
 						
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected);
+		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, null);
 						
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -449,9 +449,12 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		// Recuperando título da janela
 		final String title = bundle.getString("prelim-erros-select-title");
-								
+		
+		// Preparando o nome do arquivo de sugestão
+		final File suggestion = new Edital(this.retornoSistac).getErrorFilename();
+		
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected);
+		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, suggestion);
 							
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -564,9 +567,12 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		// Recuperando título da janela
 		final String title = bundle.getString("prelim-compile-select-title");
+		
+		// Preparando o nome do arquivo de sugestão
+		final File suggestion = new Edital(this.retornoSistac).getCompilationFilename();
 								
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, this.lastFileSelected);
+		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, this.lastFileSelected, suggestion);
 								
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -653,23 +659,12 @@ public class TelaRetornoPreliminar extends JFrame {
 	private boolean errosDependencies(final File planilha) {
 		
 		try {
-		
-			// Recuperando dados do arquivo de retorno do Sistac
-			final String[] retorno = this.retornoSistac.getName().split("_");
-		
-			final String retornoCNPJ   = retorno[1];
-			final String retornoEdital = retorno[2];
-			final String retornoData   = retorno[3];
-		
-			// Recuperando dados do arquivo de erros
-			final String[] erros   = planilha.getName().split("_");
-		
-			final String errosCNPJ   = erros[1];
-			final String errosEdital = erros[2];
-			final String errosData   = erros[3].substring(0,8);
+			
+			Edital retorno = new Edital(retornoSistac);
+			Edital erros   = new Edital(planilha);
 			
 			// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
-			if ( !retornoCNPJ.equals(errosCNPJ) || !retornoEdital.equals(errosEdital) || !retornoData.equals(errosData) ) {
+			if (!retorno.equals(erros)) {
 			
 				AlertDialog.error( bundle.getString("prelim-erros-dependencies-title" ),
 	                               bundle.getString("prelim-erros-dependencies-dialog"));
@@ -681,7 +676,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		// Acontece quando o nome de arquivo da planilha não está no mesmo padrão do Sistac
 		catch (Exception exception) {
-			
+			exception.printStackTrace();
 			AlertDialog.error( bundle.getString("prelim-erros-dependencies-etitle" ),
                                bundle.getString("prelim-erros-dependencies-edialog"));
 			

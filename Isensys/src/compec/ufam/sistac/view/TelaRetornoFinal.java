@@ -349,7 +349,7 @@ public class TelaRetornoFinal extends JFrame {
 		final String title = bundle.getString("final-compile-select-title");
 		
 		// Recuperando o arquivo de entrada
-		final File selected  = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.previousCompilacao);
+		final File selected  = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.previousCompilacao, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -408,7 +408,7 @@ public class TelaRetornoFinal extends JFrame {
 						
 			// Recuperando o arquivo de retorno
 			final File suggestion = (this.retornoExcel != null) ? this.retornoExcel : this.compilacao;
-			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, suggestion);
+			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, suggestion, null);
 						
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
@@ -445,7 +445,7 @@ public class TelaRetornoFinal extends JFrame {
 						
 			// Recuperando o arquivo de erros
 			final File suggestion = (this.retornoSistac != null) ? this.retornoSistac : this.compilacao;
-			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, suggestion);
+			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, suggestion, null);
 		
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
