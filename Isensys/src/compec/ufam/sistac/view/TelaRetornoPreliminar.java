@@ -56,7 +56,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final JButton buttonReport;
 	
 	// Dados da instituição
-	private Instituicao header;
+	private Instituicao instituicao;
 	
 	// Atributos dinâmicos
 	private File lastFileSelected;
@@ -97,12 +97,6 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Recuperando fontes e cores
 		Font  fonte = instance.getFont ();
 		Color color = this.padrao = instance.getColor();
-		
-		// Recuperando dados da instituição
-		this.header = new Instituicao( PropertiesManager.getString("inst.cnpj" , "config/program.properties"),
-								  PropertiesManager.getString("inst.nome" , "config/program.properties"),
-								  PropertiesManager.getString("inst.razao", "config/program.properties")
-								);
 		
 		// Painel 'Dados da Instituição'
 		JPanel panelInstituicao = new JPanel();
@@ -354,6 +348,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 		
+		loadInstituicao();
 	}
 	
 	/********************** Tratamento de Eventos de Botões *******************************/
@@ -394,7 +389,11 @@ public class TelaRetornoPreliminar extends JFrame {
 				
 			}
 			
-			// Salvando arquivo
+			// Realiza uma série de verificações de integridade no arquivo de retorno,
+			// caso alguma falhe, este método é quebrado aqui. 
+			if (!retornoDependencies(selected)) return;
+
+			// Atualizando arquivo interno
 			this.retornoSistac = selected;
 							
 			// Atualizando a view
@@ -442,6 +441,9 @@ public class TelaRetornoPreliminar extends JFrame {
 				
 				// Ocultando painel de processamento
 				panelResults.setVisible(false);
+				
+				// Recarregando dados institucionais
+				loadInstituicao();
 				
 			}
 			
@@ -647,6 +649,107 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	/************************* Utility Methods Section ************************************/
 	
+	/** Carrega dados institucionais do arquivo de propriedades do sistema. */
+	private void loadInstituicao() {
+		
+		// Recuperando dados da instituição do arquivo de propriedades
+		final Instituicao instituicao = Config.getInstituicao();
+		
+		// Validando dados institucionais
+		final String msg = instituicao.validate();
+		
+		if (msg != null) {
+			
+			final String title  = bundle.getString("prelim-inst-title");
+			final String dialog = String.format(bundle.getString("prelim-inst-dialog"), msg);
+			
+			AlertDialog.warning(title, dialog);
+			
+		}
+		
+		// Atualizando a view
+		loadInstituicao(instituicao, this.padrao);
+		
+	}
+	
+	private void loadInstituicao(final Instituicao instituicao, final Color color) {
+		
+		this.instituicao = instituicao;
+		
+		textCNPJ.setText      (StringUtils.BR.formataCNPJ(instituicao.getCNPJ()));
+		textCNPJ.setForeground(color);
+				
+		textNomeFantasia.setText       (instituicao.getNomeFantasia());
+		textNomeFantasia.setToolTipText(instituicao.getNomeFantasia());
+		textNomeFantasia.setForeground (color);
+				
+		textRazaoSocial.setText       (instituicao.getRazaoSocial());
+		textRazaoSocial.setToolTipText(instituicao.getRazaoSocial());
+		textRazaoSocial.setForeground (color);
+		
+	}
+	
+	/** Realiza uma série de verificações de integridade nos dados institucionais do sistema e do arquivo de retorno do Sistac.
+	 *  @param retorno - arquivo de retorno do Sistac
+	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário. */
+	private boolean retornoDependencies(final File retorno) {
+		
+		try {
+
+			// Recuperando dados institucionais do arquivo
+			final Instituicao instituicao = CSVSheetReader.getInstituicao(retorno);
+			
+			// Comparando dados institucionais do sistema com os carregados do retorno 
+			final String compare  = this.instituicao.compare(instituicao);
+			
+			// Se os dados são diferentes...
+			if (compare != null) {
+				
+				// O usuário é questionado se deseja prosseguir utilizando os dados institucionais do RETORNO...
+				final String wtitle  =               bundle.getString("prelim-retorno-dependencies-wtitle" );
+				final String wdialog = String.format(bundle.getString("prelim-retorno-dependencies-wdialog"), compare);
+				
+				int wchoice = AlertDialog.dialog(wtitle, wdialog);
+				
+				// Caso deseje prosseguir...
+				if (wchoice == AlertDialog.OK_OPTION) {
+					
+					// Os dados institucionais do RETORNO são validados
+					final String validate = instituicao.validate();
+					
+					// Se há alguma inconsistência nos dados...
+					if (validate != null) {
+						
+						// O usuário é questionado se deseja prosseguir utilizando os dados institucionais do SISTEMA...
+						final String etitle  =               bundle.getString("prelim-retorno-dependencies-etitle" );
+						final String edialog = String.format(bundle.getString("prelim-retorno-dependencies-edialog"), validate);
+									
+						int echoice = AlertDialog.dialog(etitle, edialog);
+						
+						// Caso não deseje prosseguir, o carregamento é cancelado
+						if (echoice != AlertDialog.OK_OPTION) return false;
+							
+					}
+					
+					// Se não há inconsistência nos dados, estes passam a ser o padrão nesta instância.
+					else
+						loadInstituicao(instituicao, this.yellow);
+				}
+					
+			}
+					
+		}
+		catch (IOException exception) {
+						
+			AlertDialog.error( bundle.getString("prelim-thread-sistac-title" ),
+			                   bundle.getString("prelim-thread-sistac-error"));
+			return false;
+						
+		}
+		
+		return true;
+	}
+	
 	/** Método de atualização de UI relacionado aos métodos <method>actionRetornoSelect</method> e <method>actionErrosSelect</method>. */
 	private void setInputProcessing(final boolean isProcessing) {
 		
@@ -767,11 +870,6 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String[] aux  = retornoSistac.getName().split("_");
 			final String edital = aux[2];
 			final DateTime dataEdital = PhillsDateParser.createDate(aux[3]);
-			
-			
-			// Recuperando dados institucionais do arquivo
-			final Instituicao dados = CSVSheetReader.getInstituicao(retornoSistac);
-			
 			
 			// Inicializando lista de retornos
 			this.listaRetornos = new ListaRetornos();

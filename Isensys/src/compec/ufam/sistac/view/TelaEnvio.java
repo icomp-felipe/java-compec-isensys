@@ -18,7 +18,7 @@ import compec.ufam.sistac.model.retorno.Instituicao;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 18/04/2021 */
+ *  @version 3.0, 21/04/2021 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -47,10 +47,6 @@ public class TelaEnvio extends JFrame {
 	
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
-	public static void main(String[] args) {
-		new TelaEnvio();
-	}
-	
 	public TelaEnvio() {
 		
 		// Recuperando dados da instituição do arquivo de propriedades
@@ -65,8 +61,8 @@ public class TelaEnvio extends JFrame {
 		// Infelizmente a janela não pode ser quebrada aqui, por causa dos atributos 'final'.
 		if (msg != null) {
 			
-			final String title  = bundle.getString("envio-window-title");
-			final String dialog = String.format(bundle.getString("envio-inst-error"), msg);
+			final String title  = bundle.getString("prelim-inst-title");
+			final String dialog = String.format(bundle.getString("prelim-inst-dialog"), msg);
 			
 			AlertDialog.error(title, dialog);
 		

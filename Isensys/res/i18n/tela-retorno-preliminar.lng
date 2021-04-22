@@ -50,11 +50,11 @@ hint-button-report = Gera o edital
 
 ########## Métodos
 ! TelaRetornoPreliminar::actionRetornoSelect
-prelim-retorno-select-title  = Selecione o arquivo de retorno do Sistac
-prelim-retorno-select-dtitle = Selecionando novo arquivo de retorno do Sistac
-prelim-retorno-select-dialog = Tem certeza que deseja selecionar outro arquivo de retorno do Sistac?\n\
-                               Ao prosseguir, o arquivo de erro (se houver) será desselecionado!
-prelim-retorno-select-thread = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de retorno
+prelim-retorno-select-title   = Selecione o arquivo de retorno do Sistac
+prelim-retorno-select-dtitle  = Selecionando novo arquivo de retorno do Sistac
+prelim-retorno-select-dialog  = Tem certeza que deseja selecionar outro arquivo de retorno do Sistac?\n\
+                                Ao prosseguir, o arquivo de erro (se houver) será desselecionado!
+prelim-retorno-select-thread  = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de retorno
 
 ! TelaRetornoPreliminar::actionRetornoClear
 prelim-retorno-clear-dtitle = Arquivo de retorno do Sistac
@@ -89,6 +89,29 @@ prelim-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de 
 ! TelaRetornoPreliminar::actionExport
 prelim-export-title  = Gerando edital
 prelim-export-thread = TelaRetornoPreliminar.class - Thread de geração de relatório Jasper
+
+! TelaRetornoPreliminar::loadInstituicao
+prelim-inst-title  = Dados Institucionais
+prelim-inst-dialog = Alguns erros foram encontrados ao carregar os dados de sua instituição:\n\
+                     \n\
+                     %s\n\
+                     \n\
+                     É recomendável que estes dados estejam devidamente configurados!
+
+! TelaRetornoPreliminar::retornoDependencies
+prelim-retorno-dependencies-wtitle  = Dados institucionais do retorno
+prelim-retorno-dependencies-wdialog = Alguns dados institucionais carregados do arquivo de retorno\n\
+                                      são diferentes dos configurados neste sistema:\n\
+                                      \n\
+                                      %s\n\
+                                      \n\
+                                      Deseja considerar os novos dados provenientes deste arquivo? 
+prelim-retorno-dependencies-etitle  = Dados institucionais do retorno
+prelim-retorno-dependencies-edialog = Há inconsistências nos dados institucionais carregados do arquivo de retorno:\n\
+                                      \n\
+                                      %s\n\
+                                      \n\
+                                      Deseja continuar com os dados institucionais do sistema? 
 
 ! TelaRetornoPreliminar::setInputProcessing
 prelim-input-processing = Processando arquivo...
