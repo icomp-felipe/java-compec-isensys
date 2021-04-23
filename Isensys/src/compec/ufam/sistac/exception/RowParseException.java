@@ -31,9 +31,8 @@ public class RowParseException extends Exception {
 	private String setCPF(String cpf) {
 		
 		cpf = StringUtils.extractNumbers(cpf);
-		cpf = String.format("%011d",Long.parseLong(cpf));
 		
-		return cpf;
+		return cpf.isEmpty() ? cpf : String.format("%011d",Long.parseLong(cpf));
 	}
 	
 	public void addException(FieldException exception) {

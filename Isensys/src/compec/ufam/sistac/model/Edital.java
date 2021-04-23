@@ -1,6 +1,11 @@
 package compec.ufam.sistac.model;
 
-import java.io.File;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+
+import compec.ufam.sistac.view.*;
+import compec.ufam.sistac.model.retorno.*;
 
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
  *  @author Felipe André - felipeandresouza@hotmail.com
@@ -8,12 +13,12 @@ import java.io.File;
  *  @since 3.0, 22/04/2021 */
 public class Edital {
 	
-	// Atributos de texto
 	private String cnpj, edital, dataEdital;
+	private int sequencia;
 	
 	/************************ Bloco de Construtores ****************************/
 	
-	/** Construtor normal, aqui não é realizada verificação alguma de integridade nos dados.
+	/** Construtor utilizado na {@link ListaRetornos#getEdital()}, aqui não é realizada verificação alguma de integridade nos dados.
 	 *  @param cnpj - CNPJ da instituição
 	 *  @param edital - número do edital
 	 *  @param dataEdital - data de envio do arquivo Sistac (no formato DDMMYYYY) */
@@ -24,8 +29,21 @@ public class Edital {
 		this.dataEdital = dataEdital;
 		
 	}
+	
+	/** Construtor utilizado na {@link TelaEnvio}. Incorpora dados completos do edital. A data do edital é definida no ato da construção dessa classe.
+	 *  @param cnpj - CNPJ da instituição
+	 *  @param edital - número do edital
+	 *  @param sequencia - número de sequência do arquivo */
+	public Edital(final String cnpj, final String edital, final int sequencia) {
+		
+		this.cnpj       = cnpj;
+		this.edital     = edital;
+		this.dataEdital = getDataAtual();
+		this.sequencia  = sequencia;
+		
+	}
 
-	/** Construtor alternativo, aqui os dados são obtidos do nome do <code>arquivo</code>.
+	/** Construtor utilizado nas views {@link TelaRetornoPreliminar} e {@link TelaRetornoFinal}, aqui os dados são obtidos do nome do <code>arquivo</code>.
 	 *  Este construtor está ignorando possíveis erros que podem acontecer, como <code>NullPointerException</code>
 	 *  ou <code>ArrayIndexOutOfBoundsException</code>, nesses casos, o objeto pode ficar com atributos nulos.
 	 *  @param arquivo - planilha de retorno ou erros ou arquivo de compilação */
@@ -58,13 +76,20 @@ public class Edital {
 		return this.dataEdital;
 	}
 	
+	/** Getter da sequência de arquivo.
+	 *  @return Sequência de envio de arquivo. */
+	public int getSequencia() {
+		return this.sequencia;
+	}
+	
 	/** Monta o nome do arquivo de erros, com os dados internos desta classe.
+	 *  @param parent - diretório do arquivo
 	 *  @return Um arquivo com o nome no formato 'ERROS_CNPJ_EDITAL_DATA.xlsx' */
-	public File getErrorFilename() {
+	public File getErrorFilename(final File parent) {
 		
 		String filename = String.format("ERROS_%s_%s_%s.xlsx", this.cnpj, this.edital, this.dataEdital);
 		
-		return new File(filename);
+		return new File(parent, filename);
 	}
 	
 	/** Monta o nome do arquivo de compilação, com os dados internos desta classe.
@@ -88,6 +113,14 @@ public class Edital {
 	 *  @return 'true' se o resultado da comparação de CNPJ e edital dos objetos for 'true';<br>'false' caso algum dado seja diferente ou nulo. */
 	public boolean equalsIgnoreDate(final Edital edital) {
 		return (this.cnpj.equals(edital.cnpj)) && (this.edital.equals(edital.edital));
+	}
+	
+	/*********************** Outras Funcionalidades ****************************/
+	
+	/** Retorna a data atual do sistema no formato DDMMYYYY.
+	 *  @return Uma String contendo a data atual do sistema no formato DDMMYYYY. */
+	private String getDataAtual() {        
+	    return new SimpleDateFormat("ddMMyyyy").format(new Date(System.currentTimeMillis()));
 	}
 	
 	/** Imprime todos os atributos dessa classe, útil para debug. */

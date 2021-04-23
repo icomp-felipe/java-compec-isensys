@@ -185,6 +185,11 @@ public class CandidatoBuilder {
 	public static String parseCPF(String cpf) throws FieldException {
 		
 		cpf = StringUtils.extractNumbers(cpf);
+		
+		if (cpf.isEmpty())
+			throw new FieldException("CPF vazio", cpf);
+		
+		// Formatando CPF
 		cpf = String.format("%011d", Long.parseLong(cpf));
 		
 		if (!CPFParser.parse(cpf))

@@ -58,6 +58,12 @@ public class Instituicao {
 		return razaoSocial;
 	}
 	
+	/** Monta uma String de cabeçalho do arquivo Sistac.
+	 *  @return Uma String contendo o cabeçalho do arquivo Sistac. */
+	public String getCabecalhoSistac() {
+		return String.format("0;%s;%s;%s;", this.cnpj, this.nomeFantasia, this.razaoSocial);
+	}
+	
 	/** Verifica se a <code>instituicao</code> passada é exatamente igual a esta instância da classe.
 	 *  @param instituicao - instituicao a ser comparada
 	 *  @return 'true' se o resultado da comparação de todos os campos dos objetos for 'true';<br>'false' caso algum dado seja diferente ou nulo. */

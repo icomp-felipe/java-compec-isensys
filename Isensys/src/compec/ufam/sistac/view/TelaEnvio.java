@@ -45,6 +45,7 @@ public class TelaEnvio extends JFrame {
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
 	
+	// Nome, NIS, Data de Nascimento, Sexo, RG, Data de Emissão do RG, Órgão Emissor do RG, CPF, Nome da Mãe
 	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
 	
 	public TelaEnvio() {
@@ -446,21 +447,18 @@ public class TelaEnvio extends JFrame {
 			}
 			
 			// Recuperando edital e sequência
-			final String edital    = textOutputEdital.getText().trim();
-			final String sequencia = String.format("%03d", spinnerOutputSequencia.getValue());
+			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
 			
 			// Ordenando listas
 			resultList.sort();
 			
 			// Criando arquivo de saída - Sistac
-			final File saidaSistac = SistacFile.getSistacExportName(this.outputDir, edital, sequencia);
-			SistacFile.generate(resultList.getListaCandidatos(), saidaSistac);
+			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, this.instituicao, edital);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
 			if (this.resultList.getListaExcecoes().size() > 0) {
 				
-				final String filename = String.format("errors-%s-%s.xlsx", edital, sequencia);
-				final File saidaExcel = new File(this.outputDir, filename);
+				final File saidaExcel = edital.getErrorFilename(this.outputDir);
 				
 				ExcelSheetWriter.write(resultList.getListaExcecoes(), saidaExcel);
 				

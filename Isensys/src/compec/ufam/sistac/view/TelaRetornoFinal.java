@@ -504,7 +504,7 @@ public class TelaRetornoFinal extends JFrame {
 			final String title = bundle.getString("final-erros-select-title");
 			
 			// Preparando o nome do arquivo de sugestão
-			final File suggestion = new Edital(this.retornoSistac).getErrorFilename();
+			final File suggestion = new Edital(this.retornoSistac).getErrorFilename(null);
 						
 			// Recuperando o arquivo de erros
 			final File parent = (this.retornoSistac != null) ? this.retornoSistac : this.compilacao;

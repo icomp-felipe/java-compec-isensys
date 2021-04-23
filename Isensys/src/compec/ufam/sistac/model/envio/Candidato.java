@@ -45,7 +45,7 @@ public class Candidato {
 	
 	/** Retorna uma String com os dados organizados e preparados para escrita no arquivo texto de acordo com o formato do Sistac.
 	 *  @return Uma string com os dados desta classe no formato Sistac. */
-	public String getResume() {
+	public String getDadosSistac() {
 		return String.format(Constants.StringFormat.ROW_DATA_FORMAT,
 				             this.nome, this.nis, getDataNascimento(), this.sexo, this.rg, getDataEmissaoRG(), this.orgaoEmissorRG, this.cpf, this.nomeMae);
 	}
