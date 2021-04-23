@@ -156,7 +156,7 @@ public class CandidatoBuilder {
 	 *  @throws FieldException caso o RG seja vazio ou tenha mais de 16 caracteres */
 	public static String parseRG(String rg) throws FieldException {
 		
-		rg = StringUtils.extractAlphaNumeric(rg, " ", false);
+		rg = StringUtils.extractAlphaNumeric(rg, "", true);
 		
 		if (rg.isEmpty() || (rg.length() > 16))
 			throw new FieldException("RG inválido",rg);
@@ -169,7 +169,7 @@ public class CandidatoBuilder {
 	 *  @return Um órgão emissor válido no formato Sistac. */
 	public static String parseOrgao(String orgaoEmissor) {
 		
-		orgaoEmissor = StringUtils.extractAlphaNumeric(orgaoEmissor, "", true);
+		orgaoEmissor = StringUtils.extractAlphabet(orgaoEmissor, "", true);
 		
 		// Força o retorno do órgão emissor 'SSP' em caso de erro, já que este não é um dado tão crítico
 		if (orgaoEmissor.isEmpty() || (orgaoEmissor.length() > 30))
