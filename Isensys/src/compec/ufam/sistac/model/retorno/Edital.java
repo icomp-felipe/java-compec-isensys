@@ -4,6 +4,12 @@ import java.io.File;
 
 public class Edital {
 	
+	public Edital(String cnpj, String edital, String dataEdital) {
+		this.cnpj = cnpj;
+		this.edital = edital;
+		this.dataEdital = dataEdital;
+	}
+
 	private String cnpj, edital, dataEdital;
 	
 	public Edital(final File arquivo) {
@@ -40,6 +46,14 @@ public class Edital {
 		String filename = String.format("COMPILACAO_%s_%s_%s.bsf", this.cnpj, this.edital, this.dataEdital);
 		
 		return new File(filename);
+	}
+
+	public String getEdital() {
+		return this.edital;
+	}
+
+	public String getDataEdital() {
+		return this.dataEdital;
 	}
 
 }

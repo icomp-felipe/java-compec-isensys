@@ -4,8 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.joda.time.*;
-
 /** Armazena uma lista de {@link Retorno}, classe utilizada na construção dos editais
  *  e que também pode ser escrita em disco, por ser serializável. Também armazena alguns
  *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
@@ -26,12 +24,48 @@ public class ListaRetornos implements Serializable {
 	
 	// Atributos do(s) arquivo(s) de retorno em processamento
 	private String   edital;
-	private DateTime dataEdital;
+	private String dataEdital;
+	private String cabecalho;
 	
 	/************************ Bloco de Construtores ****************************/
 	
 	public ListaRetornos() {
 		this.listaRetornos = new ArrayList<Retorno>();
+	}
+	
+	public void setInstituicao(final Instituicao instituicao) {
+		
+		if (instituicao != null) {
+			
+			this.cnpj = instituicao.getCNPJ();
+			this.nomeFantasia = instituicao.getNomeFantasia();
+			this.razaoSocial  = instituicao.getRazaoSocial ();
+			
+		}
+		
+	}
+	
+	public void setEdital(final Edital edital) {
+		
+		if (edital != null) {
+			
+			this.edital     = edital.getEdital();
+			this.dataEdital = edital.getDataEdital();
+			
+		}
+		
+	}
+	
+	public Instituicao getInstituicao() {
+		return new Instituicao(this.cnpj, this.nomeFantasia, this.razaoSocial);
+	}
+	
+	public Edital getEdital() {
+		return new Edital(this.cnpj, this.edital, this.dataEdital);
+	}
+	
+	public String getCabecalho() {
+		return this.cabecalho;
 	}
 	
 	/*public ListaRetornos(final String cnpj, final String nomeFantasia, final String razaoSocial, final String edital, final DateTime dataEdital) {
@@ -165,6 +199,10 @@ public class ListaRetornos implements Serializable {
 			return retorno1.getNome().compareTo(retorno2.getNome());
 		}
 		
+	}
+
+	public void setCabecalho(final String cabecalho) {
+		this.cabecalho = cabecalho;
 	}
 
 }

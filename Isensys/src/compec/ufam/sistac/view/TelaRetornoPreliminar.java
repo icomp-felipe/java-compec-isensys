@@ -988,6 +988,11 @@ public class TelaRetornoPreliminar extends JFrame {
 			// Recuperando cabeçalho
 			final String cabecalho = textCabecalho.getText().trim();
 			
+			// Adicionando dados extras ao arquivo de compilação
+			listaRetornos.setInstituicao(instituicao);
+			listaRetornos.setEdital     (new Edital(retornoSistac));
+			listaRetornos.setCabecalho  (cabecalho);
+			
 			// Ordenando dados
 			listaRetornos.sort();
 			
