@@ -7,7 +7,7 @@ import compec.ufam.sistac.constants.*;
 /** Classe que representa um candidato processado com sucesso pelo sistema. Se houve algum erro
  *  durante o processo de leitura e parse dos arquivos, o objeto criado será o 'RowParseException'
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021
+ *  @version 3.5, 23/04/2021
  *  @see CandidatoBuilder */
 public class Candidato {
 

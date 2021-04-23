@@ -8,7 +8,7 @@ import compec.ufam.sistac.exception.*;
 
 /** Classe que monta um {@link Candidato} e realiza uma série de validações de dados nos campos.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021
+ *  @version 3.5, 23/04/2021
  *  @see Candidato */
 public class CandidatoBuilder {
 

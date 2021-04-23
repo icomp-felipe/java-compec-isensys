@@ -6,7 +6,7 @@ import compec.ufam.sistac.exception.*;
 /** Objeto que concentra listas de {@link Candidato} (objetos lidos com sucesso dos arquivos)
  *  e {@link RowParseException} (objetos com alguma falha de processamento).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021
+ *  @version 3.5, 23/04/2021
  *  @see Candidato
  *  @see RowParseException */
 public class ParseResult {
