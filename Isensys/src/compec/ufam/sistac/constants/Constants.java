@@ -2,21 +2,32 @@ package compec.ufam.sistac.constants;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/** Armazena as diversas constantes utilizadas em todo o sistema.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.5, 23/04/2021 */
 public class Constants {
 	
+	/** Formatos de arquivo utilizados nos métodos de seleção de arquivos.
+	 *  @author Felipe André - felipeandresouza@hotmail.com
+     *  @version 3.5, 23/04/2021 */
 	public static class FileFormat {
 		
-		public static final FileNameExtensionFilter CSV_N = new FileNameExtensionFilter("Texto Separado por Vírgula (.csv)", "csv");
-		public static final FileNameExtensionFilter BSF   = new FileNameExtensionFilter("Arquivo de Compilação (.bsf)", "bsf");
-		public static final FileNameExtensionFilter XLSX  = new FileNameExtensionFilter("Planilha do Excel 2007/2010/2013 (.xlsx)","xlsx");
-		public static final FileNameExtensionFilter TSV   = new FileNameExtensionFilter("Texto Separado por Tabulação (.tsv)", "tsv");
-		public static final FileNameExtensionFilter SISTAC_SEND = new FileNameExtensionFilter("Arquivo de Envio Sistac (.txt)","txt");
-		public static final FileNameExtensionFilter SISTAC_RETV = new FileNameExtensionFilter("Arquivo de Retorno Sistac (.txt)","txt");
+		public static final FileNameExtensionFilter CSV = new FileNameExtensionFilter("Texto Separado por Vírgula (.csv)", "csv");
+		public static final FileNameExtensionFilter TXT = new FileNameExtensionFilter("Texto Separado por Vírgula (.txt)", "txt");
 		
-		public static final FileNameExtensionFilter[] SISTAC_INPUT = new FileNameExtensionFilter[]{CSV_N,TSV,XLSX};
+		public static final FileNameExtensionFilter BSF   = new FileNameExtensionFilter("Arquivo de Compilação (.bsf)"            , "bsf" );
+		public static final FileNameExtensionFilter XLSX  = new FileNameExtensionFilter("Planilha do Excel 2007/2010/2013 (.xlsx)", "xlsx");
+		
+		public static final FileNameExtensionFilter SISTAC_SEND = new FileNameExtensionFilter("Arquivo de Envio Sistac (.txt)"  , "txt");
+		public static final FileNameExtensionFilter SISTAC_RETV = new FileNameExtensionFilter("Arquivo de Retorno Sistac (.txt)", "txt");
+		
+		public static final FileNameExtensionFilter[] SISTAC_INPUT = new FileNameExtensionFilter[] { CSV, TXT, XLSX };
 		
 	}
 	
+	/** Índices de coluna de planilha.
+	 *  @author Felipe André - felipeandresouza@hotmail.com
+     *  @version 3.5, 23/04/2021 */
 	public static class SheetIndex {
 		
 		/** Índices dos campos aproveitados do arquivo de retorno do Sistac. */
@@ -39,6 +50,9 @@ public class Constants {
 		
 	}
 	
+	/** Formatos de String.
+	 *  @author Felipe André - felipeandresouza@hotmail.com
+     *  @version 3.5, 23/04/2021 */
 	public static class StringFormat {
 		
 		/** Máscara de String de acordo com o formato Sistac. */

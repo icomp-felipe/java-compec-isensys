@@ -38,18 +38,18 @@ public class PDFExport {
 		// Preparando parâmetros do relatório
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		
-		parameters.put("PAR_LOGO", image);
-		parameters.put("PAR_CABECALHO", cabecalho);
-		parameters.put("PAR_TIPO_RESULTADO",tipoResultado.name());
-		parameters.put("PAR_LISTA_ERROS",SituacaoDAO.getErros());
-		parameters.put("PAR_LISTA_RETORNOS", retornos.getList());
+		parameters.put("PAR_LOGO"          , image);
+		parameters.put("PAR_CABECALHO"     , cabecalho);
+		parameters.put("PAR_TIPO_RESULTADO", tipoResultado.name    ());
+		parameters.put("PAR_LISTA_ERROS"   , SituacaoDAO  .getErros());
+		parameters.put("PAR_LISTA_RETORNOS", retornos     .getList ());
 		
 		// Gerando relatório
 		JasperPrint  prints = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 		
 		// Exibindo resultados
-		JasperViewer jrv = new JasperViewer(prints,false);
-		jrv.setTitle(windowTitle);
+		JasperViewer jrv = new JasperViewer(prints, false);
+		jrv.setTitle  (windowTitle);
 		jrv.setVisible(true);
 		
 	}
@@ -74,11 +74,11 @@ public class PDFExport {
 		// Preparando parâmetros do relatório
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		
-		parameters.put("PAR_LOGO", image);
-		parameters.put("PAR_CABECALHO", cabecalho);
-		parameters.put("PAR_TIPO_RESULTADO",tipoResultado.name());
-		parameters.put("PAR_LISTA_ERROS",SituacaoDAO.getErros());
-		parameters.put("PAR_LISTA_RETORNOS", retornos.getList());
+		parameters.put("PAR_LOGO"          , image);
+		parameters.put("PAR_CABECALHO"     , cabecalho);
+		parameters.put("PAR_TIPO_RESULTADO", tipoResultado.name    ());
+		parameters.put("PAR_LISTA_ERROS"   , SituacaoDAO  .getErros());
+		parameters.put("PAR_LISTA_RETORNOS", retornos     .getList ());
 		
 		// Gerando relatório
 		JasperPrint  prints = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());

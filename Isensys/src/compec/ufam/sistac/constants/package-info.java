@@ -1,6 +1,4 @@
-/**
- * Pacote que encapsula as classes que representam várias entidades do programa
- * @author Felipe André
- * @version 2.50, 08/07/2018
- */
+/** Pacote que contém as constantes do sistema.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.5, 23/04/2021 */
 package compec.ufam.sistac.constants;

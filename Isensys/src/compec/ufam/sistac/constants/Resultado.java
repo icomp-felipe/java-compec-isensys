@@ -1,9 +1,8 @@
 package compec.ufam.sistac.constants;
 
-/** Enum que representa os tipos de edital.
- *  Utilizado na construção do relatório final.
- *  @author Felipe André
- *  @version 2.50, 07/07/2018 */
+/** Enum que representa os tipos de edital. Utilizado na construção do relatório Jasper.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.5, 23/04/2021 */
 public enum Resultado {
 
 	PRELIMINAR, FINAL;
