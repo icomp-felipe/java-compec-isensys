@@ -35,7 +35,7 @@ public class Constants {
 				                                     };
 		
 		/** Cabeçalho da planilha de erros (especificação das colunas). */
-		public static final String[] XLSX_COLUMN_TITLES = {"NIS", "Nome", "CPF", "Situação", "Motivo"};
+		public static final String[] XLSX_COLUMN_TITLES = {"Linha", "NIS", "Nome", "CPF", "Situação", "Motivo"};
 		
 	}
 	

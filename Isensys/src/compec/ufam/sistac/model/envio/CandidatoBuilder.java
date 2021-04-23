@@ -38,22 +38,22 @@ public class CandidatoBuilder {
 		
 		// Tratamento do Nome
 		try { nome = parseNome(dados[0], false); exceptions.setNome(nome); }
-		catch (FieldException exception) { exceptions.addException(exception); }
+		catch (FieldParseException exception) { exceptions.addException(exception); }
 		
 		// Tratamento do NIS
 		try { nis = parseNIS(dados[1]); exceptions.setNIS(nis); }
-		catch (FieldException exception) { exceptions.addException(exception); }
+		catch (FieldParseException exception) { exceptions.addException(exception); }
 		
 		// Tratamento da Data de Nascimento
 		dataNascimento = parseData(dados[2]);
 		
 		// Tratamento do Sexo
 		try { sexo = parseSexo(dados[3]); }
-		catch (FieldException exception) { exceptions.addException(exception); }
+		catch (FieldParseException exception) { exceptions.addException(exception); }
 		
 		// Tratamento do número de RG
 		try { rg = parseRG(dados[4]); }
-		catch (FieldException exception) { exceptions.addException(exception); }
+		catch (FieldParseException exception) { exceptions.addException(exception); }
 		
 		// Tratamento da Data de Emissão do RG
 		dataEmissaoRG  = parseData(dados[5]);
@@ -63,11 +63,11 @@ public class CandidatoBuilder {
 		
 		// Tratamento do número de CPF
 		try { cpf = parseCPF(dados[7]); }
-		catch (FieldException exception) { exceptions.addException(exception); }
+		catch (FieldParseException exception) { exceptions.addException(exception); }
 		
 		// Tratamento do Nome da Mãe
 		try { nomeMae = parseNome(dados[8], true); }
-		catch (FieldException exception) { exceptions.addException(exception); }
+		catch (FieldParseException exception) { exceptions.addException(exception); }
 		
 		/******************** Fim da Validação de Dados ****************************/
 		
@@ -85,18 +85,18 @@ public class CandidatoBuilder {
 	 *  @param nome - nome do solicitante ou nome da mãe
 	 *  @param isNomeMae - indica se o nome recebido é do solicitante 'false' ou da mãe 'true'
 	 *  @return Um nome válido no formato Sistac.
-	 *  @throws FieldException quando, mesmo após os tratamentos, o nome continua violando o formato Sistac. */
-	private static String parseNome(String nome, final boolean isNomeMae) throws FieldException {
+	 *  @throws FieldParseException quando, mesmo após os tratamentos, o nome continua violando o formato Sistac. */
+	private static String parseNome(String nome, final boolean isNomeMae) throws FieldParseException {
 		
 		nome = StringUtils.wipeSpecialCharacters(nome);
 		nome = StringUtils.extractAlphabet      (nome, " ", false);
 		nome = StringUtils.wipeMultipleSpaces   (nome);
 		
 		if (!StringUtils.isAlphaStringOnly(nome))
-			throw (isNomeMae) ? new FieldException("Nome da mãe inválido", nome) : new FieldException("Nome inválido", nome);
+			throw (isNomeMae) ? new FieldParseException("Nome da mãe inválido", nome) : new FieldParseException("Nome inválido", nome);
 		
 		if (nome.length() > 100)
-			throw (isNomeMae) ? new FieldException("Nome da mãe contém mais de 100 caracteres", nome) : new FieldException("Nome contém mais de 100 caracteres", nome);
+			throw (isNomeMae) ? new FieldParseException("Nome da mãe contém mais de 100 caracteres", nome) : new FieldParseException("Nome contém mais de 100 caracteres", nome);
 		
 		return nome;
 	}
@@ -104,13 +104,13 @@ public class CandidatoBuilder {
 	/** Extrai apenas os 11 primeiros dígitos do NIS.
 	 *  @param nis - número de identificação social (NIS)
 	 *  @return Um número de NIS válido no formato Sistac.
-	 *  @throws FieldException apenas se o NIS for vazio. */
-	private static String parseNIS(String nis) throws FieldException {
+	 *  @throws FieldParseException apenas se o NIS for vazio. */
+	private static String parseNIS(String nis) throws FieldParseException {
 		
 		nis = StringUtils.extractNumbers(nis);
 		
 		if (nis.isEmpty())
-			throw new FieldException("NIS inválido","-");
+			throw new FieldParseException("NIS inválido","-");
 		
 		if (nis.length() > 11)
 			nis = nis.substring(0,11);
@@ -139,13 +139,13 @@ public class CandidatoBuilder {
 	/** Verifica o sexo.
 	 *  @param sexo - sexo no formato 'M' ou 'F'
 	 *  @return Um char contendo 'M' para masculino ou 'F' para feminino.
-	 *  @throws FieldException caso o sexo seja diferente de 'M' ou 'F'. */
-	private static char parseSexo(final String sexo) throws FieldException {
+	 *  @throws FieldParseException caso o sexo seja diferente de 'M' ou 'F'. */
+	private static char parseSexo(final String sexo) throws FieldParseException {
 		
 		char sexoChar = sexo.isEmpty() ? ' ' : sexo.charAt(0);
 		
 		if ((sexoChar != 'M') && (sexoChar != 'F'))
-			throw new FieldException("Sexo inválido ou não informado", Character.toString(sexoChar));
+			throw new FieldParseException("Sexo inválido ou não informado", Character.toString(sexoChar));
 		
 		return sexoChar;
 	}
@@ -153,13 +153,13 @@ public class CandidatoBuilder {
 	/** Verifica o número de RG.
 	 *  @param rg - número de RG
 	 *  @return Um número de RG válido no formato Sistac.
-	 *  @throws FieldException caso o RG seja vazio ou tenha mais de 16 caracteres */
-	public static String parseRG(String rg) throws FieldException {
+	 *  @throws FieldParseException caso o RG seja vazio ou tenha mais de 16 caracteres */
+	public static String parseRG(String rg) throws FieldParseException {
 		
 		rg = StringUtils.extractAlphaNumeric(rg, "", true);
 		
 		if (rg.isEmpty() || (rg.length() > 16))
-			throw new FieldException("RG inválido",rg);
+			throw new FieldParseException("RG inválido",rg);
 		
 		return rg;
 	}
@@ -181,19 +181,19 @@ public class CandidatoBuilder {
 	/** Verifica e formata o número de CPF.
 	 *  @param cpf - número de CPF
 	 *  @return Um número de CPF válido no formato Sistac.
-	 *  @throws FieldException  */
-	public static String parseCPF(String cpf) throws FieldException {
+	 *  @throws FieldParseException  */
+	public static String parseCPF(String cpf) throws FieldParseException {
 		
 		cpf = StringUtils.extractNumbers(cpf);
 		
 		if (cpf.isEmpty())
-			throw new FieldException("CPF vazio", cpf);
+			throw new FieldParseException("CPF vazio", cpf);
 		
 		// Formatando CPF
 		cpf = String.format("%011d", Long.parseLong(cpf));
 		
 		if (!CPFParser.parse(cpf))
-			throw new FieldException("CPF inválido", cpf);
+			throw new FieldParseException("CPF inválido", cpf);
 		
 		return cpf;
 	}

@@ -25,13 +25,17 @@ public class ParseResult {
 	public void addCandidato(final Candidato candidato) {
 		
 		if (!listaCandidatos.contains(candidato))
-			this.listaCandidatos.add(candidato);
+			this.listaCandidatos.add (candidato);
+		
 	}
 	
-	/** Adiciona um objeto de erros de processamento de dados de candidato na lista.
+	/** Adiciona um objeto de erros de processamento de dados de candidato na lista (apenas se ele já não tiver sido inserido).
 	 *  @param excecao - objeto de erros */
 	public void addExcecao(final RowParseException excecao) {
-		this.listaExcecoes.add(excecao);
+		
+		if (!this.listaExcecoes.contains(excecao))
+			 this.listaExcecoes.add     (excecao);
+		
 	}
 	
 	/** Recupera a lista de candidatos processados com sucesso.

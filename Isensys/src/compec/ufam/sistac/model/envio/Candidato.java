@@ -50,14 +50,14 @@ public class Candidato {
 				             this.nome, this.nis, getDataNascimento(), this.sexo, this.rg, getDataEmissaoRG(), this.orgaoEmissorRG, this.cpf, this.nomeMae);
 	}
 	
-	/** Compara todos os atributos de um <code>candidato</code>.
+	/** Compara todos os atributos de um <code>object</code>, caso ele seja da classe {@link Candidato}, senão o método pai é chamado passando o objeto.
 	 *  @param object - candidato a ser comparado com esta instância da classe
 	 *  @return 'true' apenas se todos os atributos são iguais;<br>'false' caso pelo menos um atributo seja diferente.
 	 *  @since 3.5, 23/04/2021 */
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(final Object object) {
 		
-		// Se for um candidato, todos os seus atributos são verificados
+		// Se for um 'Candidato', todos os seus atributos são verificados
 		if (object instanceof Candidato) {
 			
 			Candidato candidato = (Candidato) object;
