@@ -60,7 +60,7 @@ public class TelaRetornoFinal extends JFrame {
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
-	
+
 	public TelaRetornoFinal() {
 		
 		// Setando título da janela
@@ -69,7 +69,7 @@ public class TelaRetornoFinal extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
-		Dimension dimension = new Dimension(500,490);
+		Dimension dimension = new Dimension(670,490);
 		
 		JPanel painel = new JPaintedPanel("img/final-screen.jpg", dimension);
 		painel.setLayout(null);
@@ -91,7 +91,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelInstituicao.setOpaque(false);
 		panelInstituicao.setLayout(null);
 		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("final-panel-instituicao")));
-		panelInstituicao.setBounds(12, 10, 476, 105);
+		panelInstituicao.setBounds(12, 10, 645, 105);
 		painel.add(panelInstituicao);
 				
 		JLabel labelCNPJ = new JLabel(bundle.getString("final-label-cnpj"));
@@ -135,7 +135,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelPreliminar.setOpaque(false);
 		panelPreliminar.setLayout(null);
 		panelPreliminar.setBorder(instance.getTitledBorder(bundle.getString("final-panel-prelim")));
-		panelPreliminar.setBounds(12, 115, 476, 125);
+		panelPreliminar.setBounds(12, 115, 645, 125);
 		painel.add(panelPreliminar);
 		
 		JLabel labelCompilacao = new JLabel(bundle.getString("final-label-compilacao"));
@@ -149,25 +149,25 @@ public class TelaRetornoFinal extends JFrame {
 		textCompilacao.setForeground(color);
 		textCompilacao.setFont(fonte);
 		textCompilacao.setEditable(false);
-		textCompilacao.setBounds(105, 30, 238, 25);
+		textCompilacao.setBounds(105, 30, 420, 25);
 		panelPreliminar.add(textCompilacao);
 		
 		buttonCompilacaoReload = new JButton(reloadIcon);
 		buttonCompilacaoReload.setToolTipText(bundle.getString("hint-button-compilacao-reload"));
 		buttonCompilacaoReload.addActionListener((event) -> actionCompileReload());
-		buttonCompilacaoReload.setBounds(355, 30, 30, 25);
+		buttonCompilacaoReload.setBounds(535, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoReload);
 		
 		buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
 		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
-		buttonCompilacaoClear.setBounds(395, 30, 30, 25);
+		buttonCompilacaoClear.setBounds(570, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoClear);
 		
 		buttonCompilacaoSelect = new JButton(searchIcon);
 		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
 		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
-		buttonCompilacaoSelect.setBounds(435, 30, 30, 25);
+		buttonCompilacaoSelect.setBounds(605, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoSelect);
 		
 		// Painel 'Análise do Arquivo'
@@ -176,46 +176,46 @@ public class TelaRetornoFinal extends JFrame {
 		panelResults.setVisible(false);
 		panelResults.setLayout(null);
 		panelResults.setBorder(instance.getTitledBorder(bundle.getString("final-panel-results")));
-		panelResults.setBounds(12, 60, 453, 55);
+		panelResults.setBounds(12, 60, 625, 55);
 		panelPreliminar.add(panelResults);
 		
 		JLabel labelDeferidos = new JLabel(bundle.getString("final-label-deferidos"));
 		labelDeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelDeferidos.setFont(fonte);
-		labelDeferidos.setBounds(15, 25, 80, 20);
+		labelDeferidos.setBounds(65, 25, 80, 20);
 		panelResults.add(labelDeferidos);
 		
 		textDeferidos = new JLabel();
 		textDeferidos.setHorizontalAlignment(JLabel.CENTER);
 		textDeferidos.setForeground(new Color(0x0D6B12));
 		textDeferidos.setFont(fonte);
-		textDeferidos.setBounds(100, 25, 45, 20);
+		textDeferidos.setBounds(150, 25, 45, 20);
 		panelResults.add(textDeferidos);
 		
 		JLabel labelIndeferidos = new JLabel(bundle.getString("final-label-indeferidos"));
 		labelIndeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelIndeferidos.setFont(fonte);
-		labelIndeferidos.setBounds(175, 25, 90, 20);
+		labelIndeferidos.setBounds(265, 25, 90, 20);
 		panelResults.add(labelIndeferidos);
 		
 		textIndeferidos = new JLabel();
 		textIndeferidos.setHorizontalAlignment(JLabel.CENTER);
 		textIndeferidos.setForeground(new Color(0xBC1742));
 		textIndeferidos.setFont(fonte);
-		textIndeferidos.setBounds(270, 25, 45, 20);
+		textIndeferidos.setBounds(360, 25, 45, 20);
 		panelResults.add(textIndeferidos);
 		
 		JLabel labelTotal = new JLabel(bundle.getString("final-label-total"));
 		labelTotal.setHorizontalAlignment(JLabel.RIGHT);
 		labelTotal.setFont(fonte);
-		labelTotal.setBounds(350, 25, 40, 20);
+		labelTotal.setBounds(480, 25, 40, 20);
 		panelResults.add(labelTotal);
 		
 		textTotal = new JLabel();
 		textTotal.setHorizontalAlignment(JLabel.CENTER);
 		textTotal.setForeground(color);
 		textTotal.setFont(fonte);
-		textTotal.setBounds(395, 25, 45, 20);
+		textTotal.setBounds(525, 25, 45, 20);
 		panelResults.add(textTotal);
 		
 		// Painel 'Arquivos de Entrada'
@@ -223,7 +223,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelInputFile.setOpaque(false);
 		panelInputFile.setLayout(null);
 		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("final-panel-input-file")));
-		panelInputFile.setBounds(12, 240, 476, 105);
+		panelInputFile.setBounds(12, 240, 645, 105);
 		painel.add(panelInputFile);
 		
 		JLabel labelRetorno = new JLabel(bundle.getString("final-label-retorno"));
@@ -237,14 +237,14 @@ public class TelaRetornoFinal extends JFrame {
 		textRetorno.setForeground(color);
 		textRetorno.setFont(fonte);
 		textRetorno.setEditable(false);
-		textRetorno.setBounds(125, 30, 297, 25);
+		textRetorno.setBounds(125, 30, 470, 25);
 		panelInputFile.add(textRetorno);
 		
 		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
 		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
 		buttonRetornoSelect.setEnabled(false);
-		buttonRetornoSelect.setBounds(434, 30, 30, 25);
+		buttonRetornoSelect.setBounds(605, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
 		
 		JLabel labelErros = new JLabel(bundle.getString("final-label-erros"));
@@ -258,14 +258,14 @@ public class TelaRetornoFinal extends JFrame {
 		textErros.setForeground(color);
 		textErros.setFont(fonte);
 		textErros.setEditable(false);
-		textErros.setBounds(125, 65, 297, 25);
+		textErros.setBounds(125, 65, 470, 25);
 		panelInputFile.add(textErros);
 		
 		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
 		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
 		buttonErrosSelect.setEnabled(false);
-		buttonErrosSelect.setBounds(434, 65, 30, 25);
+		buttonErrosSelect.setBounds(605, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
 		
 		// Painel 'Edital'
@@ -273,7 +273,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("final-panel-edital")));
-		panelEdital.setBounds(12, 345, 476, 65);
+		panelEdital.setBounds(12, 345, 645, 65);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel(bundle.getString("final-label-cabecalho"));
@@ -286,13 +286,13 @@ public class TelaRetornoFinal extends JFrame {
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 330, 25);
+		textCabecalho.setBounds(95, 30, 500, 25);
 		panelEdital.add(textCabecalho);
 		
 		buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
 		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
-		buttonCabecalhoClear.setBounds(435, 30, 30, 25);
+		buttonCabecalhoClear.setBounds(605, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
 		// Fundo da janela

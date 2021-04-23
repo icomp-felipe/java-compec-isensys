@@ -16,6 +16,11 @@ public class TelaInicioIsensys extends JFrame {
 	// Carregando bundle de idiomas
 	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-inicio-isensys", null);
 
+	/** Método main */
+	public static void main(String[] args) {
+		new TelaInicioIsensys();
+	}
+	
 	/** Inicialização da view */
 	public TelaInicioIsensys() {
 		

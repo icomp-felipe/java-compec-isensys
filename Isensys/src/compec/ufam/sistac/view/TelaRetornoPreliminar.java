@@ -76,7 +76,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
-		Dimension dimension = new Dimension(500,485);
+		Dimension dimension = new Dimension(670,485);
 		
 		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",dimension);
 		painel.setLayout(null);
@@ -97,7 +97,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelInstituicao.setOpaque(false);
 		panelInstituicao.setLayout(null);
 		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-instituicao")));
-		panelInstituicao.setBounds(12, 10, 476, 105);
+		panelInstituicao.setBounds(12, 10, 645, 105);
 		painel.add(panelInstituicao);
 		
 		JLabel labelCNPJ = new JLabel(bundle.getString("prelim-label-cnpj"));
@@ -141,7 +141,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelInputFile.setOpaque(false);
 		panelInputFile.setLayout(null);
 		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-input-file")));
-		panelInputFile.setBounds(12, 115, 476, 160);
+		panelInputFile.setBounds(12, 115, 645, 160);
 		painel.add(panelInputFile);
 		
 		JLabel labelRetorno = new JLabel(bundle.getString("prelim-label-retorno"));
@@ -155,19 +155,19 @@ public class TelaRetornoPreliminar extends JFrame {
 		textRetorno.setForeground(color);
 		textRetorno.setFont(fonte);
 		textRetorno.setEditable(false);
-		textRetorno.setBounds(125, 30, 260, 25);
+		textRetorno.setBounds(125, 30, 430, 25);
 		panelInputFile.add(textRetorno);
 		
 		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
 		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
-		buttonRetornoSelect.setBounds(395, 30, 30, 25);
+		buttonRetornoSelect.setBounds(565, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
 		
 		buttonRetornoClear = new JButton(clearIcon);
 		buttonRetornoClear.setToolTipText(bundle.getString("hint-button-retorno-clear"));
 		buttonRetornoClear.addActionListener((event) -> actionRetornoClear());
-		buttonRetornoClear.setBounds(435, 30, 30, 25);
+		buttonRetornoClear.setBounds(605, 30, 30, 25);
 		panelInputFile.add(buttonRetornoClear);
 		
 		JLabel labelErros = new JLabel(bundle.getString("prelim-label-erros"));
@@ -181,21 +181,21 @@ public class TelaRetornoPreliminar extends JFrame {
 		textErros.setForeground(color);
 		textErros.setFont(fonte);
 		textErros.setEditable(false);
-		textErros.setBounds(125, 65, 260, 25);
+		textErros.setBounds(125, 65, 430, 25);
 		panelInputFile.add(textErros);
 		
 		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
 		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
 		buttonErrosSelect.setEnabled(false);
-		buttonErrosSelect.setBounds(395, 65, 30, 25);
+		buttonErrosSelect.setBounds(565, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
 		
 		buttonErrosClear = new JButton(clearIcon);
 		buttonErrosClear.setToolTipText(bundle.getString("hint-button-erros-clear"));
 		buttonErrosClear.addActionListener((event) -> actionErrosClear());
 		buttonErrosClear.setEnabled(false);
-		buttonErrosClear.setBounds(435, 65, 30, 25);
+		buttonErrosClear.setBounds(605, 65, 30, 25);
 		panelInputFile.add(buttonErrosClear);
 		
 		// Painel 'Análise do Arquivo'
@@ -204,46 +204,46 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelResults.setVisible(false);
 		panelResults.setLayout(null);
 		panelResults.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-results")));
-		panelResults.setBounds(12, 95, 453, 55);
+		panelResults.setBounds(10, 95, 625, 55);
 		panelInputFile.add(panelResults);
 		
 		JLabel labelDeferidos = new JLabel(bundle.getString("prelim-label-deferidos"));
 		labelDeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelDeferidos.setFont(fonte);
-		labelDeferidos.setBounds(15, 25, 80, 20);
+		labelDeferidos.setBounds(65, 25, 80, 20);
 		panelResults.add(labelDeferidos);
 		
 		textDeferidos = new JLabel();
 		textDeferidos.setHorizontalAlignment(JLabel.CENTER);
 		textDeferidos.setForeground(new Color(0x0D6B12));
 		textDeferidos.setFont(fonte);
-		textDeferidos.setBounds(100, 25, 45, 20);
+		textDeferidos.setBounds(150, 25, 45, 20);
 		panelResults.add(textDeferidos);
 		
 		JLabel labelIndeferidos = new JLabel(bundle.getString("prelim-label-indeferidos"));
 		labelIndeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelIndeferidos.setFont(fonte);
-		labelIndeferidos.setBounds(175, 25, 90, 20);
+		labelIndeferidos.setBounds(265, 25, 90, 20);
 		panelResults.add(labelIndeferidos);
 		
 		textIndeferidos = new JLabel();
 		textIndeferidos.setHorizontalAlignment(JLabel.CENTER);
 		textIndeferidos.setForeground(new Color(0xBC1742));
 		textIndeferidos.setFont(fonte);
-		textIndeferidos.setBounds(270, 25, 45, 20);
+		textIndeferidos.setBounds(360, 25, 45, 20);
 		panelResults.add(textIndeferidos);
 		
 		JLabel labelTotal = new JLabel(bundle.getString("prelim-label-total"));
 		labelTotal.setHorizontalAlignment(JLabel.RIGHT);
 		labelTotal.setFont(fonte);
-		labelTotal.setBounds(350, 25, 40, 20);
+		labelTotal.setBounds(480, 25, 40, 20);
 		panelResults.add(labelTotal);
 		
 		textTotal = new JLabel();
 		textTotal.setHorizontalAlignment(JLabel.CENTER);
 		textTotal.setForeground(color);
 		textTotal.setFont(fonte);
-		textTotal.setBounds(395, 25, 45, 20);
+		textTotal.setBounds(525, 25, 45, 20);
 		panelResults.add(textTotal);
 		
 		// Painel 'Edital'
@@ -251,7 +251,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-edital")));
-		panelEdital.setBounds(12, 275, 476, 65);
+		panelEdital.setBounds(12, 275, 645, 65);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel(bundle.getString("prelim-label-cabecalho"));
@@ -264,13 +264,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 330, 25);
+		textCabecalho.setBounds(95, 30, 500, 25);
 		panelEdital.add(textCabecalho);
 		
 		buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
 		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
-		buttonCabecalhoClear.setBounds(435, 30, 30, 25);
+		buttonCabecalhoClear.setBounds(605, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
 		// Painel 'Resultado Final'
@@ -278,7 +278,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelFinal.setOpaque(false);
 		panelFinal.setLayout(null);
 		panelFinal.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-final")));
-		panelFinal.setBounds(12, 340, 476, 65);
+		panelFinal.setBounds(12, 340, 645, 65);
 		painel.add(panelFinal);
 		
 		JLabel labelCompilacao = new JLabel(bundle.getString("prelim-label-compilacao"));
@@ -292,19 +292,19 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCompilacao.setForeground(color);
 		textCompilacao.setFont(fonte);
 		textCompilacao.setEditable(false);
-		textCompilacao.setBounds(105, 30, 280, 25);
+		textCompilacao.setBounds(105, 30, 450, 25);
 		panelFinal.add(textCompilacao);
 		
 		buttonCompilacaoSelect = new JButton(searchIcon);
 		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
 		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
-		buttonCompilacaoSelect.setBounds(395, 30, 30, 25);
+		buttonCompilacaoSelect.setBounds(565, 30, 30, 25);
 		panelFinal.add(buttonCompilacaoSelect);
 		
 		buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
 		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
-		buttonCompilacaoClear.setBounds(435, 30, 30, 25);
+		buttonCompilacaoClear.setBounds(605, 30, 30, 25);
 		panelFinal.add(buttonCompilacaoClear);
 		
 		// Fundo da janela
@@ -318,12 +318,12 @@ public class TelaRetornoPreliminar extends JFrame {
 		JButton buttonSair = new JButton(exitIcon);
 		buttonSair.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonSair.addActionListener((event) -> dispose());
-		buttonSair.setBounds(406, 415, 35, 30);
+		buttonSair.setBounds(570, 415, 35, 30);
 		painel.add(buttonSair);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(453, 415, 35, 30);
+		buttonReport.setBounds(620, 415, 35, 30);
 		buttonReport.addActionListener((event) -> actionExport());
 		painel.add(buttonReport);
 		
