@@ -1,8 +1,9 @@
 package compec.ufam.isensys.model;
 
 import java.io.*;
-import java.text.*;
-import java.util.*;
+
+import org.joda.time.*;
+import org.joda.time.format.*;
 
 import compec.ufam.isensys.view.*;
 import compec.ufam.isensys.model.retorno.*;
@@ -117,10 +118,14 @@ public class Edital {
 	
 	/*********************** Outras Funcionalidades ****************************/
 	
-	/** Retorna a data atual do sistema no formato DDMMYYYY.
-	 *  @return Uma String contendo a data atual do sistema no formato DDMMYYYY. */
-	private String getDataAtual() {        
-	    return new SimpleDateFormat("ddMMyyyy").format(new Date(System.currentTimeMillis()));
+	/** Retorna a data atual do Sistac (UTC ou GMT+0) no formato DDMMYYYY. 
+	 *  @return Uma String contendo a data atual do Sistac no formato DDMMYYYY. */
+	private String getDataAtual() {
+		
+		DateTime sistac = DateTime.now().withZone(DateTimeZone.forID("UTC"));
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("ddMMyyyy");
+		
+	    return sistac.toString(formatter);
 	}
 	
 	/** Imprime todos os atributos dessa classe, útil para debug. */
