@@ -1,6 +1,7 @@
 package compec.ufam.isensys.io;
 
 import java.io.*;
+import java.nio.charset.*;
 
 import com.phill.libs.files.*;
 
@@ -32,7 +33,7 @@ public class CSVSheetReader {
 		String row;
 		
 		// Abrindo planilha para leitura
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), "UTF8"));
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
 		ParseResult resultados = new ParseResult();
 		
 		// Recuperando delimitador do .csv
@@ -85,7 +86,7 @@ public class CSVSheetReader {
 		String row;
 		
 		// Abrindo planilha para leitura
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), "UTF8"));
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
 
 		// Recuperando delimitador do csv
 		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
@@ -117,7 +118,7 @@ public class CSVSheetReader {
 	public static Instituicao getInstituicao(final File planilha) throws IOException {
 		
 		// Abrindo planilha para leitura
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), "UTF8"));
+		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
 		
 		// Lendo cabeçalho
 		final String firstLine = stream.readLine();

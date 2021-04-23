@@ -6,6 +6,7 @@ import java.nio.charset.*;
 
 import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.model.envio.*;
+import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac
  *  @author Felipe André - felipeandresouza@hotmail.com
@@ -68,7 +69,7 @@ public class CSVSheetWriter {
 	 *  @param sequencia - número de sequência de arquivo */
 	private static File getSistacFilename(final File diretorio, final Instituicao instituicao, final Edital edital, final int sequencia) {
 		
-		final String filename = String.format("%s_%s_%s_%03d.txt", instituicao.getCNPJ(), edital.getEdital(), edital.getDataEdital(), sequencia);
+		final String filename = String.format(Constants.StringFormat.SISTAC_SEND_FILENAME_FORMAT, instituicao.getCNPJ(), edital.getEdital(), edital.getDataEdital(), sequencia);
 		
 		return new File(diretorio, filename);
 	}

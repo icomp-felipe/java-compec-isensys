@@ -56,7 +56,10 @@ public class Constants {
 	public static class StringFormat {
 		
 		/** Máscara de String de acordo com o formato Sistac. */
-		public static final String ROW_DATA_FORMAT = "1;%s;%s;%s;%c;%s;%s;%s;%s;%s;";
+		public static final String ROW_DATA_FORMAT             = "1;%s;%s;%s;%c;%s;%s;%s;%s;%s;";
+		public static final String SISTAC_SEND_FILENAME_FORMAT = "%s_%s_%s_%03d.txt";
+		public static final String ERROS_FILENAME_FORMAT       = "ERROS_%s_%s_%s.xlsx";
+		public static final String COMPILACAO_FILENAME_FORMAT  = "COMPILACAO_%s_%s_%s.bsf"; 
 		
 	}
 

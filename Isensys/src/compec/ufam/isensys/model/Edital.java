@@ -6,6 +6,7 @@ import org.joda.time.*;
 import org.joda.time.format.*;
 
 import compec.ufam.isensys.view.*;
+import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
@@ -88,7 +89,7 @@ public class Edital {
 	 *  @return Um arquivo com o nome no formato 'ERROS_CNPJ_EDITAL_DATA.xlsx' */
 	public File getErrorFilename(final File parent) {
 		
-		String filename = String.format("ERROS_%s_%s_%s.xlsx", this.cnpj, this.edital, this.dataEdital);
+		String filename = String.format(Constants.StringFormat.ERROS_FILENAME_FORMAT, this.cnpj, this.edital, this.dataEdital);
 		
 		return new File(parent, filename);
 	}
@@ -97,7 +98,7 @@ public class Edital {
 	 *  @return Um arquivo com o nome no formato 'COMPILACAO_CNPJ_EDITAL_DATA.xlsx' */
 	public File getCompilationFilename() {
 		
-		String filename = String.format("COMPILACAO_%s_%s_%s.bsf", this.cnpj, this.edital, this.dataEdital);
+		String filename = String.format(Constants.StringFormat.COMPILACAO_FILENAME_FORMAT, this.cnpj, this.edital, this.dataEdital);
 		
 		return new File(filename);
 	}
