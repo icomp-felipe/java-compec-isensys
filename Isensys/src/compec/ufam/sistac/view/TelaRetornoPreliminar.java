@@ -680,7 +680,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private void loadInstituicao() {
 		
 		// Recuperando dados da instituição do arquivo de propriedades
-		final Instituicao instituicao = Config.getInstituicao();
+		final Instituicao instituicao = SystemConfigs.getInstituicao();
 		
 		// Validando dados institucionais
 		final String msg = instituicao.validate();

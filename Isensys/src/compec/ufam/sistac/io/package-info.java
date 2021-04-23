@@ -1,6 +1,4 @@
-/**
- * Pacote que encapsula as operações de E/S com os arquivos do sistema
- * @author Felipe André
- * @version 2.50, 07/07/2018
- */
+/**Pacote que encapsula as classes de operações de E/S com os arquivos do sistema.
+ * @author Felipe André - felipeandresouza@hotmail.com
+ * @version 3.5, 23/04/2021 */
 package compec.ufam.sistac.io;

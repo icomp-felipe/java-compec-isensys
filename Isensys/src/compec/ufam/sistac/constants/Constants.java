@@ -19,7 +19,7 @@ public class Constants {
 	
 	public static class SheetIndex {
 		
-		/** Índices dos campos aproveitados da planilha de erros. */
+		/** Índices dos campos aproveitados do arquivo de retorno do Sistac. */
 		public static final int[] CSV_RETURN_SHEET = {
 				                                       1,   // Nome do solicitante
                                                        2,   // NIS
@@ -28,10 +28,14 @@ public class Constants {
                                                        11   // Código de situação (motivo), caso esta seja 'N' (ver manual do Sistac)
                                                      };
 		
+		/** Índices dos campos aproveitados da planilha de erros. */
 		public static final int XLSX_ERROR_SHEET[] = { 1,   // Nome do solicitante
 				                                       0,   // NIS
 				                                       2    // CPF
 				                                     };
+		
+		/** Cabeçalho da planilha de erros (especificação das colunas). */
+		public static final String[] XLSX_COLUMN_TITLES = {"NIS", "Nome", "CPF", "Situação", "Motivo"};
 		
 	}
 	

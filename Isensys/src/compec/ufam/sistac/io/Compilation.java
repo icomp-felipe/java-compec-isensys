@@ -3,9 +3,9 @@ package compec.ufam.sistac.io;
 import java.io.*;
 import compec.ufam.sistac.model.retorno.*;
 
-/** Classe de I/O da compilação do sistema
+/** Classe de I/O da compilação do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 19/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class Compilation {
 	
 	/** Salva a lista de retornos em um arquivo binário.

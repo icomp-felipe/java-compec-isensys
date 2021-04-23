@@ -52,7 +52,7 @@ public class TelaEnvio extends JFrame {
 		// Recuperando dados da instituição do arquivo de propriedades
 		// Caso haja alguma falha, a tela nem é exibida, pois este é
 		// um dado de suma importância para o funcionamento desta classe.
-		this.instituicao = Config.getInstituicao();
+		this.instituicao = SystemConfigs.getInstituicao();
 		
 		// Validando dados institucionais
 		final String msg = this.instituicao.validate();

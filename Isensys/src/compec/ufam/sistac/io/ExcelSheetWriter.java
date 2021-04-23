@@ -2,47 +2,47 @@ package compec.ufam.sistac.io;
 
 import java.io.*;
 import java.util.*;
+
+import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.exception.*;
+
 import org.apache.poi.xssf.usermodel.*;
 
-/** Classe que escreve a planilha de erros de processamento no formato 'xlsx'
- *  @author Felipe André
- *  @version 2.50, 07/07/2018 */
+/** Classe que escreve a planilha de erros de processamento no formato Excel.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.5, 23/04/2021 */
 public class ExcelSheetWriter {
 
-	/** Cabeçalho da Planilha de Erros (especificação das colunas) */
-	private static final String[] ERROR_HEADER = new String[]{"NIS","Nome","CPF","Situação","Motivo"};
-	
-	/** Escreve a 'listaErros' no arquivo 'planilha'.xlsx */
-	public static void write(ArrayList<RowParseException> listaErros, File planilha) throws IOException {
+	/** Cria uma nova <code>planilha</code> no formato Excel, com os dados vindos da <code>listaErros</code>.
+	 *  @param listaErros - lista de erros de validação de dados de candidato
+	 *  @param planilha - arquivo de saída da planilha Excel
+	 *  @throws IOException caso a haja alguma falha de acesso ou escrita no arquivo da planilha. */
+	public static void write(final ArrayList<RowParseException> listaErros, final File planilha) throws IOException {
 		
-		// Se o arquivo for inválido, pego minhas coisas e vou embora
-		if (planilha == null)
-			return;
+		// Tratamento de arquivo nulo
+		if (planilha == null) return;
 
-		// Se a lista não contém erros, nem crio o arquivo 'xlsx'
-		int size = listaErros.size();
-		if (size == 0) {
-			return;
-		}
+		// Se a lista não contém erros, a planilha nem é criada
+		if (listaErros.size() == 0) return;
 		
 		// Criando a planilha (RAM)
 		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet("Lista de Erros");
+		XSSFSheet   xssfSheet = workbook.createSheet("Lista de Erros");
 		
 		// Imprimindo o cabeçalho da planilha
-		printHeader(sheet);
+		printHeader(xssfSheet);
 		
-		// Preenchendo a planilha com os erros
-		for (int i=0; i<size; i++) {
+		// Preenchendo a planilha com os dados de 'listaErros'
+		for (int i=0; i<listaErros.size(); i++) {
 			
-			String[] args = listaErros.get(i).getErrorResume();
-			XSSFRow  row  = sheet.createRow(i+1);
+			String[] dados = listaErros.get(i).getErrorResume();	// Recuperando dados da 'listaErros'
+			XSSFRow  row   = xssfSheet.createRow(i+1);				// Criando nova linha na planilha 
 			
-			for (int j=0; j<args.length; j++) {
+			// Inserindo dados célula por célula desta linha 
+			for (int j=0; j<dados.length; j++) {
 				
 				XSSFCell cell = row.createCell(j);
-				cell.setCellValue(args[j]);
+				cell.setCellValue(dados[j]);
 				
 			}
 			
@@ -51,21 +51,23 @@ public class ExcelSheetWriter {
 		// Escrevendo a planilha no disco
 		FileOutputStream stream = new FileOutputStream(planilha);
 		
-		// Limpando a casa
+		// Liberando recursos
 		workbook.write(stream);
 		workbook.close();
 		
 	}
 	
-	/** Imprime o cabeçalho com nomes das colunas na planilha */
-	private static void printHeader(XSSFSheet sheet) {
+	/** Imprime o cabeçalho com nomes das colunas na planilha.
+	 *  @param sheet - planilha de trabalho (Apache POI) */
+	private static void printHeader(final XSSFSheet sheet) {
 		
-		XSSFRow row = sheet.createRow(0);
+		final XSSFRow row = sheet.createRow(0);
+		final String[] header = Constants.SheetIndex.XLSX_COLUMN_TITLES;
 		
-		for (int i=0; i<ERROR_HEADER.length; i++) {
+		for (int i=0; i<header.length; i++) {
 			
 			XSSFCell cell = row.createCell(i);
-			cell.setCellValue(ERROR_HEADER[i]);
+			cell.setCellValue(header[i]);
 			
 		}
 		

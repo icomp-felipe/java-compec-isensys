@@ -15,7 +15,7 @@ import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que lê e processa os dados de um arquivo .xlsx com os dados necessários para solicitação de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class ExcelSheetReader {
 
 	// Forma

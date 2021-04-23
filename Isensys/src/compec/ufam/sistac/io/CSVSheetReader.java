@@ -15,7 +15,7 @@ import compec.ufam.sistac.model.retorno.*;
  *  útil para a construção do edital.
  *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class CSVSheetReader {
 
 	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
