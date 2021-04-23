@@ -50,6 +50,27 @@ public class Candidato {
 				             this.nome, this.nis, getDataNascimento(), this.sexo, this.rg, getDataEmissaoRG(), this.orgaoEmissorRG, this.cpf, this.nomeMae);
 	}
 	
+	/** Compara todos os atributos de um <code>candidato</code>.
+	 *  @param object - candidato a ser comparado com esta instância da classe
+	 *  @return 'true' apenas se todos os atributos são iguais;<br>'false' caso pelo menos um atributo seja diferente.
+	 *  @since 3.5, 23/04/2021 */
+	@Override
+	public boolean equals(Object object) {
+		
+		// Se for um candidato, todos os seus atributos são verificados
+		if (object instanceof Candidato) {
+			
+			Candidato candidato = (Candidato) object;
+			
+			return (this.nome.equals(candidato.nome) && this.nis    .equals(candidato.nis    ) && this.rg.equals(candidato.rg) && this.orgaoEmissorRG.equals(candidato.orgaoEmissorRG) &&
+					this.cpf .equals(candidato.cpf ) && this.nomeMae.equals(candidato.nomeMae) && this.dataNascimento.equals(candidato.dataNascimento) &&
+					this.dataEmissaoRG.equals(candidato.dataEmissaoRG) && this.sexo == candidato.sexo);
+			
+		}
+		
+		return super.equals(object);
+	}
+	
 	/** Comparador de nome de candidato. Útil para métodos de ordenação.
 	 *  @param candidato - candidato a ser comparado com esta instância
 	 *  @since 3.0, 21/04/2021 */

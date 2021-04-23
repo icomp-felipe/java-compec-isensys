@@ -20,10 +20,12 @@ public class ParseResult {
 		this.listaExcecoes   = new ArrayList<RowParseException>();
 	}
 
-	/** Adiciona um candidato na lista.
+	/** Adiciona um candidato na lista (apenas se ele já não tiver sido inserido).
 	 *  @param candidato - candidato */
 	public void addCandidato(final Candidato candidato) {
-		this.listaCandidatos.add(candidato);
+		
+		if (!listaCandidatos.contains(candidato))
+			this.listaCandidatos.add(candidato);
 	}
 	
 	/** Adiciona um objeto de erros de processamento de dados de candidato na lista.
