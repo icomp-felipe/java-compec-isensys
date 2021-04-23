@@ -10,7 +10,7 @@ import compec.ufam.sistac.model.*;
  *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
  *  arquivo(s) de retorno sendo atualmente processado(s).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021
+ *  @version 3.5, 23/04/2021
  *  @see Retorno */
 public class ListaRetornos implements Serializable {
 
@@ -24,68 +24,17 @@ public class ListaRetornos implements Serializable {
 	private String cnpj, nomeFantasia, razaoSocial;
 	
 	// Atributos do(s) arquivo(s) de retorno em processamento
-	private String   edital;
-	private String dataEdital;
-	private String cabecalho;
+	private String edital, dataEdital, cabecalho;
 	
 	/************************ Bloco de Construtores ****************************/
 	
+	/** Construtor regular, apenas inicializando atributos internos. */
 	public ListaRetornos() {
 		this.listaRetornos = new ArrayList<Retorno>();
 	}
 	
-	public void setInstituicao(final Instituicao instituicao) {
-		
-		if (instituicao != null) {
-			
-			this.cnpj = instituicao.getCNPJ();
-			this.nomeFantasia = instituicao.getNomeFantasia();
-			this.razaoSocial  = instituicao.getRazaoSocial ();
-			
-		}
-		
-	}
-	
-	public void setEdital(final Edital edital) {
-		
-		if (edital != null) {
-			
-			this.edital     = edital.getEdital();
-			this.dataEdital = edital.getDataEdital();
-			
-		}
-		
-	}
-	
-	public Instituicao getInstituicao() {
-		return new Instituicao(this.cnpj, this.nomeFantasia, this.razaoSocial);
-	}
-	
-	public Edital getEdital() {
-		return new Edital(this.cnpj, this.edital, this.dataEdital);
-	}
-	
-	public String getCabecalho() {
-		return this.cabecalho;
-	}
-	
-	/*public ListaRetornos(final String cnpj, final String nomeFantasia, final String razaoSocial, final String edital, final DateTime dataEdital) {
-		
-		// Inicializando atributos
-		this.cnpj         = cnpj;
-		this.nomeFantasia = nomeFantasia;
-		this.razaoSocial  = razaoSocial;
-		
-		this.edital       = edital;
-		this.dataEdital   = dataEdital;
-		
-		// Inicializando lista de retornos
-		this.listaRetornos = new ArrayList<Retorno>();
-		
-	}*/
-	
-	/** Construtor usado pelo método <code>clone()</code>.
-	 *  @since 3.00 */
+	/** Construtor alternativo, utilizado pelo método <code>clone()</code>.
+	 *  @since 3.00, 18/04/2021 */
 	private ListaRetornos(final ListaRetornos listaRetornos) {
 		
 		// Inicializando atributos
@@ -105,36 +54,100 @@ public class ListaRetornos implements Serializable {
 		
 	}
 	
-	/** Recupera um 'Retorno' da lista de acordo com sua posição na lista, indicada por 'index' */
-	public Retorno get(int index) {
-		return listaRetornos.get(index);
+	/**************************** Bloco de Setters *****************************/
+	
+	/** Setter da instituição.
+	 *  @param instituicao - dados institucionais a serem copiados para esta instância da classe */
+	public void setInstituicao(final Instituicao instituicao) {
+		
+		if (instituicao != null) {
+			
+			this.cnpj         = instituicao.getCNPJ();
+			this.nomeFantasia = instituicao.getNomeFantasia();
+			this.razaoSocial  = instituicao.getRazaoSocial ();
+			
+		}
+		
 	}
 	
-	/** Retorna o tamanho da lista de 'Retorno' */
+	/** Setter do edital.
+	 *  @param edital - dados de edital a serem copiados para esta instância da classe */
+	public void setEdital(final Edital edital) {
+		
+		if (edital != null) {
+			
+			this.edital     = edital.getEdital    ();
+			this.dataEdital = edital.getDataEdital();
+			
+		}
+		
+	}
+	
+	/** Setter do cabeçalho de edital.
+	 *  @param cabecalho - cabeçalho de edital */
+	public void setCabecalho(final String cabecalho) {
+		this.cabecalho = cabecalho;
+	}
+	
+	/**************************** Bloco de Getters *****************************/
+	
+	/** Getter da instituição.
+	 *  @return Uma nova instituição com os dados internos desta instância. */
+	public Instituicao getInstituicao() {
+		return new Instituicao(this.cnpj, this.nomeFantasia, this.razaoSocial);
+	}
+	
+	/** Getter do edital.
+	 *  @return Um novo edital com os dados internos desta instância. */
+	public Edital getEdital() {
+		return new Edital(this.cnpj, this.edital, this.dataEdital);
+	}
+	
+	/** Getter do cabeçalho de edital.
+	 *  @return Uma String contendo o cabeçalho de edital. */
+	public String getCabecalho() {
+		return this.cabecalho;
+	}
+	
+	/******************** Bloco de Getters (Funcionalidades) *******************/
+	
+	/** Recupera um <code>Retorno</code> da lista de acordo com sua posição na lista, indicada por <code>index</code>.
+	 *  @param index - índice do retorno na lista
+	 *  @return Um objeto {@link Retorno} da lista. */
+	public Retorno get(final int index) {
+		return this.listaRetornos.get(index);
+	}
+	
+	/** Retorna o tamanho da lista de retornos.
+	 *  @return Tamanho da lista de retornos. */
 	public int size() {
-		return listaRetornos.size();
+		return this.listaRetornos.size();
 	}
 	
-	/** Recupera a lista de 'Retorno' */
+	/** Recupera a lista de retornos.
+	 *  @return Lista de retornos. */
 	public ArrayList<Retorno> getList() {
-		return listaRetornos;
+		return this.listaRetornos;
 	}
 	
 	@Override
 	/** Retorna uma clone desta classe.
-	 *  @since 3.00 */
+	 *  @since 3.00, 18/04/2021 */
 	public ListaRetornos clone() {
 		return new ListaRetornos(this);
 	}
 	
-	/** Adiciona um 'Retorno' na lista de 'Retorno' já tratando o deferimento do candidato */
-	public synchronized void add(Retorno retorno) {
+	/*********************** Outras Funcionalidades ****************************/
+	
+	/** Adiciona um {@link Retorno} na lista de retornos já tratando a situação de deferimento do candidato.
+	 *  @param retorno - retorno a ser processado e inserido na lista */
+	public synchronized void add(final Retorno retorno) {
 		
-		// Aqui percorro a lista de 'Retorno' e, para cada objeto...
+		// Aqui percorro a lista de retornos e, para cada objeto...
 		for (Retorno presente: listaRetornos) {
 			
 			// ...identifico o candidato e...
-			if (presente.getCPF().equals(retorno.getCPF())) {
+			if (presente.equals(retorno)) {
 			
 				// ...se este encontra-se indeferido na listagem preliminar, mas foi deferido na final, o defiro e atualizo o NIS
 				if ((!presente.deferido()) && (retorno.deferido())) {
@@ -149,16 +162,15 @@ public class ListaRetornos implements Serializable {
 		}
 		
 		// Se não há dados duplicados, insiro um novo 'Retorno' na lista
-		listaRetornos.add(retorno);
+		this.listaRetornos.add(retorno);
+		
 	}
 	
-	/** Método mais lindo do programa :)
-	 *  Agrupa a lista de retornos de acordo com o status (deferido ou indeferido) e ordena alfabeticamente
-	 *  pelo nome do candidato */
+	/** Agrupa a lista de retornos de acordo com o status (deferido ou indeferido) e ordena alfabeticamente pelo nome do candidato. */
 	public synchronized void sort() {
 		
 		// Criando o comparador para utilizar na função Collections.sort()
-		Comparator<Retorno> comparador = new Comparador();
+		Comparator<Retorno> comparador = (retorno1, retorno2) -> retorno1.compareTo(retorno2);
 		
 		// Aqui, derivo dois 'ArrayList<Retorno>', um só com os deferidos e outro com os indeferidos
 		Map<Boolean,List<Retorno>> map = listaRetornos.stream().collect(Collectors.groupingBy(Retorno::deferido));
@@ -190,20 +202,6 @@ public class ListaRetornos implements Serializable {
 		// Atualizando a lista da classe
 		this.listaRetornos = novaLista;
 		
-	}
-	
-	/** Implementa o comparador de 'Retorno'. Trabalha com ordem alfabética do nome do candidato */
-	private class Comparador implements Comparator<Retorno> {
-
-		@Override
-		public int compare(Retorno retorno1, Retorno retorno2) {
-			return retorno1.getNome().compareTo(retorno2.getNome());
-		}
-		
-	}
-
-	public void setCabecalho(final String cabecalho) {
-		this.cabecalho = cabecalho;
 	}
 
 }

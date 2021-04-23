@@ -7,7 +7,7 @@ import java.io.Serializable;
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.2, 21/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
@@ -64,6 +64,21 @@ public class Retorno implements Serializable {
 	 *  @return 'true' se o pedido foi deferido (situacao == 'S') ou 'false' caso contrário. */
 	public boolean deferido() {
 		return (this.situacao == 'S');
+	}
+	
+	/** Comparador de objetos de retorno. Útil para métodos de ordenação. Usa o nome do candidato como base nos cálculos.
+	 *  @param retorno - retorno a ser comparado com esta instância
+	 *  @since 3.5, 23/04/2021 */
+	public int compareTo(final Retorno retorno) {
+		return this.nome.compareTo(retorno.nome);
+	}
+	
+	/** Verifica se dois retornos são iguais (seus CPF's são os mesmos).
+	 *  @param retorno - retorno a ser comparado
+	 *  @return 'true' caso os CPF's sejam iguais, 'false' caso contrário.
+	 *  @since 3.5, 23/04/2021 */
+	public boolean equals(final Retorno retorno) {
+		return this.cpf.equals(retorno.cpf);
 	}
 	
 	/******************** Bloco de Getters (Jasper) ****************************/
