@@ -1,8 +1,7 @@
 package compec.ufam.sistac.io;
 
 import com.phill.libs.PropertiesManager;
-
-import compec.ufam.sistac.model.retorno.Instituicao;
+import compec.ufam.sistac.model.Instituicao;
 
 public class Config {
 	

@@ -6,6 +6,7 @@ import com.phill.libs.files.*;
 
 import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.exception.*;
+import compec.ufam.sistac.model.*;
 import compec.ufam.sistac.model.envio.*;
 import compec.ufam.sistac.model.retorno.*;
 
