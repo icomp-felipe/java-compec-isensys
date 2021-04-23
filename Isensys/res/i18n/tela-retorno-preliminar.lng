@@ -100,12 +100,12 @@ prelim-erros-dependencies-edialog = Falha ao ler atributos de instituição e ed
                                     do nome do arquivo da planilha de erros.
 
 ! TelaRetornoPreliminar::loadInstituicao
-prelim-inst-title  = Dados Institucionais
-prelim-inst-dialog = Alguns erros foram encontrados ao carregar os dados de sua instituição:\n\
-                     \n\
-                     %s\n\
-                     \n\
-                     É recomendável que estes dados estejam devidamente configurados!
+prelim-load-instituicao-title   = Dados Institucionais
+prelim-load-instituicao-dialog = Alguns erros foram encontrados ao carregar os dados de sua instituição:\n\
+                                 \n\
+                                 %s\n\
+                                 \n\
+                                 É recomendável que estes dados estejam devidamente configurados!
 
 ! TelaRetornoPreliminar::retornoDependencies
 prelim-retorno-dependencies-wtitle  = Dados institucionais do retorno

@@ -17,12 +17,14 @@ import com.phill.libs.mfvapi.*;
 import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
+import compec.ufam.sistac.model.retorno.Edital;
+import compec.ufam.sistac.model.retorno.Instituicao;
 import compec.ufam.sistac.model.retorno.ListaRetornos;
 import compec.ufam.sistac.model.retorno.Retorno;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 19/04/2021 */
+ *  @version 3.0, 22/04/2021 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -33,7 +35,10 @@ public class TelaRetornoFinal extends JFrame {
 	private final static String windowTitle = bundle.getString("final-window-title");
 	
 	// Declaração de atributos gráficos
+	private final Color padrao, yellow = new Color(0xE9EF84);
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
+	
+	private final JLabel textCNPJ, textNomeFantasia, textRazaoSocial;
 	
 	private final JTextField textCompilacao;
 	private final JButton buttonCompilacaoReload, buttonCompilacaoClear, buttonCompilacaoSelect;
@@ -47,6 +52,9 @@ public class TelaRetornoFinal extends JFrame {
 	private final JLabel labelStatus;
 	private final JButton buttonCabecalhoClear, buttonReport;
 	
+	// Dados da instituição
+	private Instituicao instituicao;
+	
 	// Atributos dinâmicos
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
 	private ListaRetornos listaRetornos;
@@ -54,6 +62,10 @@ public class TelaRetornoFinal extends JFrame {
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
+	
+	public static void main(String[] args) {
+		new TelaRetornoFinal();
+	}
 	
 	public TelaRetornoFinal() {
 		
@@ -63,7 +75,7 @@ public class TelaRetornoFinal extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
-		Dimension dimension = new Dimension(500,385);
+		Dimension dimension = new Dimension(500,490);
 		
 		JPanel painel = new JPaintedPanel("img/final-screen.jpg", dimension);
 		painel.setLayout(null);
@@ -78,14 +90,58 @@ public class TelaRetornoFinal extends JFrame {
 		
 		// Recuperando fontes e cores
 		Font  fonte = instance.getFont ();
-		Color color = instance.getColor();
+		Color color = this.padrao = instance.getColor();
+		
+		// Painel 'Dados da Instituição'
+		JPanel panelInstituicao = new JPanel();
+		panelInstituicao.setOpaque(false);
+		panelInstituicao.setLayout(null);
+		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("final-panel-instituicao")));
+		panelInstituicao.setBounds(12, 10, 476, 105);
+		painel.add(panelInstituicao);
+				
+		JLabel labelCNPJ = new JLabel(bundle.getString("final-label-cnpj"));
+		labelCNPJ.setHorizontalAlignment(JLabel.RIGHT);
+		labelCNPJ.setFont(fonte);
+		labelCNPJ.setBounds(10, 25, 115, 20);
+		panelInstituicao.add(labelCNPJ);
+				
+		textCNPJ = new JLabel();
+		textCNPJ.setFont(fonte);
+		textCNPJ.setForeground(color);
+		textCNPJ.setBounds(130, 25, 145, 20);
+		panelInstituicao.add(textCNPJ);
+				
+		JLabel labelNomeFantasia = new JLabel(bundle.getString("final-label-nome-fantasia"));
+		labelNomeFantasia.setHorizontalAlignment(JLabel.RIGHT);
+		labelNomeFantasia.setFont(fonte);
+		labelNomeFantasia.setBounds(10, 50, 115, 20);
+		panelInstituicao.add(labelNomeFantasia);
+				
+		textNomeFantasia = new JLabel();
+		textNomeFantasia.setFont(fonte);
+		textNomeFantasia.setForeground(color);
+		textNomeFantasia.setBounds(130, 50, 334, 20);
+		panelInstituicao.add(textNomeFantasia);
+				
+		JLabel labelRazaoSocial = new JLabel(bundle.getString("final-label-razao-social"));
+		labelRazaoSocial.setHorizontalAlignment(JLabel.RIGHT);
+		labelRazaoSocial.setFont(fonte);
+		labelRazaoSocial.setBounds(10, 75, 115, 20);
+		panelInstituicao.add(labelRazaoSocial);
+				
+		textRazaoSocial = new JLabel();
+		textRazaoSocial.setFont(fonte);
+		textRazaoSocial.setForeground(color);
+		textRazaoSocial.setBounds(130, 75, 334, 20);
+		panelInstituicao.add(textRazaoSocial);
 		
 		// Painel 'Retorno Preliminar'
 		JPanel panelPreliminar = new JPanel();
 		panelPreliminar.setOpaque(false);
 		panelPreliminar.setLayout(null);
 		panelPreliminar.setBorder(instance.getTitledBorder(bundle.getString("final-panel-prelim")));
-		panelPreliminar.setBounds(12, 10, 476, 125);
+		panelPreliminar.setBounds(12, 115, 476, 125);
 		painel.add(panelPreliminar);
 		
 		JLabel labelCompilacao = new JLabel(bundle.getString("final-label-compilacao"));
@@ -173,7 +229,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelInputFile.setOpaque(false);
 		panelInputFile.setLayout(null);
 		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("final-panel-input-file")));
-		panelInputFile.setBounds(12, 135, 476, 105);
+		panelInputFile.setBounds(12, 240, 476, 105);
 		painel.add(panelInputFile);
 		
 		JLabel labelRetorno = new JLabel(bundle.getString("final-label-retorno"));
@@ -223,7 +279,7 @@ public class TelaRetornoFinal extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("final-panel-edital")));
-		panelEdital.setBounds(12, 240, 476, 65);
+		panelEdital.setBounds(12, 345, 476, 65);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel(bundle.getString("final-label-cabecalho"));
@@ -250,18 +306,18 @@ public class TelaRetornoFinal extends JFrame {
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(12, 320, 215, 20);
+		labelStatus.setBounds(12, 425, 215, 20);
 		painel.add(labelStatus);
 		
 		JButton buttonSair = new JButton(exitIcon);
 		buttonSair.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonSair.addActionListener((event) -> dispose());
-		buttonSair.setBounds(406, 315, 35, 30);
+		buttonSair.setBounds(406, 420, 35, 30);
 		painel.add(buttonSair);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(453, 315, 35, 30);
+		buttonReport.setBounds(453, 420, 35, 30);
 		buttonReport.addActionListener((event) -> actionExport());
 		painel.add(buttonReport);
 		
@@ -279,6 +335,8 @@ public class TelaRetornoFinal extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 		
+		// Carregando dados institucionais do arquivo de propriedades pra view
+		loadInstituicao();
 	}
 
 	/********************** Tratamento de Eventos de Botões *******************************/
@@ -328,6 +386,7 @@ public class TelaRetornoFinal extends JFrame {
 				textCompilacao.setText(null);
 				textRetorno   .setText(null);
 				textErros     .setText(null);
+				textCabecalho .setText(null);
 				
 				// Ocultando painel de processamento
 				panelResults.setVisible(false);
@@ -335,6 +394,9 @@ public class TelaRetornoFinal extends JFrame {
 				// Limpando dados do painel 'Arquivos de Entrada'
 				buttonRetornoSelect.setEnabled(false);
 				buttonErrosSelect  .setEnabled(false);
+				
+				// Recarregando dados institucionais
+				loadInstituicao();
 				
 			}
 			
@@ -413,6 +475,10 @@ public class TelaRetornoFinal extends JFrame {
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
 				
+				// Realiza uma série de verificações de integridade no arquivo de retorno do Sistac,
+				// caso alguma falhe, este método é quebrado aqui. 
+				if (!retornoDependencies(selected)) return;
+				
 				// Salvando arquivo
 				this.retornoSistac = selected;
 							
@@ -442,14 +508,21 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Recuperando título da janela
 			final String title = bundle.getString("final-erros-select-title");
+			
+			// Preparando o nome do arquivo de sugestão
+			final File suggestion = new Edital(this.retornoSistac).getErrorFilename();
 						
 			// Recuperando o arquivo de erros
-			final File suggestion = (this.retornoSistac != null) ? this.retornoSistac : this.compilacao;
-			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, suggestion, null);
+			final File parent = (this.retornoSistac != null) ? this.retornoSistac : this.compilacao;
+			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, parent, suggestion);
 		
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
 		
+				// Realiza uma série de verificações de integridade na planilha de erros,
+				// caso alguma falhe, este método é quebrado aqui. 
+				if (!errosDependencies(selected)) return;
+				
 				// Salvando arquivo
 				this.retornoExcel = selected;
 				
@@ -528,6 +601,99 @@ public class TelaRetornoFinal extends JFrame {
 		AlertDialog.error( bundle.getString("final-file-error-dialog-title" ),
 		                   bundle.getString("final-file-error-dialog-error"));
 		
+	}
+	
+	/** Realiza uma série de verificações de integridade nos dados contidos no nome de arquivo da planilha.
+	 *  @param planilha - planilha de erros de processamento
+	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
+	 *  @since 3.0, 22/04/2021 */
+	private boolean errosDependencies(final File planilha) {
+			
+		final Edital retorno = new Edital(this.retornoSistac);
+		final Edital erros   = new Edital(planilha);
+			
+		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
+		if (!retorno.equals(erros)) {
+			
+			AlertDialog.error( bundle.getString("final-erros-dependencies-title" ),
+	                           bundle.getString("final-erros-dependencies-dialog"));
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/** Carrega dados institucionais do arquivo de propriedades do sistema.
+	 *  @since 3.0, 22/04/2021 */
+	private void loadInstituicao() {
+		
+		// Recuperando dados da instituição do arquivo de propriedades
+		final Instituicao instituicao = Config.getInstituicao();
+		
+		// Validando dados institucionais
+		final String msg = instituicao.validate();
+		
+		if (msg != null) {
+			
+			final String title  = bundle.getString         ("final-load-instituicao-title"      );
+			final String dialog = bundle.getFormattedString("final-load-instituicao-dialog", msg);
+			
+			AlertDialog.warning(title, dialog);
+			
+		}
+		
+		// Atualizando a view
+		loadInstituicao(instituicao, this.padrao);
+		
+	}
+	
+	/** Atualiza a instituicao interna + interface gráfica.
+	 *  @param instituicao - dados institucionais
+	 *  @param color - cor para pintar os campos de texto referentes aos dados institucionais
+	 *  @since 3.0, 22/04/2021 */
+	private void loadInstituicao(final Instituicao instituicao, final Color color) {
+		
+		// Atualizando a instituição padrão desta instância
+		this.instituicao = instituicao;
+		
+		SwingUtilities.invokeLater(() -> {
+		
+			// Atualizando a view
+			textCNPJ.setText      (StringUtils.BR.formataCNPJ(instituicao.getCNPJ()));
+			textCNPJ.setForeground(color);
+				
+			textNomeFantasia.setText       (instituicao.getNomeFantasia());
+			textNomeFantasia.setToolTipText(instituicao.getNomeFantasia());
+			textNomeFantasia.setForeground (color);
+				
+			textRazaoSocial.setText       (instituicao.getRazaoSocial());
+			textRazaoSocial.setToolTipText(instituicao.getRazaoSocial());
+			textRazaoSocial.setForeground (color);
+			
+		});
+		
+	}
+	
+	/** Realiza uma série de verificações de integridade nos dados contidos no nome de arquivo de retorno do Sistac.
+	 *  @param planilha - arquivo de retorno do Sistac
+	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
+	 *  @since 3.0, 22/04/2021 */
+	private boolean retornoDependencies(final File planilha) {
+		
+		final Edital compilacao = listaRetornos.getEdital();
+		final Edital retorno    = new Edital(planilha);
+		
+		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
+		if (!compilacao.equalsIgnoreDate(retorno)) {
+					
+			AlertDialog.error( bundle.getString("final-retorno-dependencies-title" ),
+		                       bundle.getString("final-retorno-dependencies-dialog"));
+					
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/** Método de atualização de UI relacionado aos métodos <method>actionCompileReload</method> e <method>actionCompileSelect</method>. */
@@ -629,7 +795,21 @@ public class TelaRetornoFinal extends JFrame {
 		int   deferidosCount = (  deferidos == null) ? 0 : deferidos  .size();
 		int indeferidosCount = (indeferidos == null) ? 0 : indeferidos.size();
 		
+		// Recuperando dados da instituição
+		final Instituicao carregada = listaRetornos.getInstituicao();
+		
+		// Atualizando dados da instituição (caso seja diferente da configurada no sistema)
+		if (!instituicao.equals(carregada)) {
+			
+			loadInstituicao(carregada, yellow);
+			AlertDialog.info(bundle.getString("final-update-statistics-title"), bundle.getString("final-update-statistics-dialog"));
+					
+		}
+		
 		SwingUtilities.invokeLater(() -> {
+			
+			// Recuperando texto de cabeçalho
+			textCabecalho.setText(listaRetornos.getCabecalho());
 			
 			// Escondendo o label de status
 			labelStatus.setVisible(false);

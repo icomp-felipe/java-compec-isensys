@@ -341,6 +341,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 		
+		// Carregando dados institucionais do arquivo de propriedades pra view
 		loadInstituicao();
 	}
 	
@@ -480,7 +481,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			}
 			
 			// Realiza uma série de verificações de integridade na planilha de erros,
-			// caso alguma falhe, este método é quebrado aqui. 
+			// caso alguma falhe, este método é quebrado aqui.
 			if (!errosDependencies(selected)) return;
 			
 			// Salvando estado anterior ao processamento dos erros
@@ -657,28 +658,15 @@ public class TelaRetornoPreliminar extends JFrame {
 	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
 	 *  @since 3.0, 22/04/2021 */
 	private boolean errosDependencies(final File planilha) {
-		
-		try {
 			
-			Edital retorno = new Edital(retornoSistac);
-			Edital erros   = new Edital(planilha);
+		Edital retorno = new Edital(retornoSistac);
+		Edital erros   = new Edital(planilha);
 			
-			// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
-			if (!retorno.equals(erros)) {
+		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
+		if (!retorno.equals(erros)) {
 			
-				AlertDialog.error( bundle.getString("prelim-erros-dependencies-title" ),
-	                               bundle.getString("prelim-erros-dependencies-dialog"));
-			
-				return false;
-			}
-			
-		}
-		
-		// Acontece quando o nome de arquivo da planilha não está no mesmo padrão do Sistac
-		catch (Exception exception) {
-			exception.printStackTrace();
-			AlertDialog.error( bundle.getString("prelim-erros-dependencies-etitle" ),
-                               bundle.getString("prelim-erros-dependencies-edialog"));
+			AlertDialog.error( bundle.getString("prelim-erros-dependencies-title" ),
+	                           bundle.getString("prelim-erros-dependencies-dialog"));
 			
 			return false;
 		}
@@ -698,8 +686,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		if (msg != null) {
 			
-			final String title  = bundle.getString("prelim-inst-title");
-			final String dialog = String.format(bundle.getString("prelim-inst-dialog"), msg);
+			final String title  = bundle.getString         ("prelim-load-instituicao-title"      );
+			final String dialog = bundle.getFormattedString("prelim-load-instituicao-dialog", msg);
 			
 			AlertDialog.warning(title, dialog);
 			
@@ -751,8 +739,8 @@ public class TelaRetornoPreliminar extends JFrame {
 			if (compare != null) {
 				
 				// O usuário é questionado se deseja prosseguir utilizando os dados institucionais do RETORNO...
-				final String wtitle  =               bundle.getString("prelim-retorno-dependencies-wtitle" );
-				final String wdialog = String.format(bundle.getString("prelim-retorno-dependencies-wdialog"), compare);
+				final String wtitle  = bundle.getString         ("prelim-retorno-dependencies-wtitle"          );
+				final String wdialog = bundle.getFormattedString("prelim-retorno-dependencies-wdialog", compare);
 				
 				int wchoice = AlertDialog.dialog(wtitle, wdialog);
 				
@@ -766,8 +754,8 @@ public class TelaRetornoPreliminar extends JFrame {
 					if (validate != null) {
 						
 						// O usuário é questionado se deseja prosseguir utilizando os dados institucionais do SISTEMA...
-						final String etitle  =               bundle.getString("prelim-retorno-dependencies-etitle" );
-						final String edialog = String.format(bundle.getString("prelim-retorno-dependencies-edialog"), validate);
+						final String etitle  = bundle.getString         ("prelim-retorno-dependencies-etitle"           );
+						final String edialog = bundle.getFormattedString("prelim-retorno-dependencies-edialog", validate);
 									
 						int echoice = AlertDialog.dialog(etitle, edialog);
 						
