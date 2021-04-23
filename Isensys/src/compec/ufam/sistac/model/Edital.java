@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model.retorno;
+package compec.ufam.sistac.model;
 
 import java.io.File;
 
@@ -35,7 +35,11 @@ public class Edital {
 	}
 	
 	public boolean equals(final Edital edital) {
-		return (this.cnpj.equals(edital.cnpj)) && (this.edital.equals(edital.edital)) && (this.dataEdital.equals(edital.dataEdital)); 
+		return (this.cnpj.equals(edital.cnpj)) && (this.edital.equals(edital.edital)) && (this.dataEdital.equals(edital.dataEdital));
+	}
+	
+	public boolean equalsIgnoreDate(final Edital edital) {
+		return (this.cnpj.equals(edital.cnpj)) && (this.edital.equals(edital.edital));
 	}
 	
 	public void print() {

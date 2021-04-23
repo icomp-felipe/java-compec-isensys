@@ -8,18 +8,13 @@ import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 18/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;
 	
 	// Carregando bundle de idiomas
 	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-inicio-isensys", null);
-
-	/** Função principal */
-	public static void main(String[] args) {
-		new TelaInicioIsensys();
-	}
 
 	/** Inicialização da view */
 	public TelaInicioIsensys() {

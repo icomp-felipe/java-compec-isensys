@@ -17,11 +17,12 @@ import com.phill.libs.mfvapi.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
 import compec.ufam.sistac.constants.*;
+import compec.ufam.sistac.model.*;
 import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 22/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial

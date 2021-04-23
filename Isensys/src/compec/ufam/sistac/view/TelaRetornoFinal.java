@@ -14,17 +14,15 @@ import com.phill.libs.i18n.*;
 import com.phill.libs.files.*;
 import com.phill.libs.mfvapi.*;
 
-import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
 import compec.ufam.sistac.pdf.*;
-import compec.ufam.sistac.model.retorno.Edital;
-import compec.ufam.sistac.model.retorno.Instituicao;
-import compec.ufam.sistac.model.retorno.ListaRetornos;
-import compec.ufam.sistac.model.retorno.Retorno;
+import compec.ufam.sistac.constants.*;
+import compec.ufam.sistac.model.*;
+import compec.ufam.sistac.model.retorno.*;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 22/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -62,10 +60,6 @@ public class TelaRetornoFinal extends JFrame {
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
-	
-	public static void main(String[] args) {
-		new TelaRetornoFinal();
-	}
 	
 	public TelaRetornoFinal() {
 		

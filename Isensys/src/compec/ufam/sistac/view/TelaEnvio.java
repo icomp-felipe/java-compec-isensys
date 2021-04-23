@@ -11,14 +11,14 @@ import com.phill.libs.i18n.*;
 import com.phill.libs.files.*;
 import com.phill.libs.mfvapi.*;
 
-import compec.ufam.sistac.constants.*;
 import compec.ufam.sistac.io.*;
-import compec.ufam.sistac.model.envio.ParseResult;
-import compec.ufam.sistac.model.retorno.Instituicao;
+import compec.ufam.sistac.constants.*;
+import compec.ufam.sistac.model.*;
+import compec.ufam.sistac.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/04/2021 */
+ *  @version 3.5, 23/04/2021 */
 public class TelaEnvio extends JFrame {
 
 	// Serial

@@ -1,4 +1,4 @@
-package compec.ufam.sistac.model.retorno;
+package compec.ufam.sistac.model;
 
 public class Instituicao {
 
@@ -30,6 +30,10 @@ public class Instituicao {
 
 	public String getRazaoSocial() {
 		return razaoSocial;
+	}
+	
+	public boolean equals(final Instituicao instituicao) {
+		return (this.cnpj.equals(instituicao.cnpj) && this.nomeFantasia.equals(instituicao.nomeFantasia) && this.razaoSocial.equals(instituicao.razaoSocial));
 	}
 	
 	public String validate() {

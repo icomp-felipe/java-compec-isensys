@@ -3,6 +3,7 @@ package compec.ufam.sistac.model.retorno;
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
+import compec.ufam.sistac.model.*;
 
 /** Armazena uma lista de {@link Retorno}, classe utilizada na construção dos editais
  *  e que também pode ser escrita em disco, por ser serializável. Também armazena alguns
