@@ -40,7 +40,7 @@ public class Edital {
 		
 		this.cnpj       = cnpj;
 		this.edital     = edital;
-		this.dataEdital = getDataAtual();
+		this.dataEdital = getDataSistac();
 		this.sequencia  = sequencia;
 		
 	}
@@ -121,7 +121,7 @@ public class Edital {
 	
 	/** Retorna a data atual do Sistac (UTC ou GMT+0) no formato DDMMYYYY. 
 	 *  @return Uma String contendo a data atual do Sistac no formato DDMMYYYY. */
-	private String getDataAtual() {
+	private String getDataSistac() {
 		
 		DateTime sistac = DateTime.now().withZone(DateTimeZone.forID("UTC"));
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("ddMMyyyy");

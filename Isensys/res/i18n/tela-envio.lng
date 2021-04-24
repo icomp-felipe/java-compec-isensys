@@ -29,6 +29,8 @@ envio-label-output-edital    = Num. do Edital:
 envio-label-output-sequencia = Sequência:
 envio-label-output-folder    = Pasta de Saída:
 
+envio-label-status = Exportando arquivos...
+
 ########## Dicas
 hint-text-input-name = Nome do arquivo de entrada de dados
 
@@ -71,6 +73,7 @@ envio-export-title  = Exportar arquivos
 envio-export-dialog = Arquivo(s) exportado(s) com sucesso!
 envio-export-error  = Falha ao exportar arquivo(s)!\n\
                       Verifique o console para mais informações.
+envio-export-thread = TelaEnvio.class - Thread de exportação de arquivos
 
 ! TelaEnvio::setInputProcessing
 envio-input-processing = Processando...

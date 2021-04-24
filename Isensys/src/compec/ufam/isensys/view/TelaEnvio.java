@@ -30,8 +30,8 @@ public class TelaEnvio extends JFrame {
 	// Declaração de atributos gráficos
 	private final JTextField textInputName, textOutputEdital, textOutputFolder;
 	private final JSpinner spinnerOutputSequencia;
-	private final JButton buttonInputReload, buttonInputClear, buttonInputSelect;
-	private final JLabel labelInputStatus, labelInputOK, labelInputError, labelInputTotal;
+	private final JButton buttonInputReload, buttonInputClear, buttonInputSelect, buttonExport, buttonOutputSelect, buttonOutputClear;
+	private final JLabel labelInputStatus, labelInputOK, labelInputError, labelInputTotal, labelStatus;
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
 	// Dados da instituição
@@ -265,26 +265,32 @@ public class TelaEnvio extends JFrame {
 		textOutputFolder.setBounds(125, 65, 260, 25);
 		painelSaida.add(textOutputFolder);
 		
-		JButton buttonOutputSelect = new JButton(searchIcon);
+		buttonOutputSelect = new JButton(searchIcon);
 		buttonOutputSelect.setToolTipText(bundle.getString("hint-button-output-select"));
 		buttonOutputSelect.addActionListener((event) -> actionOutputSelect());
 		buttonOutputSelect.setBounds(394, 65, 30, 25);
 		painelSaida.add(buttonOutputSelect);
 		
-		JButton buttonOutputClear = new JButton(clearIcon);
+		buttonOutputClear = new JButton(clearIcon);
 		buttonOutputClear.setToolTipText(bundle.getString("hint-button-output-clear"));
 		buttonOutputClear.addActionListener((event) -> actionOutputClear());
 		buttonOutputClear.setBounds(434, 65, 30, 25);
 		painelSaida.add(buttonOutputClear);
 		
 		// Fundo da janela
+		labelStatus = new JLabel(bundle.getString("envio-label-status"), loadingIcon, JLabel.LEADING);
+		labelStatus.setFont(fonte);
+		labelStatus.setVisible(false);
+		labelStatus.setBounds(10, 345, 200, 20);
+		painel.add(labelStatus);
+		
 		JButton buttonExit = new JButton(exitIcon);
 		buttonExit.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonExit.addActionListener((event) -> dispose());
 		buttonExit.setBounds(406, 340, 35, 30);
 		painel.add(buttonExit);
 		
-		JButton buttonExport = new JButton(exportIcon);
+		buttonExport = new JButton(exportIcon);
 		buttonExport.setToolTipText(bundle.getString("hint-button-export"));
 		buttonExport.addActionListener((event) -> actionExport());
 		buttonExport.setBounds(453, 340, 35, 30);
@@ -309,6 +315,10 @@ public class TelaEnvio extends JFrame {
 		
 		if (msg == null) setVisible(true); else dispose();
 		
+	}
+	
+	public static void main(String[] args) {
+		new TelaEnvio();
 	}
 
 	/********************** Tratamento de Eventos de Botões *******************************/
@@ -433,54 +443,55 @@ public class TelaEnvio extends JFrame {
 	/** Exporta os arquivos de envio do sistac + planilha de erros (se houver) no formato Excel. */
 	private void actionExport() {
 		
-		try {
-
-			// Realizando validação dos campos antes de prosseguir
-			fieldValidator.validate(fieldLogger);
-			
-			// Só prossigo se todas os campos foram devidamente preenchidos
-			if (fieldLogger.hasErrors()) {
-				
-				AlertDialog.error(bundle.getString("envio-export-title"), fieldLogger.getErrorString());
-				fieldLogger.clear(); return;
-				
-			}
-			
-			// Recuperando edital e sequência
-			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
-			
-			// Ordenando listas
-			resultList.sort();
-			
-			// Criando arquivo de saída - Sistac
-			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, this.instituicao, edital);
-			
-			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
-			if (this.resultList.getListaExcecoes().size() > 0) {
-				
-				final File saidaExcel = edital.getErrorFilename(this.outputDir);
-				
-				ExcelSheetWriter.write(resultList.getListaExcecoes(), saidaExcel);
-				
-			}
-			
-			// Mostrando status na view
-			AlertDialog.info( bundle.getString("envio-export-title" ),
-							  bundle.getString("envio-export-dialog"));
-			
-		} catch (Exception exception) {
-			
-			exception.printStackTrace();
-			
-			// Mostrando status na view
-			AlertDialog.error( bundle.getString("envio-export-title" ),
-							   bundle.getString("envio-export-error"));
-			
+		// Realizando validação dos campos antes de prosseguir
+		fieldValidator.validate(fieldLogger);
+					
+		// Só prossigo se todas os campos foram devidamente preenchidos
+		if (fieldLogger.hasErrors()) {
+						
+			AlertDialog.error(bundle.getString("envio-export-title"), fieldLogger.getErrorString());
+			fieldLogger.clear(); return;
+						
 		}
+		
+		// Atualizando a view
+		setExportProcessing(true);
+		
+		// Exportando arquivos
+		Thread thread_export = new Thread(() -> threadExport());
+										
+		thread_export.setName(bundle.getString("envio-export-thread"));
+		thread_export.start();
 		
 	}
 	
 	/************************* Utility Methods Section ************************************/
+	
+	/** Método de bloqueio/desbloqueio de componentes da UI, utilizado pelo método de exportação de arquivos.
+	 *  @param isProcessing - indica o estado do processamento
+	 *  @since 3.5, 23/04/2021 */
+	private void setExportProcessing(final boolean isProcessing) {
+		
+		SwingUtilities.invokeLater(() -> {
+			
+			final boolean enabled = !isProcessing;
+			
+			buttonInputReload.setEnabled(enabled);
+			buttonInputClear .setEnabled(enabled);
+			buttonInputSelect.setEnabled(enabled);
+			
+			textOutputEdital      .setEditable(enabled);
+			spinnerOutputSequencia.setEnabled (enabled);
+			buttonOutputSelect    .setEnabled (enabled);
+			buttonOutputClear     .setEnabled (enabled);
+			
+			buttonExport.setEnabled(enabled);
+			
+			labelStatus.setVisible(isProcessing);
+			
+		});
+		
+	}
 	
 	/** Método de atualização de UI relacionado aos métodos <method>actionInputReload</method> e <method>actionInputSelect</method>. */
 	private void setInputProcessing() {
@@ -497,6 +508,8 @@ public class TelaEnvio extends JFrame {
 		buttonInputClear .setEnabled(false);
 		buttonInputReload.setEnabled(false);
 		buttonInputSelect.setEnabled(false);
+		
+		buttonExport.setEnabled(false);
 		
 	}
 	
@@ -536,7 +549,7 @@ public class TelaEnvio extends JFrame {
 	
 	/***************************** Threaded Methods Section *******************************/
 	
-	/** Carrega os dados de entrada para o sistema */
+	/** Carrega os dados de entrada para o sistema. */
 	private void threadParser() {
 		
 		try {
@@ -573,7 +586,59 @@ public class TelaEnvio extends JFrame {
 				buttonInputReload.setEnabled(true);
 				buttonInputSelect.setEnabled(true);
 				
+				buttonExport.setEnabled(true);
+				
 			});
+			
+		}
+		
+	}
+	
+	/** Exporta os arquivos Sistac e planilha de erros (quando cabível).
+	 *  @since 3.5, 23/04/2021 */
+	private void threadExport() {
+		
+		try {
+
+			// Recuperando edital e sequência
+			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
+			
+			// Ordenando listas
+			this.resultList.sort();
+			
+			// Criando arquivo de saída - Sistac
+			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, this.instituicao, edital);
+			
+			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
+			if (this.resultList.getListaExcecoes().size() > 0) {
+				
+				final File saidaExcel = edital.getErrorFilename(this.outputDir);
+				
+				ExcelSheetWriter.write(resultList.getListaExcecoes(), saidaExcel);
+				
+			}
+			
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(2000L);
+			
+			// Mostrando status na view
+			AlertDialog.info( bundle.getString("envio-export-title" ),
+							  bundle.getString("envio-export-dialog"));
+			
+		}
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			
+			// Mostrando status na view
+			AlertDialog.error( bundle.getString("envio-export-title" ),
+							   bundle.getString("envio-export-error"));
+			
+		}
+		finally {
+			
+			// Desbloqueando campos e botões
+			setExportProcessing(false);
 			
 		}
 		
