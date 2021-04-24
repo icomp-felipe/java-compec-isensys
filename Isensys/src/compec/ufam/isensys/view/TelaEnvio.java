@@ -317,10 +317,6 @@ public class TelaEnvio extends JFrame {
 		
 	}
 	
-	public static void main(String[] args) {
-		new TelaEnvio();
-	}
-
 	/********************** Tratamento de Eventos de Botões *******************************/
 	
 	/** Reprocessa o arquivo de entrada */

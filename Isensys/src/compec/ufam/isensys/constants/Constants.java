@@ -4,7 +4,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Armazena as diversas constantes utilizadas em todo o sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5, 24/04/2021 */
 public class Constants {
 	
 	/** Formatos de arquivo utilizados nos métodos de seleção de arquivos.
@@ -52,12 +52,13 @@ public class Constants {
 	
 	/** Formatos de String.
 	 *  @author Felipe André - felipeandresouza@hotmail.com
-     *  @version 3.5, 23/04/2021 */
+     *  @version 3.5, 24/04/2021 */
 	public static class StringFormat {
 		
 		/** Máscara de String de acordo com o formato Sistac. */
 		public static final String ROW_DATA_FORMAT             = "1;%s;%s;%s;%c;%s;%s;%s;%s;%s;";
 		public static final String SISTAC_SEND_FILENAME_FORMAT = "%s_%s_%s_%03d.txt";
+		public static final String SISTAC_RETV_FILENAME_FORMAT = "RETORNO_%s_%s_%s_%03d.txt";
 		public static final String ERROS_FILENAME_FORMAT       = "ERROS_%s_%s_%s.xlsx";
 		public static final String COMPILACAO_FILENAME_FORMAT  = "COMPILACAO_%s_%s_%s.bsf"; 
 		

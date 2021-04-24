@@ -12,11 +12,11 @@ import compec.ufam.isensys.model.retorno.*;
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
  *  @author Felipe André - felipeandresouza@hotmail.com
  *  @version 1.0, 23/04/2021
- *  @since 3.0, 22/04/2021 */
+ *  @since 3.5, 24/04/2021 */
 public class Edital {
 	
 	private String cnpj, edital, dataEdital;
-	private int sequencia;
+	private int sequencia, nextSequencia;
 	
 	/************************ Bloco de Construtores ****************************/
 	
@@ -59,6 +59,9 @@ public class Edital {
 			this.edital     = dados[2];
 			this.dataEdital = dados[3].substring(0,8);
 			
+			if (dados.length == 5)
+				this.nextSequencia = this.sequencia = Integer.parseInt(dados[4].substring(0,3));
+			
 		}
 		catch (Exception exception) { }
 		
@@ -92,6 +95,17 @@ public class Edital {
 		String filename = String.format(Constants.StringFormat.ERROS_FILENAME_FORMAT, this.cnpj, this.edital, this.dataEdital);
 		
 		return new File(parent, filename);
+	}
+	
+	/** Monta o nome do próximo arquivo de retorno, sempre incrementando o próximo número de sequência.
+	 *  @param currentFile - arquivo atualmente processado, utilizado para encontrar os outros no mesmo diretório
+	 *  @return Um arquivo com o nome no formato 'SISTAC_RETV_FILENAME_FORMAT.txt'
+	 *  @since 3.5, 24/04/2021 */
+	public File getNextRetornoFile(final File currentFile) {
+		
+		String filename = String.format(Constants.StringFormat.SISTAC_RETV_FILENAME_FORMAT, this.cnpj, this.edital, this.dataEdital, ++this.nextSequencia);
+		
+		return new File(currentFile.getParentFile(), filename);
 	}
 	
 	/** Monta o nome do arquivo de compilação, com os dados internos desta classe.

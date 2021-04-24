@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5, 24/04/2021 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -895,7 +895,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	/***************************** Threaded Methods Section *******************************/
 	
-	/** Processa o arquivo de retorno do Sistac. */
+	/** Processa o(s) arquivo(s) de retorno do Sistac. */
 	private void threadSistac() {
 		
 		try {
@@ -903,8 +903,16 @@ public class TelaRetornoPreliminar extends JFrame {
 			// Inicializando lista de retornos
 			this.listaRetornos = new ListaRetornos();
 			
-			// Processa a lista de retornos do Sistac
-			CSVSheetReader.readRetorno(retornoSistac, listaRetornos);
+			// Recuperando dados de edital do nome do arquivo retorno selecionado 
+			Edital edital = new Edital(retornoSistac);
+			
+			// Loop que busca lẽ todos os arquivos subsequentes com base na sequência do primeiro arquivo de retorno selecionado
+			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
+				
+				// Processa a lista de retornos do Sistac
+				CSVSheetReader.readRetorno(atual, listaRetornos);
+				
+			}
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(2000L);
