@@ -10,7 +10,7 @@ import org.apache.poi.xssf.usermodel.*;
 
 /** Classe que escreve a planilha de erros de processamento no formato Excel.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5, 24/04/2021 */
 public class ExcelSheetWriter {
 
 	/** Cria uma nova <code>planilha</code> no formato Excel, com os dados vindos da <code>listaErros</code>.
@@ -47,6 +47,10 @@ public class ExcelSheetWriter {
 			}
 			
 		}
+		
+		// Calculando largura das colunas
+		for (int i=0; i<Constants.SheetIndex.XLSX_COLUMN_TITLES.length; i++)
+			xssfSheet.autoSizeColumn(i);
 
 		// Escrevendo a planilha no disco
 		FileOutputStream stream = new FileOutputStream(planilha);
