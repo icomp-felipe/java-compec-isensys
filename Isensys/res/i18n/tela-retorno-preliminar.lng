@@ -53,13 +53,13 @@ hint-button-report = Gera o edital
 prelim-retorno-select-title   = Selecione o arquivo de retorno do Sistac
 prelim-retorno-select-dtitle  = Selecionando novo arquivo de retorno do Sistac
 prelim-retorno-select-dialog  = Tem certeza que deseja selecionar outro arquivo de retorno do Sistac?\n\
-                                Ao prosseguir, o arquivo de erro (se houver) será desselecionado!
+                                Ao prosseguir, os arquivos de erro e compilação serão desselecionados!
 prelim-retorno-select-thread  = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de retorno
 
 ! TelaRetornoPreliminar::actionRetornoClear
 prelim-retorno-clear-dtitle = Arquivo de retorno do Sistac
 prelim-retorno-clear-dialog = Tem certeza que deseja desselecionar o arquivo de retorno do Sistac?\n\
-                              Ao prosseguir, o arquivo de erro (se houver) também será desselecionado!  
+                              Ao prosseguir, os arquivos de erro e compilação também serão desselecionados!  
 
 ! TelaRetornoPreliminar::actionErrosSelect
 prelim-erros-select-title  = Selecione o arquivo de erros

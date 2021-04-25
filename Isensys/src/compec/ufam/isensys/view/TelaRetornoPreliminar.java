@@ -376,8 +376,11 @@ public class TelaRetornoPreliminar extends JFrame {
 				// Limpa os campos do arquivo de erro apenas se o usuário escolheu 'OK'
 				if (choice == AlertDialog.OK_OPTION) {
 					
+					this.compilacao   = null;
 					this.retornoExcel = null;
-					textErros.setText(null);
+					
+					textCompilacao.setText(null);
+					textErros     .setText(null);
 					
 				}
 				else return;
@@ -425,10 +428,12 @@ public class TelaRetornoPreliminar extends JFrame {
 				this.listaRetornos = null;
 				this.retornoSistac = null;
 				this.retornoExcel  = null;
+				this.compilacao    = null;
 				
 				// Limpando campos de texto
-				textRetorno.setText(null);
-				textErros  .setText(null);
+				textRetorno   .setText(null);
+				textErros     .setText(null);
+				textCompilacao.setText(null);
 				
 				// Bloquenado botões relacionados à planilha de erros
 				buttonErrosSelect.setEnabled(false);
