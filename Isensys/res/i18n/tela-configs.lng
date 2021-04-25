@@ -1,0 +1,33 @@
+########## Título da Janela
+configs-window-title = IsenSys v.3.5 - Configurações do Sistema
+
+########## Mensagens de erro da API MFV
+configs-mfv-cnpj     = Número de CNPJ incompleto ou inválido
+configs-mfv-fantasia = Nome fantasia vazio
+configs-mfv-razao    = Razão social vazia
+
+########## Painéis
+configs-panel-instituicao = Dados da Instituição
+configs-panel-sheet-index = Índices da Planilha de Importação
+
+########## Labels
+configs-label-cnpj          = CNPJ:
+configs-label-nome-fantasia = Nome Fantasia:
+configs-label-razao-social  = Razão Social:
+
+########## Dicas
+hint-text-nome-fantasia = Nome fantasia da instituição, contendo no máximo 100 dígitos entre letras, números e espaços
+hint-text-razao-social  = Razão social da instituição, contendo no máximo 100 dígitos entre letras, números e espaços
+
+hint-button-exit = Sai desta tela
+hint-button-save = Salva as configurações
+
+########## Métodos
+configs-save-title     = Salvando configurações
+configs-save-mfv-error = Os seguintes erros precisam ser\n\
+                         consertados antes de prosseguir:\n\
+                         \n\
+                         %s
+configs-save-success = Configurações salvas com sucesso!
+configs-save-error   = Falha ao salvar configurações.\n\
+                       Visualize o console do sistema para mais detalhes.

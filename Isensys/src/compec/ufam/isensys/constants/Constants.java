@@ -48,6 +48,9 @@ public class Constants {
 		/** Cabeçalho da planilha de erros (especificação das colunas). */
 		public static final String[] XLSX_COLUMN_TITLES = {"Linha", "NIS", "Nome", "CPF", "Situação", "Motivo"};
 		
+		/** Títulos das colunas de importação de dados */
+		public static final String[] IMPORT_COLUMN_TITLES = {"Nome", "NIS", "Dt. Nascimento", "Sexo", "RG", "Data Emissão RG", "Órgão Emissor RG", "CPF", "Nome da Mãe"};
+		
 	}
 	
 	/** Formatos de String.
