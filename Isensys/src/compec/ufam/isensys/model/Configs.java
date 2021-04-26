@@ -48,6 +48,12 @@ public class Configs implements Serializable {
 	public String getRazaoSocial() {
 		return this.razaoSocial;
 	}
+	
+	/** Monta uma String de cabeçalho do arquivo Sistac.
+	 *  @return Uma String contendo o cabeçalho do arquivo Sistac. */
+	public String getCabecalhoSistac() {
+		return String.format("0;%s;%s;%s;", this.cnpj, this.nomeFantasia, this.razaoSocial);
+	}
 
 	/** Getter dos índices de importação das planilhas. Aqui os índices começam em 0.
 	 *  @return Vetor de int[] com os índices começando em 0. */

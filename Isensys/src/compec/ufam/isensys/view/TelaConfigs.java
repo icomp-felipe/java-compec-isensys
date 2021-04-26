@@ -1,10 +1,9 @@
 package compec.ufam.isensys.view;
 
+import java.io.*;
 import java.awt.*;
-import java.util.*;
 
 import javax.swing.*;
-import javax.swing.table.*;
 
 import com.phill.libs.*;
 import com.phill.libs.br.*;
@@ -13,11 +12,13 @@ import com.phill.libs.i18n.*;
 import com.phill.libs.table.*;
 import com.phill.libs.mfvapi.*;
 
+import compec.ufam.isensys.io.*;
+import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.constants.*;
 
 /** Implementa a tela de ajustes de configurações do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.0, 24/04/2021 */
+ *  @version 1.1, 26/04/2021 */
 public class TelaConfigs extends JFrame {
 
 	// Serial
@@ -39,7 +40,7 @@ public class TelaConfigs extends JFrame {
 	public static void main(String[] args) {
 		new TelaConfigs();
 	}
-
+	
 	public TelaConfigs() {
 		
 		// Recuperando o título da janela
@@ -145,23 +146,26 @@ public class TelaConfigs extends JFrame {
 		buttonSave.setBounds(975, 210, 35, 30);
 		painel.add(buttonSave);
 		
-		// Definindo alinhamento central nas células da tabela
-		final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		// Definindo validação de dados das células
+		final TableCellValidator validator = (cellData) -> ((cellData == null) || !(cellData instanceof Integer)) ? false : (int) cellData >= 0;
+		
+		final ValidatorCellRenderer cellRenderer = new ValidatorCellRenderer(validator, Color.WHITE, new Color(0xEF8E84));
+		cellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		for (int i=0; i<Constants.SheetIndex.IMPORT_COLUMN_TITLES.length; i++)
-			tableSheetIndex.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+			tableSheetIndex.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
 		
 		// Cadastrando validação de campos
 		this.fieldValidator = new MandatoryFieldsManager();
 		this.fieldLogger    = new MandatoryFieldsLogger ();
 		
 		fieldValidator.addPermanent(labelCNPJ        , () -> textCNPJ.valido()                    , bundle.getString("configs-mfv-cnpj"    ), false);
-		fieldValidator.addPermanent(labelNomeFantasia, () -> !textNomeFantasia.getText().isBlank(), bundle.getString("configs-mfv-fantasia"), false);
-		fieldValidator.addPermanent(labelRazaoSocial , () -> !textRazaoSocial .getText().isBlank(), bundle.getString("configs-mfv-razao"   ), false);
+		fieldValidator.addPermanent(labelNomeFantasia, () -> parseNome(textNomeFantasia.getText()), bundle.getString("configs-mfv-fantasia"), false);
+		fieldValidator.addPermanent(labelRazaoSocial , () -> parseNome(textRazaoSocial .getText()), bundle.getString("configs-mfv-razao"   ), false);
+		fieldValidator.addPermanent(new JLabel()     , () -> parseIndices()                       , bundle.getString("configs-mfv-table"   ), false);
 		
 		// Carregando configurações
-		loadProperties();
+		load();
 		
 		// Mostrando a janela
 		setSize(dimension);
@@ -172,33 +176,81 @@ public class TelaConfigs extends JFrame {
 		
 	}
 	
-	/** Carrega as configurações do arquivo de propriedades do sistema e exibe na tela. */
-	private void loadProperties() {
+	/********************** Bloco de Métodos Verificadores ********************************/
+	
+	/** Verifica se um determinado nome possui apenas caracteres alfanuméricos e espaços (formato Sistac).
+	 *  @param nome - nome a ser verificado
+	 *  @return 'true' apenas se <code>nome</code> possui caracteres alfanuméricos e espaços;<br>'false' caso contrário. */
+	private boolean parseNome(final String nome) {
+		return StringUtils.isAlphanumericStringOnly(nome.trim(), false);
+	}
+	
+	/** Verifica se todos os índices da tabela estão preenchidos.
+	 *  @return Estado de preenchimento de todos os índices da tabela. */
+	private boolean parseIndices() {
 		
-		// Recuperando índices do arquivo de propriedades
-		final int[] indices = PropertiesManager.getIntArray("import.index", null);
+		for (int i=0; i<Constants.SheetIndex.IMPORT_COLUMN_TITLES.length; i++)
+			if (tableSheetIndex.getValueAt(0,i) == null)
+				return false;
 		
-		// Convertendo int[] para Object[], que é o formato que 'DefaultTableModel::addRow' utiliza
-		final Object[] rowData = Arrays.stream(indices).boxed().toArray(Object[]::new);
-
-		// Atualizando a tabela
+		return true;
+	}
+	
+	/************************* Bloco de Métodos  de I/O ***********************************/
+	
+	/** Carrega o arquivo de configurações do sistema e atualiza a tela com seus dados. */
+	private void load() {
+		
+		// Limpando a tabela
 		TableUtils.clear(modelo);
-		TableUtils.add  (modelo, () -> rowData);
 		
-		// Recuperando os dados institucionais
-		final String cnpj  = PropertiesManager.getString("inst.cnpj" , null);
-		final String nome  = PropertiesManager.getString("inst.nome" , null);
-		final String razao = PropertiesManager.getString("inst.razao", null);
-		
-		textCNPJ.setValue(cnpj);
-		textNomeFantasia.setText(nome );
-		textRazaoSocial .setText(razao);
+		try {
+			
+			// Recuperando objeto de configurações
+			Configs configs = SystemConfigs.retrieve();
+			
+			// Atualizando campos de texto
+			textCNPJ        .setValue(configs.getCNPJ        ());
+			textNomeFantasia.setText (configs.getNomeFantasia());
+			textRazaoSocial .setText (configs.getRazaoSocial ());
+			
+			// Atualizando a tabela
+			TableUtils.add(modelo, () -> configs.getIndicesTabela());
+			
+		}
+		catch (FileNotFoundException exception) {
+			
+			AlertDialog.warning( bundle.getString("configs-load-title"),
+		                         bundle.getString("configs-load-new-file"));
+			
+		}
+		catch (IOException exception) {
+			
+			exception.printStackTrace();
+			AlertDialog.error( bundle.getString("configs-load-title"),
+                               bundle.getString("configs-load-io-error"));
+			
+		}
+		catch (Exception exception) {
+			
+			exception.printStackTrace();
+			AlertDialog.error( bundle.getString("configs-load-title"),
+                               bundle.getString("configs-load-io-error"));
+			
+		}
+		finally {
+			
+			// Caso haja alguma exceção, inicializa a tabela
+			if (modelo.getRowCount() == 0)
+				modelo.addRow(new Object[9]);
+			
+		}
 		
 	}
 	
-	/** Salva as configurações no arquivo de propriedades do sistema. */
+	/** Salva as configurações no arquivo. */
 	private void save() {
-		
+
 		// Realizando validação dos campos antes de prosseguir
 		fieldValidator.validate(fieldLogger);
 							
@@ -223,14 +275,13 @@ public class TelaConfigs extends JFrame {
 			
 			for (int i=0; i<Constants.SheetIndex.IMPORT_COLUMN_TITLES.length; i++)
 				indices[i] = (int) tableSheetIndex.getValueAt(0,i);
-		
-			// Salvando configurações no arquivo de propriedades
-			PropertiesManager.setString("inst.cnpj" , cnpj , null);
-			PropertiesManager.setString("inst.nome" , nome , null);
-			PropertiesManager.setString("inst.razao", razao, null);
-		
-			PropertiesManager.setIntArray("import.index", indices, null);
 			
+			// Preparando objeto de configurações
+			final Configs configs = new Configs(cnpj, nome, razao, indices);
+			
+			// Salvando configurações no disco
+			SystemConfigs.save(configs);
+		
 			// Exibindo mensagem de sucesso
 			AlertDialog.info(bundle.getString("configs-save-title"), bundle.getString("configs-save-success"));
 			

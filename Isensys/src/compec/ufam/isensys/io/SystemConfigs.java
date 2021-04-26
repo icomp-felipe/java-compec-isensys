@@ -1,12 +1,20 @@
 package compec.ufam.isensys.io;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import com.phill.libs.*;
 
 import compec.ufam.isensys.model.*;
 
 /** Contém métodos de salvamento e recuperação de dados do arquivo de propriedades do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.0, 23/04/2021
+ *  @version 1.1, 26/04/2021
  *  @since 3.0, 22/04/2021 */
 public class SystemConfigs {
 	
@@ -21,6 +29,35 @@ public class SystemConfigs {
 		
 		return new Instituicao(cnpj, nomeFantasia, razaoSocial);
 		
+	}
+	
+	private static final File CONFIGS_FILE = ResourceManager.getResourceAsFile("config/program.dat");
+	
+	public static void save(final Configs configs) throws IOException {
+		
+		// Abrindo arquivo para escrita
+		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(CONFIGS_FILE));
+				
+		// Escrevendo dados
+		stream.writeObject(configs);
+				
+		// Liberando recursos
+		stream.close();
+		
+	}
+	
+	public static Configs retrieve() throws ClassNotFoundException, FileNotFoundException, IOException {
+		
+		// Abrindo arquivo para leitura
+		ObjectInputStream stream = new ObjectInputStream(new FileInputStream(CONFIGS_FILE));
+				
+		// Recuperando dados
+		Configs configs = (Configs) stream.readObject();
+		
+		// Liberando recursos
+		stream.close();
+		
+		return configs;
 	}
 
 }

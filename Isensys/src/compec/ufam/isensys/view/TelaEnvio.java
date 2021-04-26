@@ -18,7 +18,7 @@ import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.6, 26/04/2021 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -35,7 +35,7 @@ public class TelaEnvio extends JFrame {
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
 	// Dados da instituição
-	private final Instituicao instituicao;
+	private Configs configs;
 	
 	// Atributos dinâmicos
 	private ParseResult resultList;
@@ -45,29 +45,7 @@ public class TelaEnvio extends JFrame {
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
 	
-	// Nome, NIS, Data de Nascimento, Sexo, RG, Data de Emissão do RG, Órgão Emissor do RG, CPF, Nome da Mãe
-	public static final int INDEXES[] = new int[]{1,2,3,4,5,6,7,8,9};
-	
 	public TelaEnvio() {
-		
-		// Recuperando dados da instituição do arquivo de propriedades
-		// Caso haja alguma falha, a tela nem é exibida, pois este é
-		// um dado de suma importância para o funcionamento desta classe.
-		this.instituicao = SystemConfigs.getInstituicao();
-		
-		// Validando dados institucionais
-		final String msg = this.instituicao.validate();
-		
-		// Caso haja algum dado inconsistente, uma mensagem de erro com esses dados é exibida.
-		// Infelizmente a janela não pode ser quebrada aqui, por causa dos atributos 'final'.
-		if (msg != null) {
-			
-			final String title  = bundle.getString("prelim-inst-title");
-			final String dialog = String.format(bundle.getString("prelim-inst-dialog"), msg);
-			
-			AlertDialog.error(title, dialog);
-		
-		}
 		
 		// Recuperando o título da janela
 		setTitle(bundle.getString("envio-window-title"));
@@ -106,7 +84,7 @@ public class TelaEnvio extends JFrame {
 		labelCNPJ.setBounds(10, 25, 115, 20);
 		panelInstituicao.add(labelCNPJ);
 				
-		JLabel textCNPJ = new JLabel(StringUtils.BR.formataCNPJ(this.instituicao.getCNPJ()));
+		JLabel textCNPJ = new JLabel();
 		textCNPJ.setFont(fonte);
 		textCNPJ.setForeground(color);
 		textCNPJ.setBounds(130, 25, 145, 20);
@@ -118,10 +96,9 @@ public class TelaEnvio extends JFrame {
 		labelNomeFantasia.setBounds(10, 50, 115, 20);
 		panelInstituicao.add(labelNomeFantasia);
 				
-		JLabel textNomeFantasia = new JLabel(this.instituicao.getNomeFantasia());
+		JLabel textNomeFantasia = new JLabel();
 		textNomeFantasia.setFont(fonte);
 		textNomeFantasia.setForeground(color);
-		textNomeFantasia.setToolTipText(this.instituicao.getNomeFantasia());
 		textNomeFantasia.setBounds(130, 50, 334, 20);
 		panelInstituicao.add(textNomeFantasia);
 				
@@ -131,10 +108,9 @@ public class TelaEnvio extends JFrame {
 		labelRazaoSocial.setBounds(10, 75, 115, 20);
 		panelInstituicao.add(labelRazaoSocial);
 				
-		JLabel textRazaoSocial = new JLabel(this.instituicao.getRazaoSocial());
+		JLabel textRazaoSocial = new JLabel();
 		textRazaoSocial.setFont(fonte);
 		textRazaoSocial.setForeground(color);
-		textRazaoSocial.setToolTipText(this.instituicao.getRazaoSocial());
 		textRazaoSocial.setBounds(130, 75, 334, 20);
 		panelInstituicao.add(textRazaoSocial);
 		
@@ -303,17 +279,44 @@ public class TelaEnvio extends JFrame {
 		fieldValidator.addPermanent(labelInputName   , () -> this.inputFile != null, bundle.getString("envio-mfv-input"), false);
 		fieldValidator.addPermanent(labelOutputEdital, () -> {
 																final String text = textOutputEdital.getText().trim();
-																return text.length() == 6 && StringUtils.isAlphanumericStringOnly(text);
+																return text.length() == 6 && StringUtils.isAlphanumericStringOnly(text,true);
 															 }, bundle.getString("envio-mfv-edital"), false);
 		fieldValidator.addPermanent(labelOutputFolder, () -> this.outputDir != null, bundle.getString("envio-mfv-output"), false);
+		
+		// Recuperando configurações do sistema do arquivo em disco.
+		// Caso haja alguma falha, a tela nem é exibida, pois este é
+		// um dado de suma importância para o funcionamento desta classe.
+		try {
+			
+			// Carrega as configurações do sistema e...
+			this.configs = SystemConfigs.retrieve();
+			
+			// ...atualiza a view
+			textCNPJ.setText(StringUtils.BR.formataCNPJ(this.configs.getCNPJ()));
+			
+			textNomeFantasia.setText       (this.configs.getNomeFantasia());
+			textNomeFantasia.setToolTipText(this.configs.getNomeFantasia());
+			
+			textRazaoSocial.setText       (this.configs.getRazaoSocial());
+			textRazaoSocial.setToolTipText(this.configs.getRazaoSocial());
+					
+		}
+		catch (Exception exception) {
+					
+			exception.printStackTrace();
+			final String title  = bundle.getString("envio-window-title");
+			final String dialog = bundle.getString("envio-configs-error");
+					
+			AlertDialog.error(title, dialog); return;
+					
+		}
 		
 		// Mostrando a janela
 		setSize(dimension);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
-		if (msg == null) setVisible(true); else dispose();
+		setVisible(true);
 		
 	}
 	
@@ -552,9 +555,9 @@ public class TelaEnvio extends JFrame {
 			
 			// Seleciona o tipo de leitor de acordo com a extensão do arquivo de entrada
 			if (inputFile.getName().endsWith("xlsx"))
-				resultList = ExcelSheetReader.read(inputFile, INDEXES);
+				resultList = ExcelSheetReader.read(inputFile, this.configs.getIndices());
 			else
-				resultList = CSVSheetReader.read(inputFile, INDEXES);
+				resultList = CSVSheetReader.read(inputFile, this.configs.getIndices());
 		
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(2000L);
@@ -597,13 +600,13 @@ public class TelaEnvio extends JFrame {
 		try {
 
 			// Recuperando edital e sequência
-			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
+			final Edital edital = new Edital(this.configs.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
 			
 			// Ordenando listas
 			this.resultList.sort();
 			
 			// Criando arquivo de saída - Sistac
-			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, this.instituicao, edital);
+			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, this.configs, edital);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
 			if (this.resultList.getListaExcecoes().size() > 0) {

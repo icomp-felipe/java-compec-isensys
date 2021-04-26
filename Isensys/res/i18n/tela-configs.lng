@@ -3,8 +3,9 @@ configs-window-title = IsenSys v.3.5 - Configurações do Sistema
 
 ########## Mensagens de erro da API MFV
 configs-mfv-cnpj     = Número de CNPJ incompleto ou inválido
-configs-mfv-fantasia = Nome fantasia vazio
-configs-mfv-razao    = Razão social vazia
+configs-mfv-fantasia = Nome fantasia vazio ou com caracteres inválidos
+configs-mfv-razao    = Razão social vazia ou com caracteres inválidos
+configs-mfv-table    = Alguns índices da tabela estão vazios ou são inválidos
 
 ########## Painéis
 configs-panel-instituicao = Dados da Instituição
@@ -23,6 +24,17 @@ hint-button-exit = Sai desta tela
 hint-button-save = Salva as configurações
 
 ########## Métodos
+! TelaConfigs::load
+configs-load-title     = Recuperando configurações
+configs-load-new-file  = Arquivo de configurações não encontrado!\n\
+                         Ao salvar, um novo arquivo será criado.
+configs-load-io-error  = Falha ao carregar arquivo de configurações!\n\
+                         Ao salvar, um novo arquivo será criado.
+configs-load-exception = Ocorreu um erro desconhecido ao carregar arquivo de configurações!\n\
+                         Verifique o console para mais informações ou consulte o desenvolvedor do sistema.\n\
+                         Nota: ao salvar, um novo arquivo será criado.
+
+! TelaConfigs::save
 configs-save-title     = Salvando configurações
 configs-save-mfv-error = Os seguintes erros precisam ser\n\
                          consertados antes de prosseguir:\n\
