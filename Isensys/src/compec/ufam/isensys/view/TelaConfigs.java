@@ -52,8 +52,9 @@ public class TelaConfigs extends JFrame {
 		setContentPane(painel);
 		
 		// Recuperando ícones
-		Icon exitIcon = ResourceManager.getIcon("icon/exit.png", 25, 25);
-		Icon saveIcon = ResourceManager.getIcon("icon/save.png", 25, 25);
+		Icon exitIcon   = ResourceManager.getIcon("icon/exit.png"  , 25, 25);
+		Icon saveIcon   = ResourceManager.getIcon("icon/save.png"  , 25, 25);
+		Icon reloadIcon = ResourceManager.getIcon("icon/reload.png", 25, 25);
 		
 		// Recuperando fontes e cores
 		Font  fonte = instance.getFont ();
@@ -133,8 +134,14 @@ public class TelaConfigs extends JFrame {
 		JButton buttonExit = new JButton(exitIcon);
 		buttonExit.setToolTipText(bundle.getString("hint-button-exit"));
 		buttonExit.addActionListener((event) -> dispose());
-		buttonExit.setBounds(930, 210, 35, 30);
+		buttonExit.setBounds(885, 210, 35, 30);
 		painel.add(buttonExit);
+		
+		JButton buttonReload = new JButton(reloadIcon);
+		buttonReload.setToolTipText(bundle.getString("hint-button-reload"));
+		buttonReload.addActionListener((event) -> reload());
+		buttonReload.setBounds(930, 210, 35, 30);
+		painel.add(buttonReload);
 		
 		JButton buttonSave = new JButton(saveIcon);
 		buttonSave.setToolTipText(bundle.getString("hint-button-save"));
@@ -245,6 +252,17 @@ public class TelaConfigs extends JFrame {
 		
 	}
 	
+	/** Recarrega o arquivo de configurações do sistema e atualiza a tela com seus dados. */
+	private void reload() {
+		
+		final String title  = bundle.getString("configs-reload-title");
+		final String dialog = bundle.getString("configs-reload-dialog");
+		
+		if (AlertDialog.dialog(title, dialog) == AlertDialog.OK_OPTION)
+			load();
+		
+	}
+	
 	/** Salva as configurações no arquivo. */
 	private void save() {
 
@@ -293,5 +311,4 @@ public class TelaConfigs extends JFrame {
 		}
 		
 	}
-	
 }

@@ -20,8 +20,9 @@ configs-label-razao-social  = Razão Social:
 hint-text-nome-fantasia = Nome fantasia da instituição, contendo no máximo 100 dígitos entre letras, números e espaços
 hint-text-razao-social  = Razão social da instituição, contendo no máximo 100 dígitos entre letras, números e espaços
 
-hint-button-exit = Sai desta tela
-hint-button-save = Salva as configurações
+hint-button-exit   = Sai desta tela
+hint-button-save   = Salva as configurações
+hint-button-reload = Recarrega as configurações
 
 ########## Métodos
 ! TelaConfigs::load
@@ -33,6 +34,11 @@ configs-load-io-error  = Falha ao carregar arquivo de configurações!\n\
 configs-load-exception = Ocorreu um erro desconhecido ao carregar arquivo de configurações!\n\
                          Verifique o console para mais informações ou consulte o desenvolvedor do sistema.\n\
                          Nota: ao salvar, um novo arquivo será criado.
+
+! TelaConfigs::reload
+configs-reload-title  = Recarregando configurações
+configs-reload-dialog = Tem certeza que deseja recarregar as configurações do sistema?\n\
+                        Todos os dados preenchidos na tela serão substituídos!
 
 ! TelaConfigs::save
 configs-save-title     = Salvando configurações
