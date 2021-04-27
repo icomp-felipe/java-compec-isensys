@@ -5,9 +5,10 @@ inicio-window-title = IsenSys v.3.5.1
 inicio-panel-info = <html>Bem vindo ao IsenSys v.3.5!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
 
 ########## Dicas
-hint-button-envio = Abre o módulo de preparo do arquivo de envio
+hint-button-envio          = Abre o módulo de preparo do arquivo de envio
 hint-button-retorno-prelim = Abre o módulo de processamento do arquivo de retorno do Sistac + geração de relatório preliminar
 hint-button-retorno-final  = Abre o módulo de processamento do arquivo de retorno do Sistac + geração de relatório final
+hint-button-configs        = Abre a tela de configurações do sistema
 
 ########## Métodos
 ! TelaInicioIsensys::actionEasterEgg

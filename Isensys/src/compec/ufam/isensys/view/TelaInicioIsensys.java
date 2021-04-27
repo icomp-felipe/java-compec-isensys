@@ -31,13 +31,14 @@ public class TelaInicioIsensys extends JFrame {
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		
-		Dimension dimension = new Dimension(475,310);
+		Dimension dimension = new Dimension(475,350);
 		JPanel painel = new JPaintedPanel("img/initial-screen.jpg", dimension);
 		painel.setLayout(null);
 		
-		Icon iconEnvio  = ResourceManager.getIcon("img/botao-envio.png"     ,442,30);
-		Icon iconPrelim = ResourceManager.getIcon("img/botao-preliminar.png",442,30);
-		Icon iconFinal  = ResourceManager.getIcon("img/botao-final.png"     ,442,30);
+		Icon iconEnvio   = ResourceManager.getIcon("img/botao-envio.png"     ,442,30);
+		Icon iconPrelim  = ResourceManager.getIcon("img/botao-preliminar.png",442,30);
+		Icon iconFinal   = ResourceManager.getIcon("img/botao-final.png"     ,442,30);
+		Icon iconConfigs = ResourceManager.getIcon("img/botao-configs.png"   ,442,30);
 		
 		Icon isensysIcon  = ResourceManager.getIcon("img/isensys-logo.png",154,130);
 		
@@ -68,6 +69,15 @@ public class TelaInicioIsensys extends JFrame {
 		buttonRetornoFinal.setContentAreaFilled(false);
 		buttonRetornoFinal.setBounds(20, 229, 442, 30);
 		painel.add(buttonRetornoFinal);
+		
+		JButton buttonConfigs = new JButton(iconConfigs);
+		buttonConfigs.setToolTipText(bundle.getString("hint-button-configs"));
+		buttonConfigs.addActionListener((event) -> new TelaConfigs());
+		buttonConfigs.setBorderPainted(false);
+		buttonConfigs.setOpaque(false);
+		buttonConfigs.setContentAreaFilled(false);
+		buttonConfigs.setBounds(20, 271, 442, 30);
+		painel.add(buttonConfigs);
 		
 		JButton buttonEasterEgg = new JButton(isensysIcon);
 		buttonEasterEgg.addActionListener((event) -> actionEasterEgg());
