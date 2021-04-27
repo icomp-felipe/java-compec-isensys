@@ -10,16 +10,16 @@ import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.6, 26/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class CSVSheetWriter {
 
 	/** Gera o(s) arquivo(s) de envio no formato Sistac. A cada 2.000 candidatos, um novo arquivo é gerado com o próximo número de sequência, devido a limitações no Sistac.
 	 *  @param listaCandidatos - lista de candidatos a ser enviada ao Sistac
 	 *  @param diretorio - diretório 'pai' onde serão escritos os arquivos
-	 *  @param configs - configurações do sistema
+	 *  @param instituicao - dados institucionais
 	 *  @param edital - informações do edital
 	 *  @throws IOException caso haja alguma falha na escrita do(s) arquivos. */
-	public static void write(final ArrayList<Candidato> listaCandidatos, final File diretorio, final Configs configs, final Edital edital) throws IOException {
+	public static void write(final ArrayList<Candidato> listaCandidatos, final File diretorio, final Instituicao instituicao, final Edital edital) throws IOException {
 		
 		// Stream de escrita de arquivo
 		PrintWriter stream = null;
@@ -33,11 +33,11 @@ public class CSVSheetWriter {
 			try {
 			
 				// Abrindo arquivo para escrita
-				final File arquivo = getSistacFilename(diretorio, configs, edital, sequencia);
+				final File arquivo = getSistacFilename(diretorio, instituicao, edital, sequencia);
 				stream = new PrintWriter(arquivo, StandardCharsets.UTF_8);
 			
 				// Imprimindo cabeçalho
-				stream.println(configs.getCabecalhoSistac());
+				stream.println(instituicao.getCabecalhoSistac());
 			
 				// Imprimindo candidatos, de 2.000 em 2.000 até acabar a lista
 				for (i = 2000 * arquivoAtual; (i < 1999 * (arquivoAtual + 1)) && (i < listaCandidatos.size() - 1); i++)
@@ -64,12 +64,12 @@ public class CSVSheetWriter {
 	
 	/** Monta o nome do arquivo de envio do Sistac.
 	 *  @param diretorio - diretório 'pai' onde serão escritos os arquivos
-	 *  @param configs - configurações do sistema
+	 *  @param configs - instituicao - dados institucionais
 	 *  @param edital - informações do edital
 	 *  @param sequencia - número de sequência de arquivo */
-	private static File getSistacFilename(final File diretorio, final Configs configs, final Edital edital, final int sequencia) {
+	private static File getSistacFilename(final File diretorio, final Instituicao instituicao, final Edital edital, final int sequencia) {
 		
-		final String filename = String.format(Constants.StringFormat.SISTAC_SEND_FILENAME_FORMAT, configs.getCNPJ(), edital.getEdital(), edital.getDataEdital(), sequencia);
+		final String filename = String.format(Constants.StringFormat.SISTAC_SEND_FILENAME_FORMAT, instituicao.getCNPJ(), edital.getEdital(), edital.getDataEdital(), sequencia);
 		
 		return new File(diretorio, filename);
 	}

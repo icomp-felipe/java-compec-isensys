@@ -12,7 +12,7 @@ import compec.ufam.isensys.model.envio.*;
  *  Contém internamente dados que identificam o candidato, bem como uma lista de {@link FieldParseException}
  *  identificando cada uma das violações de requisitos.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class RowParseException extends Exception {
 
 	// Serial de versionamento

@@ -1,5 +1,5 @@
 ########## Título da Janela
-final-window-title = IsenSys v.3.5 - Resultado Final
+final-window-title = IsenSys v.3.5.1 - Resultado Final
 
 ########## Mensagens de erro da API MFV
 final-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
@@ -90,12 +90,10 @@ final-erros-dependencies-dialog = A planilha selecionada parece não pertencer\n
                                   ao mesmo edital e instituição da compilação.
 
 ! TelaRetornoFinal::loadInstituicao
-final-load-instituicao-title  = Dados Institucionais
-final-load-instituicao-dialog = Alguns erros foram encontrados ao carregar os dados de sua instituição:\n\
-                                \n\
-                                %s\n\
-                                \n\
-                                É recomendável que estes dados estejam devidamente configurados!
+final-load-instituicao-title  = Configurações do Sistema
+final-load-instituicao-dialog = Houve uma falha ao carregar o arquivo de configurações.\n\
+                                Verifique se ele está em 'res/config/program.dat'\n\
+                                O console do sistema pode ser consultado para mais detalhes.
 
 ! TelaRetornoFinal::retornoDependencies
 final-retorno-dependencies-title  = Arquivo de Retorno do Sistac

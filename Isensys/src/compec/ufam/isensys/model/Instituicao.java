@@ -1,11 +1,16 @@
 package compec.ufam.isensys.model;
 
+import java.io.Serializable;
+
 /** Armazena dados referentes à instituição utilizadora do Sistac.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.0, 23/04/2021
+ *  @version 1.1, 26/04/2021
  *  @since 3.0, 22/04/2021 */
-public class Instituicao {
+public class Instituicao implements Serializable {
 
+	// Serial de versionamento da classe
+	private static final long serialVersionUID = 3L;
+	
 	// Atributos de texto
 	private final String cnpj, nomeFantasia, razaoSocial;
 

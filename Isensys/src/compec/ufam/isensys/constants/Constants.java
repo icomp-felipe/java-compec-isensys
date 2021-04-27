@@ -1,11 +1,18 @@
 package compec.ufam.isensys.constants;
 
+import java.io.File;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.phill.libs.ResourceManager;
 
 /** Armazena as diversas constantes utilizadas em todo o sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 24/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class Constants {
+	
+	/** Caminho do arquivo de configuração do sistema. */
+	public static final File SYS_CONFIGS_FILE = ResourceManager.getResourceAsFile("config/program.dat");
 	
 	/** Formatos de arquivo utilizados nos métodos de seleção de arquivos.
 	 *  @author Felipe André - felipeandresouza@hotmail.com

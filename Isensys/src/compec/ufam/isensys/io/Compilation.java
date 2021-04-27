@@ -6,7 +6,7 @@ import compec.ufam.isensys.model.retorno.*;
 
 /** Classe de I/O da compilação do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class Compilation {
 	
 	/** Salva a lista de retornos em um arquivo binário.
@@ -28,8 +28,8 @@ public class Compilation {
 	
 	/** Recupera a compilação do 'arquivo' para o objeto ListaRetornos.
 	 *  @param arquivo - caminho do arquivo .bsf
-	 *  @throws ClassNotFoundException quando a classe {@link ListaRetornos} ou {@link Retorno} não esteja disponível, ou mudou de versão;
-	 *  @throws IOException caso haja alguma falha na leitura do arquivo */
+	 *  @throws ClassNotFoundException caso as classes {@link ListaRetornos} ou {@link Retorno} não estejam disponíveis, ou mudaram de versão;
+	 *  @throws IOException caso haja alguma falha na leitura do arquivo. */
 	public static ListaRetornos retrieve(final File arquivo) throws ClassNotFoundException, IOException {
 		
 		// Abrindo arquivo para leitura

@@ -11,7 +11,7 @@ import compec.ufam.isensys.model.*;
  *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
  *  arquivo(s) de retorno sendo atualmente processado(s).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021
+ *  @version 3.5.1, 26/04/2021
  *  @see Retorno */
 public class ListaRetornos implements Serializable {
 

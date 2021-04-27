@@ -4,7 +4,7 @@ import compec.ufam.isensys.model.envio.*;
 
 /** Classe especial de exceção utilizada pelos métodos 'parse()' da classe {@link CandidatoBuilder}.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class FieldParseException extends Exception {
 
 	// Serial de versionamento

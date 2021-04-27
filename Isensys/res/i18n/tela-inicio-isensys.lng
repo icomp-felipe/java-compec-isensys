@@ -1,5 +1,5 @@
 ########## Título da Janela
-inicio-window-title = IsenSys v.3.5
+inicio-window-title = IsenSys v.3.5.1
 
 ########## Labels
 inicio-panel-info = <html>Bem vindo ao IsenSys v.3.5!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
@@ -12,4 +12,4 @@ hint-button-retorno-final  = Abre o módulo de processamento do arquivo de retor
 ########## Métodos
 ! TelaInicioIsensys::actionEasterEgg
 inicio-button-help-title  = Notas de Versão
-inicio-button-help-dialog = IsenSys v.3.5 - Build 20210424
+inicio-button-help-dialog = IsenSys v.3.5.1 - Build 20210426

@@ -18,7 +18,7 @@ import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.6, 26/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -290,15 +290,16 @@ public class TelaEnvio extends JFrame {
 			
 			// Carrega as configurações do sistema e...
 			this.configs = SystemConfigs.retrieve();
+			Instituicao instituicao = this.configs.getInstituicao();
 			
 			// ...atualiza a view
-			textCNPJ.setText(StringUtils.BR.formataCNPJ(this.configs.getCNPJ()));
+			textCNPJ.setText(StringUtils.BR.formataCNPJ(this.configs.getInstituicao().getCNPJ()));
 			
-			textNomeFantasia.setText       (this.configs.getNomeFantasia());
-			textNomeFantasia.setToolTipText(this.configs.getNomeFantasia());
+			textNomeFantasia.setText       (instituicao.getNomeFantasia());
+			textNomeFantasia.setToolTipText(instituicao.getNomeFantasia());
 			
-			textRazaoSocial.setText       (this.configs.getRazaoSocial());
-			textRazaoSocial.setToolTipText(this.configs.getRazaoSocial());
+			textRazaoSocial.setText       (instituicao.getRazaoSocial());
+			textRazaoSocial.setToolTipText(instituicao.getRazaoSocial());
 					
 		}
 		catch (Exception exception) {
@@ -599,14 +600,17 @@ public class TelaEnvio extends JFrame {
 		
 		try {
 
+			// Recuperando instituição das configurações do sistema
+			Instituicao instituicao = this.configs.getInstituicao();
+			
 			// Recuperando edital e sequência
-			final Edital edital = new Edital(this.configs.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
+			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
 			
 			// Ordenando listas
 			this.resultList.sort();
 			
 			// Criando arquivo de saída - Sistac
-			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, this.configs, edital);
+			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, instituicao, edital);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
 			if (this.resultList.getListaExcecoes().size() > 0) {

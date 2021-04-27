@@ -37,10 +37,6 @@ public class TelaConfigs extends JFrame {
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
 	
-	public static void main(String[] args) {
-		new TelaConfigs();
-	}
-	
 	public TelaConfigs() {
 		
 		// Recuperando o título da janela
@@ -207,12 +203,13 @@ public class TelaConfigs extends JFrame {
 		try {
 			
 			// Recuperando objeto de configurações
-			Configs configs = SystemConfigs.retrieve();
+			final Configs configs   = SystemConfigs.retrieve();
+			Instituicao instituicao = configs.getInstituicao();
 			
 			// Atualizando campos de texto
-			textCNPJ        .setValue(configs.getCNPJ        ());
-			textNomeFantasia.setText (configs.getNomeFantasia());
-			textRazaoSocial .setText (configs.getRazaoSocial ());
+			textCNPJ        .setValue(instituicao.getCNPJ        ());
+			textNomeFantasia.setText (instituicao.getNomeFantasia());
+			textRazaoSocial .setText (instituicao.getRazaoSocial ());
 			
 			// Atualizando a tabela
 			TableUtils.add(modelo, () -> configs.getIndicesTabela());
@@ -269,6 +266,8 @@ public class TelaConfigs extends JFrame {
 			final String cnpj  = textCNPJ        .getValue().toString();
 			final String nome  = textNomeFantasia.getText ().trim();
 			final String razao = textRazaoSocial .getText ().trim();
+			
+			Instituicao instituicao = new Instituicao(cnpj, nome, razao);
 		
 			// Recuperando índices da tabela
 			final int[] indices = new int[Constants.SheetIndex.IMPORT_COLUMN_TITLES.length];
@@ -277,7 +276,7 @@ public class TelaConfigs extends JFrame {
 				indices[i] = (int) tableSheetIndex.getValueAt(0,i);
 			
 			// Preparando objeto de configurações
-			final Configs configs = new Configs(cnpj, nome, razao, indices);
+			final Configs configs = new Configs(instituicao, indices);
 			
 			// Salvando configurações no disco
 			SystemConfigs.save(configs);

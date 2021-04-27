@@ -7,7 +7,7 @@ import java.io.Serializable;
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 23/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe

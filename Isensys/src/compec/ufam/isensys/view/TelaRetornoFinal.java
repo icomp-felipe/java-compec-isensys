@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5, 24/04/2021 */
+ *  @version 3.5.1, 26/04/2021 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -50,8 +50,8 @@ public class TelaRetornoFinal extends JFrame {
 	private final JLabel labelStatus;
 	private final JButton buttonCabecalhoClear, buttonReport;
 	
-	// Dados da instituição
-	private Instituicao instituicao;
+	// Configurações do sistema
+	private Configs configs;
 	
 	// Atributos dinâmicos
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
@@ -329,8 +329,8 @@ public class TelaRetornoFinal extends JFrame {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 		
-		// Carregando dados institucionais do arquivo de propriedades pra view
-		loadInstituicao();
+		// Só exibe a view se o arquivo de configuração foi lido com sucesso
+		if (loadInstituicao()) setVisible(true); else return;
 	}
 
 	/********************** Tratamento de Eventos de Botões *******************************/
@@ -618,28 +618,31 @@ public class TelaRetornoFinal extends JFrame {
 		return true;
 	}
 	
-	/** Carrega dados institucionais do arquivo de propriedades do sistema.
-	 *  @since 3.0, 22/04/2021 */
-	private void loadInstituicao() {
+	/** Carrega as configurações do sistema do arquivo em disco.
+	 *  @return 'true' se o arquivo foi lido;<br>'false' caso alguma falha tenha ocorrido na leitura.
+	 *  @since 3.1, 26/04/2021 */
+	private boolean loadInstituicao() {
 		
-		// Recuperando dados da instituição do arquivo de propriedades
-		final Instituicao instituicao = SystemConfigs.getInstituicao();
-		
-		// Validando dados institucionais
-		final String msg = instituicao.validate();
-		
-		if (msg != null) {
+		// Recuperando configurações do sistema
+		try {
+
+			this.configs = SystemConfigs.retrieve();
+			final Instituicao instituicao = configs.getInstituicao();
 			
-			final String title  = bundle.getString         ("final-load-instituicao-title"      );
-			final String dialog = bundle.getFormattedString("final-load-instituicao-dialog", msg);
+			// Atualizando a view
+			loadInstituicao(instituicao, this.padrao);
 			
-			AlertDialog.warning(title, dialog);
+		}
+		catch (Exception exception) {
+			
+			final String title  = bundle.getString("final-load-instituicao-title");
+			final String dialog = bundle.getString("final-load-instituicao-dialog");
+			
+			AlertDialog.error(title, dialog);	return false;
 			
 		}
 		
-		// Atualizando a view
-		loadInstituicao(instituicao, this.padrao);
-		
+		return true;
 	}
 	
 	/** Atualiza a instituicao interna + interface gráfica.
@@ -648,8 +651,8 @@ public class TelaRetornoFinal extends JFrame {
 	 *  @since 3.0, 22/04/2021 */
 	private void loadInstituicao(final Instituicao instituicao, final Color color) {
 		
-		// Atualizando a instituição padrão desta instância
-		this.instituicao = instituicao;
+		// Atualizando a instituição das configurações (apenas em memória)
+		this.configs.setInstituicao(instituicao);
 		
 		SwingUtilities.invokeLater(() -> {
 		
@@ -793,7 +796,7 @@ public class TelaRetornoFinal extends JFrame {
 		final Instituicao carregada = listaRetornos.getInstituicao();
 		
 		// Atualizando dados da instituição (caso seja diferente da configurada no sistema)
-		if (!instituicao.equals(carregada)) {
+		if (!configs.getInstituicao().equals(carregada)) {
 			
 			loadInstituicao(carregada, yellow);
 			AlertDialog.info(bundle.getString("final-update-statistics-title"), bundle.getString("final-update-statistics-dialog"));
