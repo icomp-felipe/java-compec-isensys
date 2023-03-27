@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.6, 27/MAR/2023 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -69,6 +69,8 @@ public class TelaRetornoFinal extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
+		ESCDispose.register(this);
+		
 		Dimension dimension = new Dimension(670,490);
 		
 		JPanel painel = new JPaintedPanel("img/final-screen.jpg", dimension);
@@ -365,7 +367,7 @@ public class TelaRetornoFinal extends JFrame {
 			final String message = bundle.getString("final-compile-clear-dialog");
 			
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(title, message);
+			final int choice = AlertDialog.dialog(this, title, message);
 			
 			// Limpa os campos se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
@@ -405,7 +407,7 @@ public class TelaRetornoFinal extends JFrame {
 		final String title = bundle.getString("final-compile-select-title");
 		
 		// Recuperando o arquivo de entrada
-		final File selected  = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.previousCompilacao, null);
+		final File selected  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.previousCompilacao, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -421,7 +423,7 @@ public class TelaRetornoFinal extends JFrame {
 				final String dialogMessage = bundle.getString("final-compile-select-dmessage");
 				
 				// Exibe o diálogo de confirmação
-				final int choice = AlertDialog.dialog(dialogTitle, dialogMessage);
+				final int choice = AlertDialog.dialog(this, dialogTitle, dialogMessage);
 				
 				// Sobrescreve dados se o usuário escolheu 'OK'
 				if (choice == AlertDialog.OK_OPTION) {
@@ -464,7 +466,7 @@ public class TelaRetornoFinal extends JFrame {
 						
 			// Recuperando o arquivo de retorno
 			final File suggestion = (this.retornoExcel != null) ? this.retornoExcel : this.compilacao;
-			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, suggestion, null);
+			final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, suggestion, null);
 						
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
@@ -508,7 +510,7 @@ public class TelaRetornoFinal extends JFrame {
 						
 			// Recuperando o arquivo de erros
 			final File parent = (this.retornoSistac != null) ? this.retornoSistac : this.compilacao;
-			final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, parent, suggestion);
+			final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, parent, suggestion);
 		
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
@@ -552,7 +554,7 @@ public class TelaRetornoFinal extends JFrame {
 			final String dialog = bundle.getString("final-header-clear-dialog");
 			
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(dtitle, dialog);
+			final int choice = AlertDialog.dialog(this, dtitle, dialog);
 						
 			// Limpa o campo se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION)
@@ -574,7 +576,7 @@ public class TelaRetornoFinal extends JFrame {
 		// Só prossigo se todas os campos foram devidamente preenchidos
 		if (fieldLogger.hasErrors()) {
 						
-			AlertDialog.error(bundle.getString("final-export-title"), fieldLogger.getErrorString());
+			AlertDialog.error(this, bundle.getString("final-export-title"), fieldLogger.getErrorString());
 			fieldLogger.clear(); return;
 			
 		}
@@ -592,8 +594,8 @@ public class TelaRetornoFinal extends JFrame {
 	/** Mostra uma tela de erro caso o arquivo de compilação não tenha sido selecionado. */
 	private void compileFileErrorDialog() {
 		
-		AlertDialog.error( bundle.getString("final-file-error-dialog-title" ),
-		                   bundle.getString("final-file-error-dialog-error"));
+		AlertDialog.error(this, bundle.getString("final-file-error-dialog-title" ),
+		                        bundle.getString("final-file-error-dialog-error"));
 		
 	}
 	
@@ -609,8 +611,8 @@ public class TelaRetornoFinal extends JFrame {
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
 		if (!retorno.equals(erros)) {
 			
-			AlertDialog.error( bundle.getString("final-erros-dependencies-title" ),
-	                           bundle.getString("final-erros-dependencies-dialog"));
+			AlertDialog.error(this, bundle.getString("final-erros-dependencies-title" ),
+	                                bundle.getString("final-erros-dependencies-dialog"));
 			
 			return false;
 		}
@@ -638,7 +640,7 @@ public class TelaRetornoFinal extends JFrame {
 			final String title  = bundle.getString("final-load-instituicao-title");
 			final String dialog = bundle.getString("final-load-instituicao-dialog");
 			
-			AlertDialog.error(title, dialog);	return false;
+			AlertDialog.error(this, title, dialog);	return false;
 			
 		}
 		
@@ -684,8 +686,8 @@ public class TelaRetornoFinal extends JFrame {
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
 		if (!compilacao.equalsIgnoreDate(retorno)) {
 					
-			AlertDialog.error( bundle.getString("final-retorno-dependencies-title" ),
-		                       bundle.getString("final-retorno-dependencies-dialog"));
+			AlertDialog.error(this, bundle.getString("final-retorno-dependencies-title" ),
+		                            bundle.getString("final-retorno-dependencies-dialog"));
 					
 			return false;
 		}
@@ -799,7 +801,7 @@ public class TelaRetornoFinal extends JFrame {
 		if (!configs.getInstituicao().equals(carregada)) {
 			
 			loadInstituicao(carregada, yellow);
-			AlertDialog.info(bundle.getString("final-update-statistics-title"), bundle.getString("final-update-statistics-dialog"));
+			AlertDialog.info(this, bundle.getString("final-update-statistics-title"), bundle.getString("final-update-statistics-dialog"));
 					
 		}
 		
@@ -853,8 +855,8 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("final-thread-retriever-title" ),
-					           bundle.getString("final-thread-retriever-error"));
+			AlertDialog.error(this, bundle.getString("final-thread-retriever-title" ),
+					                bundle.getString("final-thread-retriever-error"));
 			
 		}
 		finally {
@@ -895,8 +897,8 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("final-thread-sistac-title" ),
-					           bundle.getString("final-thread-sistac-error"));
+			AlertDialog.error(this, bundle.getString("final-thread-sistac-title" ),
+					                bundle.getString("final-thread-sistac-error"));
 			
 		}
 		finally {
@@ -929,8 +931,8 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("final-thread-erros-title" ),
-					           bundle.getString("final-thread-erros-error"));
+			AlertDialog.error(this, bundle.getString("final-thread-erros-title" ),
+					                bundle.getString("final-thread-erros-error"));
 			
 		}
 		finally {
@@ -966,8 +968,8 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("final-thread-export-title" ),
-					           bundle.getString("final-thread-export-error"));
+			AlertDialog.error(this, bundle.getString("final-thread-export-title" ),
+					                bundle.getString("final-thread-export-error"));
 			
 		}
 		finally {

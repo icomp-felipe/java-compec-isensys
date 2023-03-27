@@ -8,7 +8,7 @@ import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.6, 27/MAR/2023 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;
@@ -30,6 +30,7 @@ public class TelaInicioIsensys extends JFrame {
 		// Carregando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
+		ESCDispose.register(this);
 		
 		Dimension dimension = new Dimension(475,350);
 		JPanel painel = new JPaintedPanel("img/initial-screen.jpg", dimension);
@@ -109,7 +110,7 @@ public class TelaInicioIsensys extends JFrame {
 		final String dialog = bundle.getString("inicio-button-help-dialog");
 		
 		// Exibindo notas de versão na UI
-		AlertDialog.info(title,dialog);
+		AlertDialog.info(this, title, dialog);
 		
 	}
 	

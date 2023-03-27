@@ -18,7 +18,7 @@ import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.6, 27/MAR/2023 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -53,6 +53,8 @@ public class TelaEnvio extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
+		ESCDispose.register(this);
+		
 		Dimension dimension = new Dimension(500,405);
 		
 		JPanel painel = new JPaintedPanel("img/envio-screen.jpg",dimension);
@@ -308,7 +310,7 @@ public class TelaEnvio extends JFrame {
 			final String title  = bundle.getString("envio-window-title");
 			final String dialog = bundle.getString("envio-configs-error");
 					
-			AlertDialog.error(title, dialog); return;
+			AlertDialog.error(this, title, dialog); return;
 					
 		}
 		
@@ -353,7 +355,7 @@ public class TelaEnvio extends JFrame {
 			final String message = bundle.getString("envio-input-clear-dialog");
 			
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(title, message);
+			final int choice = AlertDialog.dialog(this, title, message);
 			
 			// Limpa os campos se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
@@ -381,7 +383,7 @@ public class TelaEnvio extends JFrame {
 		final String title = bundle.getString("envio-input-select-title");
 		
 		// Recuperando o arquivo de entrada
-		this.inputFile  = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, null, null);
+		this.inputFile  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, null, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (this.inputFile != null) {
@@ -407,7 +409,7 @@ public class TelaEnvio extends JFrame {
 		final String title = bundle.getString("envio-output-select-title");
 		
 		// Recuperando o diretório de saída
-		this.outputDir = PhillFileUtils.loadDir(title, PhillFileUtils.OPEN_DIALOG, null);
+		this.outputDir = PhillFileUtils.loadDir(this, title, PhillFileUtils.OPEN_DIALOG, null);
 		
 		// Atualizando a view
 		if (outputDir != null)
@@ -426,7 +428,7 @@ public class TelaEnvio extends JFrame {
 			final String message = bundle.getString("envio-output-clear-dialog");
 					
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(title, message);
+			final int choice = AlertDialog.dialog(this, title, message);
 					
 			// Limpa o campo 'Pasta de Saída' se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
@@ -449,7 +451,7 @@ public class TelaEnvio extends JFrame {
 		// Só prossigo se todas os campos foram devidamente preenchidos
 		if (fieldLogger.hasErrors()) {
 						
-			AlertDialog.error(bundle.getString("envio-export-title"), fieldLogger.getErrorString());
+			AlertDialog.error(this, bundle.getString("envio-export-title"), fieldLogger.getErrorString());
 			fieldLogger.clear(); return;
 						
 		}
@@ -573,8 +575,8 @@ public class TelaEnvio extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelInputStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("envio-parser-title" ),
-							   bundle.getString("envio-parser-error"));
+			AlertDialog.error(this, bundle.getString("envio-parser-title" ),
+							        bundle.getString("envio-parser-error"));
 			
 		}
 		finally {
@@ -625,8 +627,8 @@ public class TelaEnvio extends JFrame {
 			Thread.sleep(2000L);
 			
 			// Mostrando status na view
-			AlertDialog.info( bundle.getString("envio-export-title" ),
-							  bundle.getString("envio-export-dialog"));
+			AlertDialog.info(this, bundle.getString("envio-export-title" ),
+							       bundle.getString("envio-export-dialog"));
 			
 		}
 		catch (Exception exception) {
@@ -634,8 +636,8 @@ public class TelaEnvio extends JFrame {
 			exception.printStackTrace();
 			
 			// Mostrando status na view
-			AlertDialog.error( bundle.getString("envio-export-title" ),
-							   bundle.getString("envio-export-error"));
+			AlertDialog.error(this, bundle.getString("envio-export-title" ),
+							        bundle.getString("envio-export-error"));
 			
 		}
 		finally {

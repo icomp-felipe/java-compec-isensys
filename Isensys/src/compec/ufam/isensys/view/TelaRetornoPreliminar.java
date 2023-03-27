@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.6, 27/MAR/2023 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -76,6 +76,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
+		ESCDispose.register(this);
+		
 		Dimension dimension = new Dimension(670,485);
 		
 		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",dimension);
@@ -355,7 +357,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		final String title = bundle.getString("prelim-retorno-select-title");
 						
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, null);
+		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, null);
 						
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -371,7 +373,7 @@ public class TelaRetornoPreliminar extends JFrame {
 				final String dialog = bundle.getString("prelim-retorno-select-dialog");
 				
 				// Exibe o diálogo de confirmação
-				final int choice = AlertDialog.dialog(dtitle, dialog);
+				final int choice = AlertDialog.dialog(this, dtitle, dialog);
 				
 				// Limpa os campos do arquivo de erro apenas se o usuário escolheu 'OK'
 				if (choice == AlertDialog.OK_OPTION) {
@@ -419,7 +421,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String dialog = bundle.getString("prelim-retorno-clear-dialog");
 						
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(dtitle, dialog);
+			final int choice = AlertDialog.dialog(this, dtitle, dialog);
 									
 			// Limpa o campo se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
@@ -461,7 +463,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		final File suggestion = new Edital(this.retornoSistac).getErrorFilename(null);
 		
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, suggestion);
+		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, suggestion);
 							
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -477,7 +479,7 @@ public class TelaRetornoPreliminar extends JFrame {
 				final String dialog = bundle.getString("prelim-erros-select-dialog");
 							
 				// Exibe o diálogo de confirmação
-				final int choice = AlertDialog.dialog(dtitle, dialog);
+				final int choice = AlertDialog.dialog(this, dtitle, dialog);
 
 				// Recupera o estado anterior se o usuário selecionou 'OK'
 				if (choice == AlertDialog.OK_OPTION)
@@ -521,7 +523,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String dialog = bundle.getString("prelim-erros-clear-dialog");
 						
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(dtitle, dialog);
+			final int choice = AlertDialog.dialog(this, dtitle, dialog);
 									
 			// Prossegue apenas se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
@@ -556,7 +558,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String dialog = bundle.getString("prelim-header-clear-dialog");
 			
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(dtitle, dialog);
+			final int choice = AlertDialog.dialog(this, dtitle, dialog);
 						
 			// Limpa o campo se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION)
@@ -579,7 +581,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		final File suggestion = new Edital(this.retornoSistac).getCompilationFilename();
 								
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(title, Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, this.lastFileSelected, suggestion);
+		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, this.lastFileSelected, suggestion);
 								
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -595,7 +597,7 @@ public class TelaRetornoPreliminar extends JFrame {
 				final String dialog = bundle.getString("prelim-compile-select-dialog");
 				
 				// Exibe o diálogo de confirmação
-				final int choice = AlertDialog.dialog(dtitle, dialog);
+				final int choice = AlertDialog.dialog(this, dtitle, dialog);
 							
 				// Sai aqui se o usuário não selecionou 'OK'
 				if (choice != AlertDialog.OK_OPTION) return;
@@ -621,7 +623,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String message = bundle.getString("prelim-compile-clear-dialog");
 					
 			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(title, message);
+			final int choice = AlertDialog.dialog(this, title, message);
 						
 			// Limpa os campos se o usuário escolheu 'OK'
 			if (choice == AlertDialog.OK_OPTION) {
@@ -644,7 +646,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Só prossigo se todas os campos foram devidamente preenchidos
 		if (fieldLogger.hasErrors()) {
 						
-			AlertDialog.error(bundle.getString("prelim-export-title"), fieldLogger.getErrorString());
+			AlertDialog.error(this, bundle.getString("prelim-export-title"), fieldLogger.getErrorString());
 			fieldLogger.clear(); return;
 			
 		}
@@ -671,8 +673,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
 		if (!retorno.equals(erros)) {
 			
-			AlertDialog.error( bundle.getString("prelim-erros-dependencies-title" ),
-	                           bundle.getString("prelim-erros-dependencies-dialog"));
+			AlertDialog.error(this, bundle.getString("prelim-erros-dependencies-title" ),
+	                                bundle.getString("prelim-erros-dependencies-dialog"));
 			
 			return false;
 		}
@@ -700,7 +702,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String title  = bundle.getString("prelim-load-instituicao-title");
 			final String dialog = bundle.getString("prelim-load-instituicao-dialog");
 			
-			AlertDialog.error(title, dialog);	return false;
+			AlertDialog.error(this, title, dialog);	return false;
 			
 		}
 		
@@ -751,7 +753,7 @@ public class TelaRetornoPreliminar extends JFrame {
 				final String wtitle  = bundle.getString         ("prelim-retorno-dependencies-wtitle"          );
 				final String wdialog = bundle.getFormattedString("prelim-retorno-dependencies-wdialog", compare);
 				
-				int wchoice = AlertDialog.dialog(wtitle, wdialog);
+				int wchoice = AlertDialog.dialog(this, wtitle, wdialog);
 				
 				// Caso deseje prosseguir...
 				if (wchoice == AlertDialog.OK_OPTION) {
@@ -766,7 +768,7 @@ public class TelaRetornoPreliminar extends JFrame {
 						final String etitle  = bundle.getString         ("prelim-retorno-dependencies-etitle"           );
 						final String edialog = bundle.getFormattedString("prelim-retorno-dependencies-edialog", validate);
 									
-						int echoice = AlertDialog.dialog(etitle, edialog);
+						int echoice = AlertDialog.dialog(this, etitle, edialog);
 						
 						// Caso não deseje prosseguir, o carregamento é cancelado
 						if (echoice != AlertDialog.OK_OPTION) return false;
@@ -783,8 +785,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		}
 		catch (IOException exception) {
 						
-			AlertDialog.error( bundle.getString("prelim-thread-sistac-title" ),
-			                   bundle.getString("prelim-thread-sistac-error"));
+			AlertDialog.error(this, bundle.getString("prelim-thread-sistac-title" ),
+			                        bundle.getString("prelim-thread-sistac-error"));
 			return false;
 						
 		}
@@ -935,8 +937,8 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("prelim-thread-sistac-title" ),
-					           bundle.getString("prelim-thread-sistac-error"));
+			AlertDialog.error(this, bundle.getString("prelim-thread-sistac-title" ),
+					                bundle.getString("prelim-thread-sistac-error"));
 			
 		}
 		finally {
@@ -969,8 +971,8 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("final-thread-erros-title" ),
-					           bundle.getString("final-thread-erros-error"));
+			AlertDialog.error(this, bundle.getString("final-thread-erros-title" ),
+					                bundle.getString("final-thread-erros-error"));
 			
 		}
 		finally {
@@ -1012,8 +1014,8 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error( bundle.getString("prelim-thread-export-title" ),
-					           bundle.getString("prelim-thread-export-error"));
+			AlertDialog.error(this, bundle.getString("prelim-thread-export-title" ),
+					                bundle.getString("prelim-thread-export-error"));
 			
 		}
 		finally {

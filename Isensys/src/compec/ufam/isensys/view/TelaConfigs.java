@@ -18,7 +18,7 @@ import compec.ufam.isensys.constants.*;
 
 /** Implementa a tela de ajustes de configurações do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.1, 26/04/2021 */
+ *  @version 1.2, 27/MAR/2023 */
 public class TelaConfigs extends JFrame {
 
 	// Serial
@@ -45,6 +45,8 @@ public class TelaConfigs extends JFrame {
 		// Inicializando atributos gráficos
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
+		ESCDispose.register(this);
+		
 		Dimension dimension = new Dimension(1024,275);
 		
 		JPanel painel = new JPaintedPanel("img/envio-screen.jpg",dimension);
@@ -224,22 +226,22 @@ public class TelaConfigs extends JFrame {
 		}
 		catch (FileNotFoundException exception) {
 			
-			AlertDialog.warning( bundle.getString("configs-load-title"),
-		                         bundle.getString("configs-load-new-file"));
+			AlertDialog.warning(this, bundle.getString("configs-load-title"),
+		                              bundle.getString("configs-load-new-file"));
 			
 		}
 		catch (IOException exception) {
 			
 			exception.printStackTrace();
-			AlertDialog.error( bundle.getString("configs-load-title"),
-                               bundle.getString("configs-load-io-error"));
+			AlertDialog.error(this, bundle.getString("configs-load-title"),
+                                    bundle.getString("configs-load-io-error"));
 			
 		}
 		catch (Exception exception) {
 			
 			exception.printStackTrace();
-			AlertDialog.error( bundle.getString("configs-load-title"),
-                               bundle.getString("configs-load-io-error"));
+			AlertDialog.error(this, bundle.getString("configs-load-title"),
+                                    bundle.getString("configs-load-io-error"));
 			
 		}
 		finally {
@@ -258,7 +260,7 @@ public class TelaConfigs extends JFrame {
 		final String title  = bundle.getString("configs-reload-title");
 		final String dialog = bundle.getString("configs-reload-dialog");
 		
-		if (AlertDialog.dialog(title, dialog) == AlertDialog.OK_OPTION)
+		if (AlertDialog.dialog(this, title, dialog) == AlertDialog.OK_OPTION)
 			load();
 		
 	}
@@ -272,8 +274,8 @@ public class TelaConfigs extends JFrame {
 		// Só prossigo se todas os campos foram devidamente preenchidos
 		if (fieldLogger.hasErrors()) {
 								
-			AlertDialog.warning( bundle.getString         ("configs-save-title"),
-					             bundle.getFormattedString("configs-save-mfv-error", fieldLogger.getErrorString()));
+			AlertDialog.warning(this, bundle.getString         ("configs-save-title"),
+					                  bundle.getFormattedString("configs-save-mfv-error", fieldLogger.getErrorString()));
 			fieldLogger.clear(); return;
 								
 		}
@@ -300,13 +302,13 @@ public class TelaConfigs extends JFrame {
 			SystemConfigs.save(configs);
 		
 			// Exibindo mensagem de sucesso
-			AlertDialog.info(bundle.getString("configs-save-title"), bundle.getString("configs-save-success"));
+			AlertDialog.info(this, bundle.getString("configs-save-title"), bundle.getString("configs-save-success"));
 			
 		}
 		catch (Exception exception) {
 			
 			exception.printStackTrace();
-			AlertDialog.error(bundle.getString("configs-save-title"), bundle.getString("configs-save-error"));
+			AlertDialog.error(this, bundle.getString("configs-save-title"), bundle.getString("configs-save-error"));
 			
 		}
 		

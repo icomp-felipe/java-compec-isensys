@@ -1,5 +1,5 @@
 ########## Título da Janela
-inicio-window-title = IsenSys v.3.5.1
+inicio-window-title = IsenSys v.3.6
 
 ########## Labels
 inicio-panel-info = <html>Bem vindo ao IsenSys v.3.5!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
@@ -13,4 +13,4 @@ hint-button-configs        = Abre a tela de configurações do sistema
 ########## Métodos
 ! TelaInicioIsensys::actionEasterEgg
 inicio-button-help-title  = Notas de Versão
-inicio-button-help-dialog = IsenSys v.3.5.1 - Build 20210426
+inicio-button-help-dialog = IsenSys v.3.6 - Build 20230327
