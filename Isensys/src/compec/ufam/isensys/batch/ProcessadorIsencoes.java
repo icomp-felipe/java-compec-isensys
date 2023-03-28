@@ -23,12 +23,16 @@ public class ProcessadorIsencoes {
 	public static void main(String[] args) throws Exception {
 		
 		// Diretórios
-		File inputDir      = new File("/run/media/felipe/Gaming/Google Drive/Isenções PSI 2023/Daiana");
+		File inputDir      = new File("/home/felipe/indeferidos");
 		File docxOutputDir = new File(inputDir, "docx");
 		File pdfOutputDir  = new File(inputDir, "pdf" );
 		
+		// Criando diretórios
+		docxOutputDir.mkdirs(); pdfOutputDir.mkdirs();
+		
 		// Recuperando apenas os arquivos do Word (.docx)
 		List<File> filtered = PhillFileUtils.filterByExtension(inputDir, "docx"); Collections.sort(filtered);
+		List<File> exported = new ArrayList<File>(filtered.size());
 		
 		// Preparando filtros de exportação pra PDF
     	final Map<String, Object> filterData = new HashMap<>();
@@ -49,7 +53,9 @@ public class ProcessadorIsencoes {
 			
 			// Preparando arquivos de saída
 			File docxFile = new File(docxOutputDir, filename + ".docx");
-			File pdfFile  = new File(pdfOutputDir , filename + ".pdf" );
+			//File pdfFile  = new File(pdfOutputDir , filename + ".pdf" );
+			
+			exported.add(docxFile);
 			
 			// Imprimindo status
 			System.out.printf("Processando arquivo %d/%d: '%s'\n", i++, filtered.size(), filename);
@@ -74,9 +80,11 @@ public class ProcessadorIsencoes {
 			fileOutputStream.close();
 			
 			// Gerando o novo arquivo .pdf
-		    LibreOfficePDFExporter.toPDF(outputStream.toByteArray(), DefaultDocumentFormatRegistry.DOCX, pdfFile, customProperties);
+		    //LibreOfficePDFExporter.toPDF(outputStream.toByteArray(), DefaultDocumentFormatRegistry.DOCX, pdfFile, customProperties);
 				
 		}
+		
+		LibreOfficePDFExporter.toPDF(exported, pdfOutputDir, customProperties, true);
 		
 	}
 	
