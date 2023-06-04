@@ -1,5 +1,5 @@
 ########## Título da Janela
-prelim-window-title = IsenSys v.3.5.1 - Resultado Preliminar
+prelim-window-title = IsenSys v.3.7 - Resultado Preliminar
 
 ########## Mensagens de erro da API MFV
 prelim-mfv-retorno    = Selecione o arquivo de retorno do Sistac
@@ -45,7 +45,6 @@ hint-text-compilacao = Arquivo de compilação (.bsf) que servirá para o result
 hint-button-compilacao-select = Busca o arquivo de compilação
 hint-button-compilacao-clear  = Limpa a seleção do arquivo de compilação
 
-hint-button-exit   = Sai desta tela
 hint-button-report = Gera o edital
 
 ########## Métodos

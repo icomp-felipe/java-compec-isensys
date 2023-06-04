@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.6, 27/MAR/2023 */
+ *  @version 3.7, 04/JUN/2023 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -81,7 +81,6 @@ public class TelaRetornoFinal extends JFrame {
 		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png" ,20,20);
 		Icon reloadIcon = ResourceManager.getIcon("icon/reload.png",20,20);
 		Icon searchIcon = ResourceManager.getIcon("icon/search.png",20,20);
-		Icon exitIcon   = ResourceManager.getIcon("icon/exit.png"  ,25,25);
 		Icon reportIcon = ResourceManager.getIcon("icon/report.png",25,25);
 		
 		// Recuperando fontes e cores
@@ -304,12 +303,6 @@ public class TelaRetornoFinal extends JFrame {
 		labelStatus.setVisible(false);
 		labelStatus.setBounds(12, 425, 215, 20);
 		painel.add(labelStatus);
-		
-		JButton buttonSair = new JButton(exitIcon);
-		buttonSair.setToolTipText(bundle.getString("hint-button-exit"));
-		buttonSair.addActionListener((event) -> dispose());
-		buttonSair.setBounds(570, 420, 35, 30);
-		painel.add(buttonSair);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));

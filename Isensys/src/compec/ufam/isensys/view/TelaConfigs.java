@@ -18,7 +18,7 @@ import compec.ufam.isensys.constants.*;
 
 /** Implementa a tela de ajustes de configurações do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.2, 27/MAR/2023 */
+ *  @version 3.7, 04/JUN/2023 */
 public class TelaConfigs extends JFrame {
 
 	// Serial
@@ -54,7 +54,6 @@ public class TelaConfigs extends JFrame {
 		setContentPane(painel);
 		
 		// Recuperando ícones
-		Icon exitIcon   = ResourceManager.getIcon("icon/exit.png"  , 25, 25);
 		Icon saveIcon   = ResourceManager.getIcon("icon/save.png"  , 25, 25);
 		Icon reloadIcon = ResourceManager.getIcon("icon/reload.png", 25, 25);
 		
@@ -132,12 +131,6 @@ public class TelaConfigs extends JFrame {
 		tableSheetIndex.setForeground(color);
 		tableSheetIndex.getTableHeader().setFont(instance.getFont(11));
 		scrollSheetindex.setViewportView(tableSheetIndex);
-		
-		JButton buttonExit = new JButton(exitIcon);
-		buttonExit.setToolTipText(bundle.getString("hint-button-exit"));
-		buttonExit.addActionListener((event) -> dispose());
-		buttonExit.setBounds(885, 210, 35, 30);
-		painel.add(buttonExit);
 		
 		JButton buttonReload = new JButton(reloadIcon);
 		buttonReload.setToolTipText(bundle.getString("hint-button-reload"));

@@ -18,7 +18,7 @@ import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.6, 27/MAR/2023 */
+ *  @version 3.7, 04/JUN/2023 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -65,7 +65,6 @@ public class TelaEnvio extends JFrame {
 		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png" ,20,20);
 		Icon reloadIcon = ResourceManager.getIcon("icon/reload.png",20,20);
 		Icon searchIcon = ResourceManager.getIcon("icon/search.png",20,20);
-		Icon exitIcon   = ResourceManager.getIcon("icon/exit.png"  ,25,25);
 		Icon exportIcon = ResourceManager.getIcon("icon/save.png"  ,25,25);
 		
 		// Recuperando fontes e cores
@@ -261,12 +260,6 @@ public class TelaEnvio extends JFrame {
 		labelStatus.setVisible(false);
 		labelStatus.setBounds(10, 345, 200, 20);
 		painel.add(labelStatus);
-		
-		JButton buttonExit = new JButton(exitIcon);
-		buttonExit.setToolTipText(bundle.getString("hint-button-exit"));
-		buttonExit.addActionListener((event) -> dispose());
-		buttonExit.setBounds(406, 340, 35, 30);
-		painel.add(buttonExit);
 		
 		buttonExport = new JButton(exportIcon);
 		buttonExport.setToolTipText(bundle.getString("hint-button-export"));

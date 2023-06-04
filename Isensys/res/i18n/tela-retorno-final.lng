@@ -1,5 +1,5 @@
 ########## Título da Janela
-final-window-title = IsenSys v.3.5.1 - Resultado Final
+final-window-title = IsenSys v.3.7 - Resultado Final
 
 ########## Mensagens de erro da API MFV
 final-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
@@ -44,7 +44,6 @@ hint-button-erros-select = Busca o arquivo de erros
 hint-text-cabecalho = Título que fará parte do cabeçalho do edital
 hint-button-cabecalho-clear = Limpa o texto de cabeçalho
 
-hint-button-exit   = Sai desta tela
 hint-button-report = Gera o edital
 
 ########## Métodos

@@ -1,5 +1,5 @@
 ########## Título da Janela
-envio-window-title = IsenSys v.3.5.1 - Exportação
+envio-window-title = IsenSys v.3.7 - Exportação
 
 ########## Mensagem de erro no construtor
 envio-configs-error = Houve uma falha ao carregar o arquivo de configurações.\n\
@@ -42,7 +42,6 @@ hint-text-output-name   = Nome da pasta de saída de arquivos (Sistac + Excel)
 hint-button-output-select = Escolher aonde serão salvos os arquivos pós-processamento
 hint-button-output-clear  = Limpa a seleção da pasta atual
 
-hint-button-exit   = Sai desta tela
 hint-button-export = Gera os arquivos na pasta selecionada 
 
 ########## Métodos
