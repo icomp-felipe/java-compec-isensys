@@ -19,6 +19,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="res/fonts/fonts-extention.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Phills Libs"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PDF Exporters"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
