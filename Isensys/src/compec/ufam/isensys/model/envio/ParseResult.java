@@ -7,7 +7,7 @@ import compec.ufam.isensys.exception.*;
 /** Objeto que concentra listas de {@link Candidato} (objetos lidos com sucesso dos arquivos)
  *  e {@link RowParseException} (objetos com alguma falha de processamento).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021
+ *  @version 3.7, 05/JUN/2023
  *  @see Candidato
  *  @see RowParseException */
 public class ParseResult {
@@ -22,12 +22,16 @@ public class ParseResult {
 	}
 
 	/** Adiciona um candidato na lista (apenas se ele já não tiver sido inserido).
-	 *  @param candidato - candidato */
-	public void addCandidato(final Candidato candidato) {
+	 *  @param candidato - candidato
+	 *  @return 'false' apenas se o candidato já foi previamente inserido na lista (duplicado) */
+	public boolean addCandidato(final Candidato candidato) {
 		
-		if (!listaCandidatos.contains(candidato))
-			this.listaCandidatos.add (candidato);
+		final boolean unique = !listaCandidatos.contains(candidato);
 		
+		if (unique)
+			this.listaCandidatos.add(candidato);
+		
+		return unique;
 	}
 	
 	/** Adiciona um objeto de erros de processamento de dados de candidato na lista (apenas se ele já não tiver sido inserido).

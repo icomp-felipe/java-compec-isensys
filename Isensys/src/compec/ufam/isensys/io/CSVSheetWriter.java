@@ -10,7 +10,7 @@ import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.7, 05/JUN/2023 */
 public class CSVSheetWriter {
 
 	/** Gera o(s) arquivo(s) de envio no formato Sistac. A cada 2.000 candidatos, um novo arquivo é gerado com o próximo número de sequência, devido a limitações no Sistac.
@@ -40,7 +40,7 @@ public class CSVSheetWriter {
 				stream.println(instituicao.getCabecalhoSistac());
 			
 				// Imprimindo candidatos, de 2.000 em 2.000 até acabar a lista
-				for (i = 2000 * arquivoAtual; (i < 1999 * (arquivoAtual + 1)) && (i < listaCandidatos.size() - 1); i++)
+				for (i = 2000 * arquivoAtual; (i < 1999 * (arquivoAtual + 1) + arquivoAtual) && (i < listaCandidatos.size() - 1); i++)
 					stream.println(listaCandidatos.get(i).getDadosSistac());
 			
 				// Imprimindo a última linha do arquivo, para evitar '\n' ao final

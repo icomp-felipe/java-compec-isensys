@@ -16,7 +16,7 @@ import compec.ufam.isensys.exception.*;
  *  útil para a construção do edital.
  *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.7, 05/JUN/2023 */
 public class CSVSheetReader {
 
 	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
@@ -51,7 +51,8 @@ public class CSVSheetReader {
 				Candidato candidato = CandidatoBuilder.parse(linha, dados);
 				
 				// Se não houve nenhum erro de processamento, o candidato é adicionado a uma lista própria
-				resultados.addCandidato(candidato);
+				if (!resultados.addCandidato(candidato))
+					System.err.printf("* Ignorando candidato duplicado na linha %d: '%s'\n", linha, candidato.getNome());
 				
 			}
 			catch (RowParseException exception) {

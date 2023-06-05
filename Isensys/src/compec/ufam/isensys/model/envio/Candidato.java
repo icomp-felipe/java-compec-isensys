@@ -8,7 +8,7 @@ import compec.ufam.isensys.constants.*;
 /** Classe que representa um candidato processado com sucesso pelo sistema. Se houve algum erro
  *  durante o processo de leitura e parse dos arquivos, o objeto criado será o 'RowParseException'
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021
+ *  @version 3.7, 05/JUN/2023
  *  @see CandidatoBuilder */
 public class Candidato {
 
@@ -30,6 +30,11 @@ public class Candidato {
 		this.dataEmissaoRG  = dataEmissaoRG;
 		this.orgaoEmissorRG = orgaoEmissorRG;
 		
+	}
+	
+	/** @return Nome do candidato. */
+	public String getNome() {
+		return this.nome;
 	}
 
 	/** Getter para a data de nascimento do candidato.
@@ -69,7 +74,7 @@ public class Candidato {
 			
 		}
 		
-		return super.equals(object);
+		return false;
 	}
 	
 	/** Comparador de nome de candidato. Útil para métodos de ordenação.
