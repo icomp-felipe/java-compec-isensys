@@ -11,7 +11,7 @@ import compec.ufam.isensys.model.*;
  *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
  *  arquivo(s) de retorno sendo atualmente processado(s).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021
+ *  @version 3.7, 20/JUN/2023
  *  @see Retorno */
 public class ListaRetornos implements Serializable {
 
@@ -153,7 +153,8 @@ public class ListaRetornos implements Serializable {
 				// ...se este encontra-se indeferido na listagem preliminar, mas foi deferido na final, o defiro e atualizo o NIS
 				if ((!presente.deferido()) && (retorno.deferido())) {
 					presente.defere();
-					presente.setNIS(retorno.getNis());
+					presente.setNIS (retorno.getNis ());
+					presente.setNome(retorno.getNome());
 				}
 				
 				// Evita que eu insira dados duplicados na lista

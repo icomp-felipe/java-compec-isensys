@@ -7,7 +7,7 @@ import java.io.Serializable;
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.7, 20/JUN/2023 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
@@ -40,6 +40,12 @@ public class Retorno implements Serializable {
 	 *  @param nis - número do NIS do candidato */
 	public void setNIS(final String nis) {
 		this.nis = nis;
+	}
+	
+	/** Setter pro nome.
+	 *  @param nome - nome do candidato */
+	public void setNome(final String nome) {
+		this.nome = nome;
 	}
 	
 	/** Defere o pedido de isenção de um candidato. */
