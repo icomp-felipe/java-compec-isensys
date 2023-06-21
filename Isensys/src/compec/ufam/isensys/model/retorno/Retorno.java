@@ -10,7 +10,7 @@ import com.phill.libs.br.*;
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 20/JUN/2023 */
+ *  @version 3.8, 21/JUN/2023 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
@@ -18,7 +18,7 @@ public class Retorno implements Serializable {
 	
 	protected String nome, nis, cpf;
 	private char situacao;
-	private int motivo;
+	protected int motivo;
 
 	/** Construtor principal e obrigatório desta classe.
 	 *  @param nome - nome do candidato
@@ -49,6 +49,12 @@ public class Retorno implements Serializable {
 	 *  @param nome - nome do candidato */
 	public void setNome(final String nome) {
 		this.nome = nome;
+	}
+	
+	/** Setter do motivo de indeferimento, utilizado apenas no resultado definitivo, após os recursos.
+	 *  @param motivo - motivo de indeferimento */
+	public void setMotivo(final int motivo) {
+		this.motivo = motivo;
 	}
 	
 	/** Defere o pedido de isenção de um candidato. */
@@ -121,5 +127,5 @@ public class Retorno implements Serializable {
 	public int getMotivo() {
 		return this.motivo;
 	}
-	
+
 }

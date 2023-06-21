@@ -102,8 +102,8 @@ public class CSVSheetReader {
 			// Montando objeto 'Retorno'
 			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], dados[3], dados[4] );
 			
-			// Adicionando novo objeto retorno à lista recebida via parâmetro
-			listaRetornos.add(retorno);
+			// Cadastrando o novo objeto na ListaRetornos, de acordo com o tipo de resultado
+			if (preliminar) listaRetornos.add(retorno); else listaRetornos.update(retorno);
 			
 		}
 		

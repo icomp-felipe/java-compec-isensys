@@ -11,7 +11,7 @@ import compec.ufam.isensys.model.*;
  *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
  *  arquivo(s) de retorno sendo atualmente processado(s).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 20/JUN/2023
+ *  @version 3.8, 21/JUN/2023
  *  @see Retorno */
 public class ListaRetornos implements Serializable {
 
@@ -140,9 +140,18 @@ public class ListaRetornos implements Serializable {
 	
 	/*********************** Outras Funcionalidades ****************************/
 	
-	/** Adiciona um {@link Retorno} na lista de retornos já tratando a situação de deferimento do candidato.
-	 *  @param retorno - retorno a ser processado e inserido na lista */
+	/** Adiciona um {@link Retorno} na lista de retornos.
+	 *  @param retorno - objeto retorno a ser inserido na lista */
 	public synchronized void add(final Retorno retorno) {
+		
+		this.listaRetornos.add(retorno);
+		
+	}
+	
+	/** Atualiza os dados do candidato indicado no objeto 'retorno' e sua situação de deferimento.
+	 *  @param retorno - objeto retorno com os dados a serem atualizados
+	 *  @return 'true' se, e somente se, o candidato já existir na lista, ou seja, o CPF do <code>retorno</code> já foi previamente inserido nesta instância de {@link ListaRetornos}. */
+	public synchronized boolean update(final Retorno retorno) {
 		
 		// Aqui percorro a lista de retornos e, para cada objeto...
 		for (Retorno presente: listaRetornos) {
@@ -150,24 +159,23 @@ public class ListaRetornos implements Serializable {
 			// ...identifico o candidato e...
 			if (presente.equals(retorno)) {
 			
-				// ...se este encontra-se indeferido na listagem preliminar, mas foi deferido na final, o defiro e atualizo o NIS
-				if ((!presente.deferido()) && (retorno.deferido())) {
-					
+				// ...se este encontra-se indeferido na listagem preliminar, mas foi deferido na final, o defiro.
+				if ((!presente.deferido()) && (retorno.deferido()))
 					presente.defere();
-					presente.setNIS (retorno.nis );
-					presente.setNome(retorno.nome);
-					
-				}
+
+				// Aqui são atualizados os dados de acordo com o recurso
+				presente.setNIS   (retorno.nis   );
+				presente.setNome  (retorno.nome  );
+				presente.setMotivo(retorno.motivo);
 				
-				// Evita que eu insira dados duplicados na lista
-				return;
+				// Evita processamento desnecessário
+				return true;
 				
 			}
+			
 		}
 		
-		// Se não há dados duplicados, insiro um novo 'Retorno' na lista
-		this.listaRetornos.add(retorno);
-		
+		return false;
 	}
 	
 	/** Agrupa a lista de retornos de acordo com o status (deferido ou indeferido) e ordena alfabeticamente pelo nome do candidato. */

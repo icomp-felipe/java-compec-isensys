@@ -82,9 +82,10 @@ public class ExcelSheetReader {
 	/** Incorpora os erros contidos na <code>planilhaErros</code> à <code>listaRetornos</code>.
 	 *  @param planilhaErros - arquivo da planilha de erros
 	 *  @param listaRetornos - lista de retornos
+	 *  @param preliminar - indica se o arquivo de retorno é pra confecção do resultado preliminar (true) ou definitivo (false)
 	 *  @throws IOException quando há alguma falha na leitura da planilha.
 	 *  @throws InvalidFormatException quando a planilha está com um formato desconhecido ou corrompida. */
-	public static void readErros(final File planilhaErros, final ListaRetornos listaRetornos) throws IOException, InvalidFormatException {
+	public static void readErros(final File planilhaErros, final ListaRetornos listaRetornos, final boolean preliminar) throws IOException, InvalidFormatException {
 		
 		// Abrindo planilha para leitura
 		XSSFWorkbook  workbook = new XSSFWorkbook   (planilhaErros);
@@ -102,8 +103,8 @@ public class ExcelSheetReader {
 			// Montando objeto 'Retorno'
 			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], "N", "-1" );
 						
-			// Adicionando novo objeto retorno à lista recebida via parâmetro
-			listaRetornos.add(retorno);
+			// Cadastrando o novo objeto na ListaRetornos, de acordo com o tipo de resultado
+			if (preliminar) listaRetornos.add(retorno); else listaRetornos.update(retorno);
 			
 		}
 		

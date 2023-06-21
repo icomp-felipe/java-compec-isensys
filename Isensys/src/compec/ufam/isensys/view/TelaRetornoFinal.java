@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Final.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 04/JUN/2023 */
+ *  @version 3.8, 21/JUN/2023 */
 public class TelaRetornoFinal extends JFrame {
 
 	// Serial
@@ -833,7 +833,7 @@ public class TelaRetornoFinal extends JFrame {
 				CSVSheetReader.readRetorno(retornoSistac, listaRetornos, false);
 			
 			if (this.retornoExcel != null)
-				ExcelSheetReader.readErros(retornoExcel, listaRetornos);
+				ExcelSheetReader.readErros(retornoExcel, listaRetornos, false);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
@@ -903,7 +903,7 @@ public class TelaRetornoFinal extends JFrame {
 		try {
 			
 			// Processa a lista de erros
-			ExcelSheetReader.readErros(retornoExcel, listaRetornos);
+			ExcelSheetReader.readErros(retornoExcel, listaRetornos, false);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(2000L);

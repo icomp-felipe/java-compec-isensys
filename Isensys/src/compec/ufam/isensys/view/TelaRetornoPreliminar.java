@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 04/JUN/2023 */
+ *  @version 3.8, 21/JUN/2023 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -946,10 +946,10 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 			
 			// Processa a lista de erros
-			ExcelSheetReader.readErros(retornoExcel, listaRetornos);
+			ExcelSheetReader.readErros(retornoExcel, listaRetornos, true);
 			
 			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
+			Thread.sleep(500L);
 						
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
