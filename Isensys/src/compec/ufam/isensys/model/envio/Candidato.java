@@ -8,7 +8,7 @@ import compec.ufam.isensys.constants.*;
 /** Classe que representa um candidato processado com sucesso pelo sistema. Se houve algum erro
  *  durante o processo de leitura e parse dos arquivos, o objeto criado será o 'RowParseException'
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 05/JUN/2023
+ *  @version 3.8, 21/JUN/2023
  *  @see CandidatoBuilder */
 public class Candidato {
 

@@ -10,7 +10,7 @@ import org.apache.poi.xssf.usermodel.*;
 
 /** Classe que escreve a planilha de erros de processamento no formato Excel.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.8, 21/JUN/2023 */
 public class ExcelSheetWriter {
 
 	/** Cria uma nova <code>planilha</code> no formato Excel, com os dados vindos da <code>listaErros</code>.

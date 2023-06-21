@@ -18,7 +18,7 @@ import compec.ufam.isensys.constants.*;
 
 /** Implementa a tela de ajustes de configurações do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 04/JUN/2023 */
+ *  @version 3.8, 21/JUN/2023 */
 public class TelaConfigs extends JFrame {
 
 	// Serial

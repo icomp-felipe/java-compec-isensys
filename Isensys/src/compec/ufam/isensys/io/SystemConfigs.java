@@ -7,7 +7,7 @@ import compec.ufam.isensys.constants.*;
 
 /** Contém métodos de salvamento e recuperação de dados do arquivo de propriedades do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.1, 26/04/2021
+ *  @version 3.8, 21/JUN/2023
  *  @since 3.0, 22/04/2021 */
 public class SystemConfigs {
 	

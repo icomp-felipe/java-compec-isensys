@@ -7,7 +7,7 @@ import compec.ufam.isensys.exception.*;
 /** Objeto que concentra listas de {@link Candidato} (objetos lidos com sucesso dos arquivos)
  *  e {@link RowParseException} (objetos com alguma falha de processamento).
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 05/JUN/2023
+ *  @version 3.8, 21/JUN/2023
  *  @see Candidato
  *  @see RowParseException */
 public class ParseResult {

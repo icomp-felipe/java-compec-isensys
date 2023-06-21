@@ -2,7 +2,7 @@ package compec.ufam.isensys.pdf;
 
 /** Classe que representa uma situação de processamento. Utilizada para a construção do relatório.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.8, 21/JUN/2023 */
 public class Situacao {
 
 	private final String id;

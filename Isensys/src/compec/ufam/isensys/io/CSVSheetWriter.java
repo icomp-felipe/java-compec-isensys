@@ -10,7 +10,7 @@ import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.7, 05/JUN/2023 */
+ *  @version 3.8, 21/JUN/2023 */
 public class CSVSheetWriter {
 
 	/** Gera o(s) arquivo(s) de envio no formato Sistac. A cada 2.000 candidatos, um novo arquivo é gerado com o próximo número de sequência, devido a limitações no Sistac.

@@ -16,7 +16,7 @@ import net.sf.jasperreports.engine.util.*;
 
 /** Classe que controla a visualização do relatório em PDF com o resultado do processamento.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.8, 21/JUN/2023 */
 public class PDFExport {
 
 	/** Monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo já compilado (.jasper).

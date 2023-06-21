@@ -8,7 +8,7 @@ import com.phill.libs.ResourceManager;
 
 /** Armazena as diversas constantes utilizadas em todo o sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.5.1, 26/04/2021 */
+ *  @version 3.8, 21/JUN/2023 */
 public class Constants {
 	
 	/** Caminho do arquivo de configuração do sistema. */

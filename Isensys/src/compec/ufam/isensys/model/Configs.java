@@ -6,7 +6,7 @@ import java.util.*;
 import compec.ufam.isensys.view.*;
 
 /** Classe que armazena as configurações do sistema.
- *  @version 1.0, 26/APR/2021
+ *  @version 3.8, 21/JUN/2023
  *  @since 3.5, 26/APR/2021 */
 public class Configs implements Serializable {
 	
