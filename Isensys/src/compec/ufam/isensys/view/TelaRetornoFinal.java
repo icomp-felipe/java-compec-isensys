@@ -830,13 +830,10 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Processa os retornos (função do botão 'Recarregar')
 			if (this.retornoSistac != null)
-				CSVSheetReader.readRetorno(retornoSistac, listaRetornos);
+				CSVSheetReader.readRetorno(retornoSistac, listaRetornos, false);
 			
 			if (this.retornoExcel != null)
 				ExcelSheetReader.readErros(retornoExcel, listaRetornos);
-			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
@@ -873,13 +870,10 @@ public class TelaRetornoFinal extends JFrame {
 			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
 							
 				// Processa a lista de retornos do Sistac
-				CSVSheetReader.readRetorno(atual, listaRetornos);
+				CSVSheetReader.readRetorno(atual, listaRetornos, false);
 							
 			}
 			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
-						
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
 			

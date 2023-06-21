@@ -80,8 +80,9 @@ public class CSVSheetReader {
 	/** Incorpora os retornos contidos na <code>planilha</code> do Sistac à <code>listaRetornos</code>.
 	 *  @param planilha - arquivo de retorno do Sistac
 	 *  @param listaRetornos - lista de retornos
+	 *  @param preliminar - indica se o arquivo de retorno é pra confecção do resultado preliminar (true) ou definitivo (false)
 	 *  @throws IOException quando a planilha não pode ser lida. */
-	public static void readRetorno(final File planilha, final ListaRetornos listaRetornos) throws IOException {
+	public static void readRetorno(final File planilha, final ListaRetornos listaRetornos, final boolean preliminar) throws IOException {
 		
 		// Variável auxiliar ao loop de leitura do csv
 		String row;

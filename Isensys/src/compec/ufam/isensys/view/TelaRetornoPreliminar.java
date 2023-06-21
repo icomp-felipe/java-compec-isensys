@@ -913,13 +913,10 @@ public class TelaRetornoPreliminar extends JFrame {
 			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
 				
 				// Processa a lista de retornos do Sistac
-				CSVSheetReader.readRetorno(atual, listaRetornos);
+				CSVSheetReader.readRetorno(atual, listaRetornos, true);
 				
 			}
 			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
-						
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
 			

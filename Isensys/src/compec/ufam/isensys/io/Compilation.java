@@ -36,7 +36,7 @@ public class Compilation {
 		ObjectInputStream stream = new ObjectInputStream(new FileInputStream(arquivo));
 		
 		// Recuperando dados
-		ListaRetornos listaRetornos   = (ListaRetornos) stream.readObject();
+		ListaRetornos listaRetornos = (ListaRetornos) stream.readObject();
 		
 		// Liberando recursos
 		stream.close();
