@@ -2,6 +2,9 @@ package compec.ufam.isensys.model.retorno;
 
 import java.io.Serializable;
 
+import com.phill.libs.*;
+import com.phill.libs.br.*;
+
 /** Entidade principal da parte de processamento de arquivos de retornos do sistema.
  *  Encapsula apenas neste objeto tanto os candidatos válidos (vindos do arquivo do Sistac),
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
@@ -13,7 +16,7 @@ public class Retorno implements Serializable {
 	// Serial de versionamento da classe
 	private static final transient long serialVersionUID = 3;
 	
-	private String nome, nis, cpf;
+	protected String nome, nis, cpf;
 	private char situacao;
 	private int motivo;
 
@@ -60,12 +63,6 @@ public class Retorno implements Serializable {
 	
 	/*************************** Bloco de Getters ******************************/
 	
-	/** Getter para o CPF do candidato.
-	 *  @return Número de CPF do candidato. */
-	public String getCPF() {
-		return this.cpf;
-	}
-	
 	/** Verifica se o candidato teve seu pedido de isenção deferido.
 	 *  @return 'true' se o pedido foi deferido (situacao == 'S') ou 'false' caso contrário. */
 	public boolean deferido() {
@@ -89,16 +86,28 @@ public class Retorno implements Serializable {
 	
 	/******************** Bloco de Getters (Jasper) ****************************/
 	
+	/** Getter para o CPF do candidato.
+	 *  @return Número de CPF do candidato. */
+	public String getCPF() {
+		return CPFParser.oculta(this.cpf);
+	}
+	
 	/** Getter para o nome do candidato.
 	 *  @return Nome do candidato. */
 	public String getNome() {
-		return this.nome;
+		return StringUtils.BR.normaliza(this.nome);
 	}
 	
 	/** Getter para o Número de Identicação Social (NIS) do candidato.
 	 *  @return Número do NIS do candidato. */
-	public String getNis() {
+	public String getNIS() {
 		return this.nis;
+	}
+	
+	/** Getter para o Número de Identicação Social (NIS) do candidato, descaracterizado.
+	 *  @return Número do NIS do candidato com a máscara de descaracterização aplicada. */
+	public String getNISOculto() {
+		return PISParser.oculta(this.nis);
 	}
 	
 	/** Getter para a situação de odeferimento do pedido de isenção do candidato.

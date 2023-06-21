@@ -152,9 +152,11 @@ public class ListaRetornos implements Serializable {
 			
 				// ...se este encontra-se indeferido na listagem preliminar, mas foi deferido na final, o defiro e atualizo o NIS
 				if ((!presente.deferido()) && (retorno.deferido())) {
+					
 					presente.defere();
-					presente.setNIS (retorno.getNis ());
-					presente.setNome(retorno.getNome());
+					presente.setNIS (retorno.nis );
+					presente.setNome(retorno.nome);
+					
 				}
 				
 				// Evita que eu insira dados duplicados na lista
