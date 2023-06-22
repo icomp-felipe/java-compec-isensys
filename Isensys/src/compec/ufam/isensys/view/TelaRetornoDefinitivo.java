@@ -8,7 +8,6 @@ import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -29,7 +28,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Definitivo.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 3.8, 22/JUN/2023 */
 public class TelaRetornoDefinitivo extends JFrame {
 
 	// Serial
@@ -61,6 +60,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 	private Configs configs;
 	
 	// Atributos dinâmicos
+	private List<File> retornosProcessados;
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
 	private ListaRetornos listaRetornos, listaRecursos;
 	private int[] previousCount, currentCount;
@@ -351,6 +351,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 				this.compilacao = null;
 				this.listaRetornos = null;
 				this.listaRecursos = null;
+				this.retornosProcessados = null;
 				this.retornoSistac = null;
 				this.retornoExcel  = null;
 				this.previousCount = new int[3];
@@ -854,18 +855,6 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 		});
 		
-		// Recuperando dados
-		Map<Boolean,List<Retorno>> rec = listaRecursos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido));
-		
-		List<Retorno>   defs = rec.get(true );
-		List<Retorno> indefs = rec.get(false);
-
-		System.out.println("Previous: " + Arrays.toString(previousCount));
-		System.out.println("Current: " + Arrays.toString(currentCount));
-		System.out.println("RecDefs: " + (defs == null ? 0 : defs.size()) + " - RecIndefs: " + (indefs == null ? 0 : indefs.size()));
-		System.out.println();
-		System.out.flush();
-		
 	}
 	
 	/***************************** Threaded Methods Section *******************************/
@@ -876,6 +865,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		try {
 			
 			// Recupera a compilação
+			this.retornosProcessados = new ArrayList<File>();
 			this.listaRetornos = Compilation.retrieve(compilacao);
 			this.listaRecursos = new ListaRetornos();
 			this.currentCount  = new int[3];
@@ -924,10 +914,13 @@ public class TelaRetornoDefinitivo extends JFrame {
 						
 			// Loop que busca lẽ todos os arquivos subsequentes com base na sequência do primeiro arquivo de retorno selecionado
 			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
-							
+				
 				// Processa a lista de retornos do Sistac
 				CSVSheetReader.readRetorno(atual, listaRetornos, listaRecursos, false);
-							
+				
+				// Registrando os arquivos processados
+				this.retornosProcessados.add(atual);
+				
 			}
 			
 			// Só dorme um pouco pra mostrar progresso na view
@@ -1013,6 +1006,11 @@ public class TelaRetornoDefinitivo extends JFrame {
 			if (listaSimilaridades != null)
 				PDFSimilaridade.show(listaSimilaridades, textCabecalho.getText().trim(), bundle.getString("final-similarity-title"));
 			
+			// Montando a lista de arquivos processados
+			final List<ArquivoProcessado> listaProcessados = computeFiles();
+			
+			PDFRetorno.show(cabecalho, cabecalho, currentCount, previousCount, Resultado.DEFINITIVO, listaRecursos.getList(), listaProcessados);
+			
 		}
 		catch (Exception exception) {
 			
@@ -1031,6 +1029,25 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 		}
 		
+	}
+
+	private List<ArquivoProcessado> computeFiles() {
+		
+		List<ArquivoProcessado> listaProcessados = new ArrayList<ArquivoProcessado>();
+
+		// Registrando o arquivo de compilação
+		listaProcessados.add(new ArquivoProcessado(compilacao, "Compilação"));
+		
+		// Registrando o(s) arquivo(s) de retorno do Sistac
+		if (this.retornosProcessados != null)
+			for (File retorno: this.retornosProcessados)
+				listaProcessados.add(new ArquivoProcessado(retorno, "Retorno do Sistac"));
+		
+		// Registrando a planilha de erros
+		if (this.retornoExcel != null)
+			listaProcessados.add(new ArquivoProcessado(this.retornoExcel, "Planilha de Erros"));
+		
+		return listaProcessados;
 	}
 	
 }

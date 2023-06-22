@@ -68,8 +68,6 @@ public class Retorno implements Serializable {
 		this.situacao = 'S';
 		this.motivo   =  0 ;
 		
-		System.out.println("Deferido(a) candidato(a): " + nome);
-		
 	}
 	
 	/*************************** Bloco de Getters ******************************/
@@ -102,26 +100,27 @@ public class Retorno implements Serializable {
 	
 	/******************** Bloco de Getters (Jasper) ****************************/
 	
-	/** Getter para o CPF do candidato.
-	 *  @return Número de CPF do candidato. */
+	 /** @return Número de CPF do candidato (com máscara). */
 	public String getCPF() {
+		return CPFParser.format(this.cpf);
+	}
+	
+	/** @return Número de CPF do candidato (LGPD). */
+	public String getCPFOculto() {
 		return CPFParser.oculta(this.cpf);
 	}
 	
-	/** Getter para o nome do candidato.
-	 *  @return Nome do candidato. */
+	/** @return Nome do candidato (normalizado). */
 	public String getNome() {
 		return StringUtils.BR.normaliza(this.nome);
 	}
 	
-	/** Getter para o Número de Identicação Social (NIS) do candidato.
-	 *  @return Número do NIS do candidato. */
+	/** @return Número de Identicação Social (NIS) do candidato (com máscara). */
 	public String getNIS() {
-		return this.nis;
+		return PISParser.format(this.nis);
 	}
 	
-	/** Getter para o Número de Identicação Social (NIS) do candidato, descaracterizado.
-	 *  @return Número do NIS do candidato com a máscara de descaracterização aplicada. */
+	/** @return Número de Identicação Social (NIS) do candidato (LGPD). */
 	public String getNISOculto() {
 		return PISParser.oculta(this.nis);
 	}

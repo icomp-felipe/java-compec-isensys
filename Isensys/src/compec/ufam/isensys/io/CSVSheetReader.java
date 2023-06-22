@@ -89,7 +89,7 @@ public class CSVSheetReader {
 		String row;
 		
 		// Abrindo planilha para leitura
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
+		BufferedReader stream = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
 
 		// Recuperando delimitador do csv
 		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
