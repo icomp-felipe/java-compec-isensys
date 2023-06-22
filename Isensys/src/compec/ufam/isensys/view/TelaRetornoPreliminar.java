@@ -994,7 +994,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			listaRetornos.sort();
 			
 			// Gerando visualização
-			PDFExport.export(listaRetornos, cabecalho, windowTitle, Resultado.PRELIMINAR);
+			PDFEdital.export(listaRetornos, cabecalho, windowTitle, Resultado.PRELIMINAR);
 			Compilation.save(listaRetornos, compilacao);
 			
 		}

@@ -1,6 +1,5 @@
 ########## Título da Janela
 final-window-title     = IsenSys v.3.8 - Resultado Definitivo
-final-similarity-title = IsenSys v.3.8 - Relatório de Similaridade
 
 ########## Mensagens de erro da API MFV
 final-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
