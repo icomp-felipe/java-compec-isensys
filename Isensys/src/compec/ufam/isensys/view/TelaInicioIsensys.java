@@ -64,7 +64,7 @@ public class TelaInicioIsensys extends JFrame {
 		
 		JButton buttonRetornoFinal = new JButton(iconFinal);
 		buttonRetornoFinal.setToolTipText(bundle.getString("hint-button-retorno-final"));
-		buttonRetornoFinal.addActionListener((event) -> new TelaRetornoFinal());
+		buttonRetornoFinal.addActionListener((event) -> new TelaRetornoDefinitivo());
 		buttonRetornoFinal.setBorderPainted(false);
 		buttonRetornoFinal.setOpaque(false);
 		buttonRetornoFinal.setContentAreaFilled(false);

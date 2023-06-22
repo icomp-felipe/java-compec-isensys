@@ -45,7 +45,7 @@ public class Edital {
 		
 	}
 
-	/** Construtor utilizado nas views {@link TelaRetornoPreliminar} e {@link TelaRetornoFinal}, aqui os dados são obtidos do nome do <code>arquivo</code>.
+	/** Construtor utilizado nas views {@link TelaRetornoPreliminar} e {@link TelaRetornoDefinitivo}, aqui os dados são obtidos do nome do <code>arquivo</code>.
 	 *  Este construtor está ignorando possíveis erros que podem acontecer, como <code>NullPointerException</code>
 	 *  ou <code>ArrayIndexOutOfBoundsException</code>, nesses casos, o objeto pode ficar com atributos nulos.
 	 *  @param arquivo - planilha de retorno ou erros ou arquivo de compilação */

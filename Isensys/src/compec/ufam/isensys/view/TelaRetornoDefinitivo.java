@@ -27,16 +27,16 @@ import compec.ufam.isensys.model.retorno.*;
 import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.pdf.*;
 
-/** Classe que controla a view de processamento de Retorno Final.
+/** Classe que controla a view de processamento de Retorno Definitivo.
  *  @author Felipe André - felipeandresouza@hotmail.com
  *  @version 3.8, 21/JUN/2023 */
-public class TelaRetornoFinal extends JFrame {
+public class TelaRetornoDefinitivo extends JFrame {
 
 	// Serial
 	private static final long serialVersionUID = 3675211848533443138L;
 	
 	// Carregando bundle de idiomas
-	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-retorno-final", null);
+	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-retorno-definitivo", null);
 	private final static String windowTitle = bundle.getString("final-window-title");
 	
 	// Declaração de atributos gráficos
@@ -69,7 +69,7 @@ public class TelaRetornoFinal extends JFrame {
 	private final MandatoryFieldsManager fieldValidator;
 	private final MandatoryFieldsLogger  fieldLogger;
 
-	public TelaRetornoFinal() {
+	public TelaRetornoDefinitivo() {
 		
 		// Setando título da janela
 		setTitle(windowTitle);
@@ -1005,7 +1005,7 @@ public class TelaRetornoFinal extends JFrame {
 			listaRetornos.sort();
 			
 			// Gerando visualização do edital
-			PDFExport.export(listaRetornos, cabecalho, windowTitle, Resultado.FINAL);
+			PDFExport.export(listaRetornos, cabecalho, windowTitle, Resultado.DEFINITIVO);
 			
 			// Calculando e exibindo o relatório de distância e similaridade
 			final List<Similaridade> listaSimilaridades = computeSimilaridades();
