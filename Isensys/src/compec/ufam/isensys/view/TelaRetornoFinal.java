@@ -4,6 +4,7 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class TelaRetornoFinal extends JFrame {
 	private final JLabel textCNPJ, textNomeFantasia, textRazaoSocial;
 	
 	private final JTextField textCompilacao;
-	private final JButton buttonCompilacaoReload, buttonCompilacaoClear, buttonCompilacaoSelect;
+	private final JButton buttonCompilacaoClear, buttonCompilacaoSelect;
 	private final JPanel panelResults;
 	private final JLabel  textDeferidos, textIndeferidos, textTotal;
 	
@@ -56,6 +57,7 @@ public class TelaRetornoFinal extends JFrame {
 	// Atributos dinâmicos
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
 	private ListaRetornos listaRetornos;
+	private int[] previousCount, currentCount;
 
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
@@ -79,7 +81,6 @@ public class TelaRetornoFinal extends JFrame {
 		
 		// Recuperando ícones
 		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png" ,20,20);
-		Icon reloadIcon = ResourceManager.getIcon("icon/reload.png",20,20);
 		Icon searchIcon = ResourceManager.getIcon("icon/search.png",20,20);
 		Icon reportIcon = ResourceManager.getIcon("icon/report.png",25,25);
 		
@@ -150,14 +151,8 @@ public class TelaRetornoFinal extends JFrame {
 		textCompilacao.setForeground(color);
 		textCompilacao.setFont(fonte);
 		textCompilacao.setEditable(false);
-		textCompilacao.setBounds(105, 30, 420, 25);
+		textCompilacao.setBounds(105, 30, 455, 25);
 		panelPreliminar.add(textCompilacao);
-		
-		buttonCompilacaoReload = new JButton(reloadIcon);
-		buttonCompilacaoReload.setToolTipText(bundle.getString("hint-button-compilacao-reload"));
-		buttonCompilacaoReload.addActionListener((event) -> actionCompileReload());
-		buttonCompilacaoReload.setBounds(535, 30, 30, 25);
-		panelPreliminar.add(buttonCompilacaoReload);
 		
 		buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
@@ -330,25 +325,6 @@ public class TelaRetornoFinal extends JFrame {
 
 	/********************** Tratamento de Eventos de Botões *******************************/
 	
-	/** Reprocessa o arquivo de entrada */
-	private void actionCompileReload() {
-		
-		// Faz algo somente se algum arquivo foi selecionado
-		if (this.compilacao != null) {
-			
-			// Atualizando a view
-			setCompileProcessing(true);
-			
-			// Processando o arquivo
-			Thread thread_retriever = new Thread(() -> threadRetriever());
-						
-			thread_retriever.setName(bundle.getString("final-compile-reload-thread"));
-			thread_retriever.start();
-			
-		}
-		
-	}
-	
 	/** Limpa o painel 'Resultado Preliminar' */
 	private void actionCompileClear() {
 		
@@ -370,6 +346,8 @@ public class TelaRetornoFinal extends JFrame {
 				this.listaRetornos = null;
 				this.retornoSistac = null;
 				this.retornoExcel  = null;
+				this.previousCount = new int[3];
+				this.currentCount  = new int[3];
 				
 				// Limpando campos de texto
 				textCompilacao.setText(null);
@@ -700,7 +678,6 @@ public class TelaRetornoFinal extends JFrame {
 			panelResults.setVisible(false);
 
 			// Bloqueando os botões do painel 'Resultado Preliminar'
-			buttonCompilacaoReload.setEnabled(false);
 			buttonCompilacaoClear .setEnabled(false);
 			buttonCompilacaoSelect.setEnabled(false);
 			
@@ -718,7 +695,6 @@ public class TelaRetornoFinal extends JFrame {
 			SwingUtilities.invokeLater(() -> {
 				
 				// Desbloqueando os botões do painel 'Análise do Arquivo'
-				buttonCompilacaoReload.setEnabled(true);
 				buttonCompilacaoClear .setEnabled(true);
 				buttonCompilacaoSelect.setEnabled(true);
 				
@@ -741,7 +717,6 @@ public class TelaRetornoFinal extends JFrame {
 		SwingUtilities.invokeLater(() -> {
 			
 			// Controlando visualização dos botões do painel 'Resultado Preliminar'
-			buttonCompilacaoReload.setEnabled( !isProcessing );
 			buttonCompilacaoClear .setEnabled( !isProcessing );
 			buttonCompilacaoSelect.setEnabled( !isProcessing );
 			
@@ -776,7 +751,7 @@ public class TelaRetornoFinal extends JFrame {
 	}
 	
 	/** Atualiza os totais de candidatos processados. */
-	private void updateStatistics() {
+	private void updateStatistics(final boolean saveHistory) {
 		
 		// Recuperando dados
 		Map<Boolean,List<Retorno>> map = listaRetornos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido));
@@ -784,8 +759,19 @@ public class TelaRetornoFinal extends JFrame {
 		List<Retorno>   deferidos = map.get(true );
 		List<Retorno> indeferidos = map.get(false);
 		
-		int   deferidosCount = (  deferidos == null) ? 0 : deferidos  .size();
-		int indeferidosCount = (indeferidos == null) ? 0 : indeferidos.size();
+		// Atualizando os contadores
+		this.currentCount[0] = (  deferidos == null) ? 0 : deferidos  .size();
+		this.currentCount[1] = (indeferidos == null) ? 0 : indeferidos.size();
+		this.currentCount[2] = this.currentCount[0] + this.currentCount[1];
+		
+		// Salva o histórico dos contadores, quando a flag é ativada
+		if (saveHistory) {
+			
+			this.previousCount[0] = this.currentCount[0];
+			this.previousCount[1] = this.currentCount[1];
+			this.previousCount[2] = this.currentCount[2];
+			
+		}
 		
 		// Recuperando dados da instituição
 		final Instituicao carregada = listaRetornos.getInstituicao();
@@ -807,14 +793,19 @@ public class TelaRetornoFinal extends JFrame {
 			labelStatus.setVisible(false);
 			
 			// Atualizando estatísticas
-			textDeferidos  .setText(Integer.toString(deferidosCount  ));
-			textIndeferidos.setText(Integer.toString(indeferidosCount));
-			textTotal      .setText(Integer.toString(indeferidosCount + deferidosCount));
+			textDeferidos  .setText(Integer.toString(this.currentCount[0]));
+			textIndeferidos.setText(Integer.toString(this.currentCount[1]));
+			textTotal      .setText(Integer.toString(this.currentCount[2]));
 			
 			// Exibindo estatísticas
 			panelResults.setVisible(true);
 			
 		});
+
+		System.out.println("Previous: " + Arrays.toString(previousCount));
+		System.out.println("Current: " + Arrays.toString(currentCount));
+		System.out.println();
+		System.out.flush();
 		
 	}
 	
@@ -827,6 +818,8 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Recupera a compilação
 			this.listaRetornos = Compilation.retrieve(compilacao);
+			this.currentCount  = new int[3];
+			this.previousCount = new int[3];
 			
 			// Processa os retornos (função do botão 'Recarregar')
 			if (this.retornoSistac != null)
@@ -835,8 +828,11 @@ public class TelaRetornoFinal extends JFrame {
 			if (this.retornoExcel != null)
 				ExcelSheetReader.readErros(retornoExcel, listaRetornos, false);
 			
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(500L);
+			
 			// Atualiza a view com estatísticas do processamento
-			updateStatistics();
+			updateStatistics(true);
 			
 		}
 		catch (Exception exception) {
@@ -874,8 +870,11 @@ public class TelaRetornoFinal extends JFrame {
 							
 			}
 			
+			// Só dorme um pouco pra mostrar progresso na view
+			Thread.sleep(500L);
+			
 			// Atualiza a view com estatísticas do processamento
-			updateStatistics();
+			updateStatistics(false);
 			
 		}
 		catch (Exception exception) {
@@ -906,10 +905,10 @@ public class TelaRetornoFinal extends JFrame {
 			ExcelSheetReader.readErros(retornoExcel, listaRetornos, false);
 			
 			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
+			Thread.sleep(500L);
 						
 			// Atualiza a view com estatísticas do processamento
-			updateStatistics();
+			updateStatistics(false);
 			
 		}
 		catch (Exception exception) {
