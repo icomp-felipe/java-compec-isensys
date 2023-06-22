@@ -56,7 +56,7 @@ public class TelaRetornoFinal extends JFrame {
 	
 	// Atributos dinâmicos
 	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
-	private ListaRetornos listaRetornos;
+	private ListaRetornos listaRetornos, listaRecursos;
 	private int[] previousCount, currentCount;
 
 	// MFV API
@@ -344,6 +344,7 @@ public class TelaRetornoFinal extends JFrame {
 				// Limpando atributos
 				this.compilacao = null;
 				this.listaRetornos = null;
+				this.listaRecursos = null;
 				this.retornoSistac = null;
 				this.retornoExcel  = null;
 				this.previousCount = new int[3];
@@ -801,9 +802,16 @@ public class TelaRetornoFinal extends JFrame {
 			panelResults.setVisible(true);
 			
 		});
+		
+		// Recuperando dados
+		Map<Boolean,List<Retorno>> rec = listaRecursos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido));
+		
+		List<Retorno>   defs = rec.get(true );
+		List<Retorno> indefs = rec.get(false);
 
 		System.out.println("Previous: " + Arrays.toString(previousCount));
 		System.out.println("Current: " + Arrays.toString(currentCount));
+		System.out.println("RecDefs: " + (defs == null ? 0 : defs.size()) + " - RecIndefs: " + (indefs == null ? 0 : indefs.size()));
 		System.out.println();
 		System.out.flush();
 		
@@ -818,15 +826,16 @@ public class TelaRetornoFinal extends JFrame {
 			
 			// Recupera a compilação
 			this.listaRetornos = Compilation.retrieve(compilacao);
+			this.listaRecursos = new ListaRetornos();
 			this.currentCount  = new int[3];
 			this.previousCount = new int[3];
 			
 			// Processa os retornos (função do botão 'Recarregar')
 			if (this.retornoSistac != null)
-				CSVSheetReader.readRetorno(retornoSistac, listaRetornos, false);
+				CSVSheetReader.readRetorno(retornoSistac, listaRetornos, listaRecursos, false);
 			
 			if (this.retornoExcel != null)
-				ExcelSheetReader.readErros(retornoExcel, listaRetornos, false);
+				ExcelSheetReader.readErros(retornoExcel, listaRetornos, listaRecursos, false);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(500L);
@@ -866,7 +875,7 @@ public class TelaRetornoFinal extends JFrame {
 			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
 							
 				// Processa a lista de retornos do Sistac
-				CSVSheetReader.readRetorno(atual, listaRetornos, false);
+				CSVSheetReader.readRetorno(atual, listaRetornos, listaRecursos, false);
 							
 			}
 			
@@ -902,7 +911,7 @@ public class TelaRetornoFinal extends JFrame {
 		try {
 			
 			// Processa a lista de erros
-			ExcelSheetReader.readErros(retornoExcel, listaRetornos, false);
+			ExcelSheetReader.readErros(retornoExcel, listaRetornos, listaRecursos, false);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(500L);

@@ -168,9 +168,6 @@ public class ListaRetornos implements Serializable {
 				presente.setNome  (retorno.nome  );
 				presente.setMotivo(retorno.motivo);
 				
-				// Indica que o candidato solicitou recurso
-				presente.recursou();
-				
 				// Evita processamento desnecessário
 				return true;
 				

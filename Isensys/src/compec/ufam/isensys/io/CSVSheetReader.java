@@ -80,9 +80,10 @@ public class CSVSheetReader {
 	/** Incorpora os retornos contidos na <code>planilha</code> do Sistac à <code>listaRetornos</code>.
 	 *  @param planilha - arquivo de retorno do Sistac
 	 *  @param listaRetornos - lista de retornos
+	 *  @param listaRecursos - lista de recursos
 	 *  @param preliminar - indica se o arquivo de retorno é pra confecção do resultado preliminar (true) ou definitivo (false)
 	 *  @throws IOException quando a planilha não pode ser lida. */
-	public static void readRetorno(final File planilha, final ListaRetornos listaRetornos, final boolean preliminar) throws IOException {
+	public static void readRetorno(final File planilha, final ListaRetornos listaRetornos, final ListaRetornos listaRecursos, final boolean preliminar) throws IOException {
 		
 		// Variável auxiliar ao loop de leitura do csv
 		String row;
@@ -102,8 +103,17 @@ public class CSVSheetReader {
 			// Montando objeto 'Retorno'
 			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], dados[3], dados[4] );
 			
-			// Cadastrando o novo objeto na ListaRetornos, de acordo com o tipo de resultado
-			if (preliminar) listaRetornos.add(retorno); else listaRetornos.update(retorno);
+			// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
+			if (preliminar)
+				listaRetornos.add(retorno);
+			
+			// Se o resultado é definitivo, o novo retorno é atualizado na lista já existente e cadastrado na lista de recursantes
+			else {
+				
+				listaRetornos.update(retorno);
+				listaRecursos.add   (retorno);
+				
+			}
 			
 		}
 		

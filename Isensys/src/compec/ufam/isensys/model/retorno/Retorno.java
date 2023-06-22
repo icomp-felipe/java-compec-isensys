@@ -21,9 +21,6 @@ public class Retorno implements Serializable {
 	protected String nome, nis, cpf;
 	protected int motivo;
 
-	// Indica se o candidato atual solicitou recurso. Obs.: não faz parte da serialização!
-	private transient boolean recursado;
-
 	/** Construtor principal e obrigatório desta classe.
 	 *  @param nome - nome do candidato
 	 *  @param nis - Número de Identicação Social (NIS) do candidato
@@ -61,11 +58,6 @@ public class Retorno implements Serializable {
 		this.motivo = motivo;
 	}
 	
-	/** Indica que o candidato solicitou recurso. */
-	public void recursou() {
-		this.recursado = true;
-	}
-	
 	/** Defere o pedido de isenção de um candidato. */
 	public void defere() {
 		
@@ -82,11 +74,6 @@ public class Retorno implements Serializable {
 	 *  @return 'true' se o pedido foi deferido (situacao == 'S') ou 'false' caso contrário. */
 	public boolean deferido() {
 		return (this.situacao == 'S');
-	}
-	
-	/** @return 'true' se o candidato solicitou recurso. */
-	public boolean recursado() {
-		return this.recursado;
 	}
 	
 	/** Comparador de objetos de retorno. Útil para métodos de ordenação. Usa o nome do candidato como base nos cálculos.
