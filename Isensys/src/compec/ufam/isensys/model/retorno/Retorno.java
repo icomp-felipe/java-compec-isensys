@@ -10,7 +10,7 @@ import com.phill.libs.br.*;
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 3.8, 22/JUN/2023 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
@@ -20,6 +20,9 @@ public class Retorno implements Serializable {
 	private char situacao;
 	protected String nome, nis, cpf;
 	protected int motivo;
+	
+	// Utilizado apenas pro cálculo de similaridade. Logo, não faz parte da serialização!
+	private transient String nomeAnterior;
 
 	/** Construtor principal e obrigatório desta classe.
 	 *  @param nome - nome do candidato
@@ -49,6 +52,7 @@ public class Retorno implements Serializable {
 	/** Setter pro nome.
 	 *  @param nome - nome do candidato */
 	public void setNome(final String nome) {
+		this.nomeAnterior = this.nome;
 		this.nome = nome;
 	}
 	
@@ -74,6 +78,11 @@ public class Retorno implements Serializable {
 	 *  @return 'true' se o pedido foi deferido (situacao == 'S') ou 'false' caso contrário. */
 	public boolean deferido() {
 		return (this.situacao == 'S');
+	}
+	
+	/** @return Nome antes da atualização pelo método {@link #setNome(String)}. */
+	public String getNomeAnterior() {
+		return StringUtils.BR.normaliza(this.nomeAnterior);
 	}
 	
 	/** Comparador de objetos de retorno. Útil para métodos de ordenação. Usa o nome do candidato como base nos cálculos.

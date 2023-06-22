@@ -4,7 +4,13 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 
+import org.apache.commons.text.similarity.JaroWinklerDistance;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -571,6 +577,51 @@ public class TelaRetornoFinal extends JFrame {
 		
 	}
 	
+	/** Calcula a lista de distância e similaridades. */
+	private List<Similaridade> computeSimilaridades() {
+		
+		// Lista de distância e similaridades
+		List<Similaridade> listaSimilaridades = null;
+		
+		// Recuperando apenas os candidatos deferidos no recurso 
+		List<Retorno> recursosDeferidos = this.listaRecursos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido)).get(true);
+		
+		// Se 'recursosDeferidos == null' significa que não houve recurso ou ninguém foi deferido
+		if (recursosDeferidos != null) {
+		
+			// Inicializando os algoritmos
+			final JaroWinklerDistance   algoDistancia    = new JaroWinklerDistance  ();
+			final JaroWinklerSimilarity algoSimilaridade = new JaroWinklerSimilarity();
+			
+			// Inicializando a lista de distância e similaridades
+			listaSimilaridades = new ArrayList<Similaridade>();
+			
+			// Recuperando a lista geral de solicitações de isenção
+			List<Retorno> listaIsencao = this.listaRetornos.getList();
+			
+			// Para cada candidato com deferimento no recurso...
+			for (Retorno deferidoRecurso: recursosDeferidos) {
+
+				// ...recupero sua solicitação original...
+				Retorno retornoIsencao = listaIsencao.stream().filter(retorno -> retorno.equals(deferidoRecurso)).findFirst().orElse(null);
+				
+				// ...e realizo o cálculo de distância com os nomes informados
+				Similaridade similaridade = new Similaridade(retornoIsencao.getNomeAnterior(), deferidoRecurso.getNome(), algoDistancia, algoSimilaridade);
+				listaSimilaridades.add(similaridade);
+				
+			}
+
+			// Após o preenchimento da lista, realizo a ordenação de acordo com a similaridade
+			Comparator<Similaridade> comparator = (sim1, sim2) -> Double.compare(sim1.getSimilaridade(), sim2.getSimilaridade());
+			
+			Collections.sort(listaSimilaridades, comparator);
+			
+		}
+			
+		return listaSimilaridades;
+		
+	}
+	
 	/** Realiza uma série de verificações de integridade nos dados contidos no nome de arquivo da planilha.
 	 *  @param planilha - planilha de erros de processamento
 	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
@@ -953,8 +1004,14 @@ public class TelaRetornoFinal extends JFrame {
 			// Ordenando dados
 			listaRetornos.sort();
 			
-			// Gerando visualização
+			// Gerando visualização do edital
 			PDFExport.export(listaRetornos, cabecalho, windowTitle, Resultado.FINAL);
+			
+			// Calculando e exibindo o relatório de distância e similaridade
+			final List<Similaridade> listaSimilaridades = computeSimilaridades();
+			
+			if (listaSimilaridades != null)
+				PDFSimilaridade.show(listaSimilaridades, textCabecalho.getText().trim(), bundle.getString("final-similarity-title"));
 			
 		}
 		catch (Exception exception) {
@@ -975,4 +1032,5 @@ public class TelaRetornoFinal extends JFrame {
 		}
 		
 	}
+	
 }
