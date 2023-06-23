@@ -4,8 +4,8 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.*;
 
 import com.phill.libs.*;
@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 3.8, 22/JUN/2023 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -57,6 +57,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private Configs configs;
 	
 	// Atributos dinâmicos
+	private List<File> retornosProcessados;
 	private File lastFileSelected;
 	private File retornoSistac, retornoExcel, compilacao;
 	private ListaRetornos listaRetornos, lastListaRetornos;
@@ -80,7 +81,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		Dimension dimension = new Dimension(670,485);
 		
-		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg",dimension);
+		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg", dimension);
 		painel.setLayout(null);
 		setContentPane(painel);
 		
@@ -424,6 +425,7 @@ public class TelaRetornoPreliminar extends JFrame {
 				this.retornoSistac = null;
 				this.retornoExcel  = null;
 				this.compilacao    = null;
+				this.retornosProcessados = null;
 				
 				// Limpando campos de texto
 				textRetorno   .setText(null);
@@ -654,6 +656,26 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	/************************* Utility Methods Section ************************************/
 	
+	/** @return Lista dos arquivos processados nesta sessão. */
+	private List<ArquivoProcessado> computeFiles() {
+		
+		List<ArquivoProcessado> listaProcessados = new ArrayList<ArquivoProcessado>();
+
+		// Registrando o arquivo de compilação
+		listaProcessados.add(new ArquivoProcessado(compilacao, "Compilação"));
+		
+		// Registrando o(s) arquivo(s) de retorno do Sistac
+		if (this.retornosProcessados != null)
+			for (File retorno: this.retornosProcessados)
+				listaProcessados.add(new ArquivoProcessado(retorno, "Retorno do Sistac"));
+		
+		// Registrando a planilha de erros
+		if (this.retornoExcel != null)
+			listaProcessados.add(new ArquivoProcessado(this.retornoExcel, "Planilha de Erros"));
+		
+		return listaProcessados;
+	}
+	
 	/** Realiza uma série de verificações de integridade nos dados contidos no nome de arquivo da planilha.
 	 *  @param planilha - planilha de erros de processamento
 	 *  @return 'true' caso todas as verificações sejam satisfeitas ou 'false' caso contrário.
@@ -867,6 +889,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
+	private final int[] currentCount = new int[2];
+	
 	/** Atualiza os totais de candidatos processados. */
 	private void updateStatistics() {
 		
@@ -876,8 +900,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		List<Retorno>   deferidos = map.get(true );
 		List<Retorno> indeferidos = map.get(false);
 		
-		int   deferidosCount = (  deferidos == null) ? 0 : deferidos  .size();
-		int indeferidosCount = (indeferidos == null) ? 0 : indeferidos.size();
+		this.currentCount[0] = (  deferidos == null) ? 0 : deferidos  .size();
+		this.currentCount[1] = (indeferidos == null) ? 0 : indeferidos.size();
 		
 		SwingUtilities.invokeLater(() -> {
 			
@@ -885,9 +909,9 @@ public class TelaRetornoPreliminar extends JFrame {
 			labelStatus.setVisible(false);
 			
 			// Atualizando estatísticas
-			textDeferidos  .setText(Integer.toString(deferidosCount  ));
-			textIndeferidos.setText(Integer.toString(indeferidosCount));
-			textTotal      .setText(Integer.toString(indeferidosCount + deferidosCount));
+			textDeferidos  .setText(Integer.toString(this.currentCount[0]));
+			textIndeferidos.setText(Integer.toString(this.currentCount[1]));
+			textTotal      .setText(Integer.toString(this.currentCount[0] + this.currentCount[1]));
 			
 			// Exibindo estatísticas
 			panelResults.setVisible(true);
@@ -905,6 +929,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 			// Inicializando lista de retornos
 			this.listaRetornos = new ListaRetornos();
+			this.retornosProcessados = new ArrayList<File>();
 			
 			// Recuperando dados de edital do nome do arquivo retorno selecionado 
 			Edital edital = new Edital(retornoSistac);
@@ -914,6 +939,9 @@ public class TelaRetornoPreliminar extends JFrame {
 				
 				// Processa a lista de retornos do Sistac
 				CSVSheetReader.readRetorno(atual, listaRetornos, null, true);
+				
+				// Registrando os arquivos processados
+				this.retornosProcessados.add(atual);
 				
 			}
 			
@@ -996,6 +1024,11 @@ public class TelaRetornoPreliminar extends JFrame {
 			// Gerando visualização
 			PDFEdital.export(listaRetornos, cabecalho, windowTitle, Resultado.PRELIMINAR);
 			Compilation.save(listaRetornos, compilacao);
+			
+			// Montando a lista de arquivos processados
+			final List<ArquivoProcessado> listaProcessados = computeFiles();
+			
+			PDFRetorno.export(cabecalho, this.currentCount, listaProcessados);
 			
 		}
 		catch (Exception exception) {

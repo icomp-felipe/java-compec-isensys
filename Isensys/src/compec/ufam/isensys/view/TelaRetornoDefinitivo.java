@@ -40,8 +40,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 	
 	private final JLabel textCNPJ, textNomeFantasia, textRazaoSocial;
 	
-	private final JTextField textCompilacao;
-	private final JButton buttonCompilacaoClear, buttonCompilacaoSelect;
+	private final JTextField textCompilacao, textSaida;
+	private final JButton buttonCompilacaoClear, buttonCompilacaoSelect, buttonSaidaClear, buttonSaidaSelect;
 	private final JPanel panelResults;
 	private final JLabel  textDeferidos, textIndeferidos, textTotal;
 	
@@ -75,7 +75,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		ESCDispose.register(this);
 		
-		Dimension dimension = new Dimension(670,490);
+		Dimension dimension = new Dimension(670, 555);
 		
 		JPanel painel = new JPaintedPanel("img/final-screen.jpg", dimension);
 		painel.setLayout(null);
@@ -292,6 +292,40 @@ public class TelaRetornoDefinitivo extends JFrame {
 		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
 		buttonCabecalhoClear.setBounds(605, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
+		
+		// Painel 'Arquivos de Saída'
+		JPanel panelSaida = new JPanel();
+		panelSaida.setOpaque(false);
+		panelSaida.setLayout(null);
+		panelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
+		panelSaida.setBounds(12, 410, 645, 65);
+		painel.add(panelSaida);
+		
+		JLabel labelSaida = new JLabel("Diretório:");
+		labelSaida.setHorizontalAlignment(JLabel.RIGHT);
+		labelSaida.setFont(fonte);
+		labelSaida.setBounds(10, 30, 80, 20);
+		panelSaida.add(labelSaida);
+		
+		textSaida = new JTextField();
+		textSaida.setEditable(false);
+		textSaida.setToolTipText(bundle.getString("hint-text-cabecalho"));
+		textSaida.setForeground(color);
+		textSaida.setFont(fonte);
+		textSaida.setBounds(105, 30, 455, 25);
+		panelSaida.add(textSaida);
+		
+		buttonSaidaClear = new JButton(clearIcon);
+		buttonSaidaClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
+		//buttonSaidaClear.addActionListener((event) -> actionHeaderClear());
+		buttonSaidaClear.setBounds(570, 30, 30, 25);
+		panelSaida.add(buttonSaidaClear);
+		
+		buttonSaidaSelect = new JButton(searchIcon);
+		buttonSaidaSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
+		//buttonSaidaSelect.addActionListener((event) -> actionCompileSelect());
+		buttonSaidaSelect.setBounds(605, 30, 30, 25);
+		panelSaida.add(buttonSaidaSelect);
 		
 		// Fundo da janela
 		labelStatus = new JLabel(loadingIcon);
@@ -1018,12 +1052,12 @@ public class TelaRetornoDefinitivo extends JFrame {
 			final List<Similaridade> listaSimilaridades = computeSimilaridades();
 			
 			if (listaSimilaridades != null)
-				PDFSimilaridade.show(listaSimilaridades, textCabecalho.getText().trim(), null);
+				PDFSimilaridade.export(listaSimilaridades, textCabecalho.getText().trim(), null);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFRetorno.show(null, cabecalho, currentCount, previousCount, Resultado.DEFINITIVO, listaRecursos.getList(), listaProcessados);
+			PDFRetorno.export(cabecalho, currentCount, previousCount, listaRecursos.getList(), listaProcessados);
 			
 		}
 		catch (Exception exception) {
