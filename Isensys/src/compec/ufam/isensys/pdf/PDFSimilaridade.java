@@ -9,7 +9,6 @@ import com.phill.libs.*;
 
 import compec.ufam.isensys.model.retorno.*;
 
-import net.sf.jasperreports.view.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.*;
 
@@ -19,12 +18,12 @@ import net.sf.jasperreports.engine.util.*;
 public class PDFSimilaridade {
 
 	/** Monta o relatório de distância e similaridade dos candidatos deferidos no recurso de isenção.
-	 *  @param listaDeferidos - lista de deferidos no recurso
 	 *  @param cabecalho - cabeçalho do edital
-	 *  @param windowTitle - título da janela
+	 *  @param listaDeferidos - lista de deferidos no recurso
+	 *  @param diretorioDestino - diretório de destino do arquivo PDF
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void show(final List<Similaridade> listaDeferidos, final String cabecalho, final String windowTitle) throws JRException, IOException {
+	public static void export(final String cabecalho, final List<Similaridade> listaDeferidos, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
@@ -41,13 +40,14 @@ public class PDFSimilaridade {
 		parameters.put("PAR_CABECALHO"      , cabecalho);
 		parameters.put("PAR_LISTA_SIMILARES", listaDeferidos);
 		
-		// Gerando relatório
-		JasperPrint  prints = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+		// Construindo o relatório
+		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+
+		// Preparando o arquivo de saída
+		File arquivoDestino = new File(diretorioDestino, "Isenção - Relatório de Similaridade.pdf");
 		
-		// Exibindo resultados
-		JasperViewer viewer = new JasperViewer(prints, false);
-		viewer.setTitle  (windowTitle);
-		viewer.setVisible(true);
+		// Exportando pra PDF
+		JasperExportManager.exportReportToPdfFile(relatorio, arquivoDestino.getAbsolutePath());
 		
 	}
 	
