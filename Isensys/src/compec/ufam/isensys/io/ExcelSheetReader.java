@@ -102,7 +102,7 @@ public class ExcelSheetReader {
 			String[] dados = readLine(row, Constants.SheetIndex.XLSX_ERROR_SHEET);	// Recuperando os dados de uma linha já separados em um array
 
 			// Montando objeto 'Retorno'
-			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], "N", "-1" );
+			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], "N", "1" );
 						
 			// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
 			if (preliminar)

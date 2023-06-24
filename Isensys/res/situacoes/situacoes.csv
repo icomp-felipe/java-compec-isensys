@@ -1,6 +1,6 @@
 Código de Erro;Situação;Descrição da Situação;
--1;Dados inválidos;Envio impossibilitado ao órgão gestor (CadÚnico) devido a inconsistência nos dados pessoais;
-1;Dados divergentes;Os dados informados na solicitação de isenção ou de recurso de isenção não estão associados ao CPF do candidato;
+1;Dados inválidos;Envio impossibilitado ao órgão gestor (CadÚnico) devido a inconsistência nos dados pessoais;
+2;Dados divergentes;Os dados informados na solicitação de isenção ou de recurso de isenção não estão associados ao CPF do candidato;
 3;NIS inválido;O NIS é inválido;
 4;NIS não cadastrado;O NIS não foi identificado na base de dados do Cadastro Único;
 5;NIS excluído;O NIS foi identificado na base de dados do Cadastro Único, porém com status excluído;
