@@ -8,7 +8,7 @@ import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 3.8, 23/JUN/2023 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;
@@ -38,7 +38,7 @@ public class TelaInicioIsensys extends JFrame {
 		
 		Icon iconEnvio   = ResourceManager.getIcon("img/botao-envio.png"     ,442,30);
 		Icon iconPrelim  = ResourceManager.getIcon("img/botao-preliminar.png",442,30);
-		Icon iconFinal   = ResourceManager.getIcon("img/botao-final.png"     ,442,30);
+		Icon iconFinal   = ResourceManager.getIcon("img/botao-definitivo.png",442,30);
 		Icon iconConfigs = ResourceManager.getIcon("img/botao-configs.png"   ,442,30);
 		
 		Icon isensysIcon  = ResourceManager.getIcon("img/isensys-logo.png",154,130);

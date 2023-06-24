@@ -24,7 +24,7 @@ import org.apache.commons.text.similarity.*;
 
 /** Classe que controla a view de processamento de Retorno Definitivo.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 22/JUN/2023 */
+ *  @version 3.8, 24/JUN/2023 */
 public class TelaRetornoDefinitivo extends JFrame {
 
 	// Serial
@@ -32,7 +32,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 	
 	// Carregando bundle de idiomas
 	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-retorno-definitivo", null);
-	private final static String windowTitle = bundle.getString("final-window-title");
+	private final static String windowTitle = bundle.getString("defs-window-title");
 	
 	// Declaração de atributos gráficos
 	private final Color padrao, yellow = new Color(0xE9EF84);
@@ -57,7 +57,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 	
 	// Atributos dinâmicos
 	private List<File> retornosProcessados;
-	private File retornoSistac, retornoExcel, compilacao, previousCompilacao;
+	private File arqRetornoSistac, arqPlanilhaErros, arqCompilacao, arqCompilacaoHistorico, dirSaida;
 	private ListaRetornos listaRetornos, listaRecursos;
 	private int[] previousCount, currentCount;
 
@@ -75,11 +75,17 @@ public class TelaRetornoDefinitivo extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		ESCDispose.register(this);
 		
-		Dimension dimension = new Dimension(670, 555);
+		//Dimension dimension = new Dimension(670, 555);
+		setSize(670,555);
 		
-		JPanel painel = new JPaintedPanel("img/final-screen.jpg", dimension);
+		//JPanel painel = new JPaintedPanel("img/defs-screen.jpg", dimension);
+		//painel.setLayout(null);
+		//setContentPane(painel);
+		
+		JPanel painel = new JPanel();
 		painel.setLayout(null);
 		setContentPane(painel);
+		
 		
 		// Recuperando ícones
 		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png" ,20,20);
@@ -94,11 +100,11 @@ public class TelaRetornoDefinitivo extends JFrame {
 		JPanel panelInstituicao = new JPanel();
 		panelInstituicao.setOpaque(false);
 		panelInstituicao.setLayout(null);
-		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("final-panel-instituicao")));
-		panelInstituicao.setBounds(12, 10, 645, 105);
+		panelInstituicao.setBorder(instance.getTitledBorder("Dados da Instituição"));
+		panelInstituicao.setBounds(10, 10, 635, 105);
 		painel.add(panelInstituicao);
 				
-		JLabel labelCNPJ = new JLabel(bundle.getString("final-label-cnpj"));
+		JLabel labelCNPJ = new JLabel("CNPJ:");
 		labelCNPJ.setHorizontalAlignment(JLabel.RIGHT);
 		labelCNPJ.setFont(fonte);
 		labelCNPJ.setBounds(10, 25, 115, 20);
@@ -110,7 +116,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textCNPJ.setBounds(130, 25, 145, 20);
 		panelInstituicao.add(textCNPJ);
 				
-		JLabel labelNomeFantasia = new JLabel(bundle.getString("final-label-nome-fantasia"));
+		JLabel labelNomeFantasia = new JLabel("Nome Fantasia:");
 		labelNomeFantasia.setHorizontalAlignment(JLabel.RIGHT);
 		labelNomeFantasia.setFont(fonte);
 		labelNomeFantasia.setBounds(10, 50, 115, 20);
@@ -122,7 +128,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textNomeFantasia.setBounds(130, 50, 334, 20);
 		panelInstituicao.add(textNomeFantasia);
 				
-		JLabel labelRazaoSocial = new JLabel(bundle.getString("final-label-razao-social"));
+		JLabel labelRazaoSocial = new JLabel("Razão Social:");
 		labelRazaoSocial.setHorizontalAlignment(JLabel.RIGHT);
 		labelRazaoSocial.setFont(fonte);
 		labelRazaoSocial.setBounds(10, 75, 115, 20);
@@ -134,15 +140,15 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textRazaoSocial.setBounds(130, 75, 334, 20);
 		panelInstituicao.add(textRazaoSocial);
 		
-		// Painel 'Retorno Preliminar'
+		// Painel 'Resultado Preliminar'
 		JPanel panelPreliminar = new JPanel();
 		panelPreliminar.setOpaque(false);
 		panelPreliminar.setLayout(null);
-		panelPreliminar.setBorder(instance.getTitledBorder(bundle.getString("final-panel-prelim")));
-		panelPreliminar.setBounds(12, 115, 645, 125);
+		panelPreliminar.setBorder(instance.getTitledBorder("Resultado Preliminar"));
+		panelPreliminar.setBounds(10, 115, 635, 125);
 		painel.add(panelPreliminar);
 		
-		JLabel labelCompilacao = new JLabel(bundle.getString("final-label-compilacao"));
+		JLabel labelCompilacao = new JLabel("Compilação:");
 		labelCompilacao.setHorizontalAlignment(JLabel.RIGHT);
 		labelCompilacao.setFont(fonte);
 		labelCompilacao.setBounds(10, 30, 90, 20);
@@ -153,19 +159,19 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textCompilacao.setForeground(color);
 		textCompilacao.setFont(fonte);
 		textCompilacao.setEditable(false);
-		textCompilacao.setBounds(105, 30, 455, 25);
+		textCompilacao.setBounds(105, 30, 445, 25);
 		panelPreliminar.add(textCompilacao);
 		
 		buttonCompilacaoClear = new JButton(clearIcon);
 		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
 		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
-		buttonCompilacaoClear.setBounds(570, 30, 30, 25);
+		buttonCompilacaoClear.setBounds(560, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoClear);
 		
 		buttonCompilacaoSelect = new JButton(searchIcon);
 		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
 		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
-		buttonCompilacaoSelect.setBounds(605, 30, 30, 25);
+		buttonCompilacaoSelect.setBounds(595, 30, 30, 25);
 		panelPreliminar.add(buttonCompilacaoSelect);
 		
 		// Painel 'Análise do Arquivo'
@@ -173,11 +179,11 @@ public class TelaRetornoDefinitivo extends JFrame {
 		panelResults.setOpaque(false);
 		panelResults.setVisible(false);
 		panelResults.setLayout(null);
-		panelResults.setBorder(instance.getTitledBorder(bundle.getString("final-panel-results")));
+		panelResults.setBorder(instance.getTitledBorder("Análise do Arquivo"));
 		panelResults.setBounds(12, 60, 625, 55);
 		panelPreliminar.add(panelResults);
 		
-		JLabel labelDeferidos = new JLabel(bundle.getString("final-label-deferidos"));
+		JLabel labelDeferidos = new JLabel("Deferidos:");
 		labelDeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelDeferidos.setFont(fonte);
 		labelDeferidos.setBounds(65, 25, 80, 20);
@@ -190,7 +196,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textDeferidos.setBounds(150, 25, 45, 20);
 		panelResults.add(textDeferidos);
 		
-		JLabel labelIndeferidos = new JLabel(bundle.getString("final-label-indeferidos"));
+		JLabel labelIndeferidos = new JLabel("Indeferidos:");
 		labelIndeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelIndeferidos.setFont(fonte);
 		labelIndeferidos.setBounds(265, 25, 90, 20);
@@ -203,7 +209,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textIndeferidos.setBounds(360, 25, 45, 20);
 		panelResults.add(textIndeferidos);
 		
-		JLabel labelTotal = new JLabel(bundle.getString("final-label-total"));
+		JLabel labelTotal = new JLabel("Total:");
 		labelTotal.setHorizontalAlignment(JLabel.RIGHT);
 		labelTotal.setFont(fonte);
 		labelTotal.setBounds(480, 25, 40, 20);
@@ -220,11 +226,11 @@ public class TelaRetornoDefinitivo extends JFrame {
 		JPanel panelInputFile = new JPanel();
 		panelInputFile.setOpaque(false);
 		panelInputFile.setLayout(null);
-		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("final-panel-input-file")));
-		panelInputFile.setBounds(12, 240, 645, 105);
+		panelInputFile.setBorder(instance.getTitledBorder("Arquivos de Entrada"));
+		panelInputFile.setBounds(10, 240, 635, 105);
 		painel.add(panelInputFile);
 		
-		JLabel labelRetorno = new JLabel(bundle.getString("final-label-retorno"));
+		JLabel labelRetorno = new JLabel("Retorno Sistac:");
 		labelRetorno.setHorizontalAlignment(JLabel.RIGHT);
 		labelRetorno.setFont(fonte);
 		labelRetorno.setBounds(10, 30, 110, 20);
@@ -235,17 +241,17 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textRetorno.setForeground(color);
 		textRetorno.setFont(fonte);
 		textRetorno.setEditable(false);
-		textRetorno.setBounds(125, 30, 470, 25);
+		textRetorno.setBounds(125, 30, 460, 25);
 		panelInputFile.add(textRetorno);
 		
 		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
 		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
 		buttonRetornoSelect.setEnabled(false);
-		buttonRetornoSelect.setBounds(605, 30, 30, 25);
+		buttonRetornoSelect.setBounds(595, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
 		
-		JLabel labelErros = new JLabel(bundle.getString("final-label-erros"));
+		JLabel labelErros = new JLabel("Planilha Erros:");
 		labelErros.setHorizontalAlignment(JLabel.RIGHT);
 		labelErros.setFont(fonte);
 		labelErros.setBounds(10, 65, 110, 20);
@@ -256,25 +262,25 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textErros.setForeground(color);
 		textErros.setFont(fonte);
 		textErros.setEditable(false);
-		textErros.setBounds(125, 65, 470, 25);
+		textErros.setBounds(125, 65, 460, 25);
 		panelInputFile.add(textErros);
 		
 		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
 		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
 		buttonErrosSelect.setEnabled(false);
-		buttonErrosSelect.setBounds(605, 65, 30, 25);
+		buttonErrosSelect.setBounds(595, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
 		
 		// Painel 'Edital'
 		JPanel panelEdital = new JPanel();
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
-		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("final-panel-edital")));
-		panelEdital.setBounds(12, 345, 645, 65);
+		panelEdital.setBorder(instance.getTitledBorder("Edital"));
+		panelEdital.setBounds(10, 345, 635, 65);
 		painel.add(panelEdital);
 		
-		JLabel labelCabecalho = new JLabel(bundle.getString("final-label-cabecalho"));
+		JLabel labelCabecalho = new JLabel("Cabeçalho:");
 		labelCabecalho.setHorizontalAlignment(JLabel.RIGHT);
 		labelCabecalho.setFont(fonte);
 		labelCabecalho.setBounds(10, 30, 80, 20);
@@ -284,13 +290,13 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 500, 25);
+		textCabecalho.setBounds(95, 30, 490, 25);
 		panelEdital.add(textCabecalho);
 		
 		buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
 		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
-		buttonCabecalhoClear.setBounds(605, 30, 30, 25);
+		buttonCabecalhoClear.setBounds(595, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
 		// Painel 'Arquivos de Saída'
@@ -298,7 +304,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		panelSaida.setOpaque(false);
 		panelSaida.setLayout(null);
 		panelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
-		panelSaida.setBounds(12, 410, 645, 65);
+		panelSaida.setBounds(10, 410, 635, 65);
 		painel.add(panelSaida);
 		
 		JLabel labelSaida = new JLabel("Diretório:");
@@ -312,19 +318,19 @@ public class TelaRetornoDefinitivo extends JFrame {
 		textSaida.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textSaida.setForeground(color);
 		textSaida.setFont(fonte);
-		textSaida.setBounds(105, 30, 455, 25);
+		textSaida.setBounds(95, 30, 455, 25);
 		panelSaida.add(textSaida);
 		
 		buttonSaidaClear = new JButton(clearIcon);
-		buttonSaidaClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
-		//buttonSaidaClear.addActionListener((event) -> actionHeaderClear());
-		buttonSaidaClear.setBounds(570, 30, 30, 25);
+		buttonSaidaClear.setToolTipText(bundle.getString("hint-button-saida-clear"));
+		buttonSaidaClear.addActionListener((event) -> { this.dirSaida = null; textSaida.setText(null); });
+		buttonSaidaClear.setBounds(560, 30, 30, 25);
 		panelSaida.add(buttonSaidaClear);
 		
 		buttonSaidaSelect = new JButton(searchIcon);
-		buttonSaidaSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
-		//buttonSaidaSelect.addActionListener((event) -> actionCompileSelect());
-		buttonSaidaSelect.setBounds(605, 30, 30, 25);
+		buttonSaidaSelect.setToolTipText(bundle.getString("hint-button-saida-select"));
+		buttonSaidaSelect.addActionListener((event) -> actionSaidaSelect());
+		buttonSaidaSelect.setBounds(595, 30, 30, 25);
 		panelSaida.add(buttonSaidaSelect);
 		
 		// Fundo da janela
@@ -332,12 +338,12 @@ public class TelaRetornoDefinitivo extends JFrame {
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(12, 425, 215, 20);
+		labelStatus.setBounds(10, 485, 215, 20);
 		painel.add(labelStatus);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(620, 420, 35, 30);
+		buttonReport.setBounds(610, 480, 35, 30);
 		buttonReport.addActionListener((event) -> actionExport());
 		painel.add(buttonReport);
 		
@@ -345,11 +351,12 @@ public class TelaRetornoDefinitivo extends JFrame {
 		this.fieldValidator = new MandatoryFieldsManager();
 		this.fieldLogger    = new MandatoryFieldsLogger ();
 		
-		fieldValidator.addPermanent(labelCompilacao, () -> this.compilacao != null, bundle.getString("final-mfv-compilacao"), false);
-		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().trim().isEmpty(), bundle.getString("final-mfv-cabecalho"), false);
+		fieldValidator.addPermanent(labelCompilacao, () -> this.arqCompilacao != null, bundle.getString("defs-mfv-compilacao"), false);
+		fieldValidator.addPermanent(labelSaida     , () -> this.dirSaida      != null, bundle.getString("defs-mfv-dirSaida"  ), false);
+		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().trim().isEmpty(), bundle.getString("defs-mfv-cabecalho"), false);
 		
 		// Mostrando a janela
-		setSize(dimension);
+		// setSize(dimension);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -365,11 +372,11 @@ public class TelaRetornoDefinitivo extends JFrame {
 	private void actionCompileClear() {
 		
 		// Faz algo somente se algum arquivo foi selecionado
-		if (this.compilacao != null) {
+		if (this.arqCompilacao != null) {
 			
 			// Montando janela de diálogo
-			final String title   = bundle.getString("final-compile-clear-title");
-			final String message = bundle.getString("final-compile-clear-dialog");
+			final String title   = bundle.getString("defs-compile-clear-title");
+			final String message = bundle.getString("defs-compile-clear-dialog");
 			
 			// Exibe o diálogo de confirmação
 			final int choice = AlertDialog.dialog(this, title, message);
@@ -378,11 +385,9 @@ public class TelaRetornoDefinitivo extends JFrame {
 			if (choice == AlertDialog.OK_OPTION) {
 				
 				// Limpando atributos
-				this.compilacao    = null;
+				this.arqCompilacao = this.arqPlanilhaErros = this.arqRetornoSistac;
 				this.listaRetornos = null;
 				this.listaRecursos = null;
-				this.retornoSistac = null;
-				this.retornoExcel  = null;
 				this.previousCount = new int[2];
 				this.currentCount  = new int[2];
 				this.retornosProcessados = null;
@@ -413,23 +418,23 @@ public class TelaRetornoDefinitivo extends JFrame {
 	private void actionCompileSelect() {
 		
 		// Recuperando título da janela
-		final String title = bundle.getString("final-compile-select-title");
+		final String title = bundle.getString("defs-compile-select-title");
 		
 		// Recuperando o arquivo de entrada
-		final File selected  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.previousCompilacao, null);
+		final File selected  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.arqCompilacaoHistorico, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
 			
 			// Atualizando a última seleção de arquivo
-			this.previousCompilacao = selected;
+			this.arqCompilacaoHistorico = selected;
 			
 			// Se já existe uma compilação previamente selecionada, um diálogo de sobrescrever é exibido
-			if (this.compilacao != null) {
+			if (this.arqCompilacao != null) {
 				
 				// Montando janela de diálogo
-				final String dialogTitle   = bundle.getString("final-compile-select-dtitle");
-				final String dialogMessage = bundle.getString("final-compile-select-dmessage");
+				final String dialogTitle   = bundle.getString("defs-compile-select-dtitle");
+				final String dialogMessage = bundle.getString("defs-compile-select-dmessage");
 				
 				// Exibe o diálogo de confirmação
 				final int choice = AlertDialog.dialog(this, dialogTitle, dialogMessage);
@@ -437,7 +442,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 				// Sobrescreve dados se o usuário escolheu 'OK'
 				if (choice == AlertDialog.OK_OPTION) {
 					
-					this.retornoSistac = this.retornoExcel = null;
+					this.arqRetornoSistac = this.arqPlanilhaErros = null;
 					
 					textRetorno.setText(null);
 					textErros  .setText(null);
@@ -448,16 +453,16 @@ public class TelaRetornoDefinitivo extends JFrame {
 			}
 				
 			// Salvando arquivo
-			this.compilacao = selected;
+			this.arqCompilacao = selected;
 				
 			// Atualizando a view
-			textCompilacao.setText(compilacao.getName());
+			textCompilacao.setText(arqCompilacao.getName());
 			setCompileProcessing(true);
 				
 			// Processando o arquivo
 			Thread thread_retriever = new Thread(() -> threadRetriever());
 				
-			thread_retriever.setName(bundle.getString("final-compile-select-thread"));
+			thread_retriever.setName(bundle.getString("defs-compile-select-thread"));
 			thread_retriever.start();
 				
 		}
@@ -468,13 +473,13 @@ public class TelaRetornoDefinitivo extends JFrame {
 	private void actionRetornoSelect() {
 		
 		// Faz algo somente se o arquivo de compilação já foi previamente selecionado
-		if (this.compilacao != null) {
+		if (this.arqCompilacao != null) {
 			
 			// Recuperando título da janela
-			final String title = bundle.getString("final-retorno-select-title");
+			final String title = bundle.getString("defs-retorno-select-title");
 						
 			// Recuperando o arquivo de retorno
-			final File suggestion = (this.retornoExcel != null) ? this.retornoExcel : this.compilacao;
+			final File suggestion = (this.arqPlanilhaErros != null) ? this.arqPlanilhaErros : this.arqCompilacao;
 			final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.SISTAC_RETV, PhillFileUtils.OPEN_DIALOG, suggestion, null);
 						
 			// Faz algo somente se algum arquivo foi selecionado
@@ -485,16 +490,16 @@ public class TelaRetornoDefinitivo extends JFrame {
 				if (!retornoDependencies(selected)) return;
 				
 				// Salvando arquivo
-				this.retornoSistac = selected;
+				this.arqRetornoSistac = selected;
 							
 				// Atualizando a view
-				textRetorno.setText(retornoSistac.getName());
+				textRetorno.setText(arqRetornoSistac.getName());
 				setCompileProcessing(true);
 				
 				// Processando o arquivo
 				Thread thread_sistac = new Thread(() -> threadSistac());
 				
-				thread_sistac.setName(bundle.getString("final-retorno-select-thread"));
+				thread_sistac.setName(bundle.getString("defs-retorno-select-thread"));
 				thread_sistac.start();
 							
 			}
@@ -505,20 +510,40 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 	}
 	
+	/** Seleciona o diretório de saída de arquivos */
+	private void actionSaidaSelect() {
+		
+		// Recuperando título da janela
+		final String title = bundle.getString("defs-saida-select-title");
+								
+		// Recuperando o diretório de saída
+		final File suggestion = (this.arqPlanilhaErros != null) ? this.arqPlanilhaErros : this.arqCompilacao;
+		final File selected = PhillFileUtils.loadDir(this, title, PhillFileUtils.SAVE_DIALOG, suggestion);
+								
+		// Faz algo somente se algum arquivo foi selecionado
+		if (selected != null) {
+			
+			this.dirSaida = selected;
+			this.textSaida.setText(selected.getAbsolutePath());
+			
+		}
+		
+	}
+	
 	/** Carrega o arquivo de erros e atualiza as informações da janela. */
 	private void actionErrosSelect() {
 		
 		// Faz algo somente se o arquivo de compilação já foi previamente selecionado
-		if (this.compilacao != null) {
+		if (this.arqCompilacao != null) {
 			
 			// Recuperando título da janela
-			final String title = bundle.getString("final-erros-select-title");
+			final String title = bundle.getString("defs-erros-select-title");
 			
 			// Preparando o nome do arquivo de sugestão
-			final File suggestion = new Edital(this.retornoSistac).getErrorFilename(null);
+			final File suggestion = new Edital(this.arqRetornoSistac).getErrorFilename(null);
 						
 			// Recuperando o arquivo de erros
-			final File parent = (this.retornoSistac != null) ? this.retornoSistac : this.compilacao;
+			final File parent = (this.arqRetornoSistac != null) ? this.arqRetornoSistac : this.arqCompilacao;
 			final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, parent, suggestion);
 		
 			// Faz algo somente se algum arquivo foi selecionado
@@ -529,16 +554,16 @@ public class TelaRetornoDefinitivo extends JFrame {
 				if (!errosDependencies(selected)) return;
 				
 				// Salvando arquivo
-				this.retornoExcel = selected;
+				this.arqPlanilhaErros = selected;
 				
 				// Atualizando a view
-				textErros.setText(retornoExcel.getName());
+				textErros.setText(arqPlanilhaErros.getName());
 				setCompileProcessing(true);
 		
 				// Processando o arquivo
 				Thread thread_erros = new Thread(() -> threadErros());
 				
-				thread_erros.setName(bundle.getString("final-erros-select-thread"));
+				thread_erros.setName(bundle.getString("defs-erros-select-thread"));
 				thread_erros.start();
 							
 			}
@@ -559,8 +584,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 		if (!cabecalho.isBlank()) {
 			
 			// Recuperando strings do diálogo
-			final String dtitle = bundle.getString("final-header-clear-dtitle");
-			final String dialog = bundle.getString("final-header-clear-dialog");
+			final String dtitle = bundle.getString("defs-header-clear-dtitle");
+			final String dialog = bundle.getString("defs-header-clear-dialog");
 			
 			// Exibe o diálogo de confirmação
 			final int choice = AlertDialog.dialog(this, dtitle, dialog);
@@ -585,7 +610,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		// Só prossigo se todas os campos foram devidamente preenchidos
 		if (fieldLogger.hasErrors()) {
 						
-			AlertDialog.error(this, bundle.getString("final-export-title"), fieldLogger.getErrorString());
+			AlertDialog.error(this, bundle.getString("defs-export-title"), fieldLogger.getErrorString());
 			fieldLogger.clear(); return;
 			
 		}
@@ -593,7 +618,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		// Processando o edital
 		Thread thread_export = new Thread(() -> threadExport());
 										
-		thread_export.setName(bundle.getString("final-export-thread"));
+		thread_export.setName(bundle.getString("defs-export-thread"));
 		thread_export.start();
 		
 	}
@@ -603,8 +628,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 	/** Mostra uma tela de erro caso o arquivo de compilação não tenha sido selecionado. */
 	private void compileFileErrorDialog() {
 		
-		AlertDialog.error(this, bundle.getString("final-file-error-dialog-title" ),
-		                        bundle.getString("final-file-error-dialog-error"));
+		AlertDialog.error(this, bundle.getString("defs-file-error-dialog-title" ),
+		                        bundle.getString("defs-file-error-dialog-error"));
 		
 	}
 	
@@ -614,7 +639,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		List<ArquivoProcessado> listaProcessados = new ArrayList<ArquivoProcessado>();
 
 		// Registrando o arquivo de compilação
-		listaProcessados.add(new ArquivoProcessado(compilacao, "Compilação"));
+		listaProcessados.add(new ArquivoProcessado(arqCompilacao, "Compilação"));
 		
 		// Registrando o(s) arquivo(s) de retorno do Sistac
 		if (this.retornosProcessados != null)
@@ -622,8 +647,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 				listaProcessados.add(new ArquivoProcessado(retorno, "Retorno do Sistac"));
 		
 		// Registrando a planilha de erros
-		if (this.retornoExcel != null)
-			listaProcessados.add(new ArquivoProcessado(this.retornoExcel, "Planilha de Erros"));
+		if (this.arqPlanilhaErros != null)
+			listaProcessados.add(new ArquivoProcessado(this.arqPlanilhaErros, "Planilha de Erros"));
 		
 		return listaProcessados;
 	}
@@ -679,14 +704,14 @@ public class TelaRetornoDefinitivo extends JFrame {
 	 *  @since 3.0, 22/04/2021 */
 	private boolean errosDependencies(final File planilha) {
 			
-		final Edital retorno = new Edital(this.retornoSistac);
+		final Edital retorno = new Edital(this.arqRetornoSistac);
 		final Edital erros   = new Edital(planilha);
 			
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
 		if (!retorno.equals(erros)) {
 			
-			AlertDialog.error(this, bundle.getString("final-erros-dependencies-title" ),
-	                                bundle.getString("final-erros-dependencies-dialog"));
+			AlertDialog.error(this, bundle.getString("defs-erros-dependencies-title" ),
+	                                bundle.getString("defs-erros-dependencies-dialog"));
 			
 			return false;
 		}
@@ -711,8 +736,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 		}
 		catch (Exception exception) {
 			
-			final String title  = bundle.getString("final-load-instituicao-title");
-			final String dialog = bundle.getString("final-load-instituicao-dialog");
+			final String title  = bundle.getString("defs-load-instituicao-title");
+			final String dialog = bundle.getString("defs-load-instituicao-dialog");
 			
 			AlertDialog.error(this, title, dialog);	return false;
 			
@@ -760,8 +785,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
 		if (!compilacao.equalsIgnoreDate(retorno)) {
 					
-			AlertDialog.error(this, bundle.getString("final-retorno-dependencies-title" ),
-		                            bundle.getString("final-retorno-dependencies-dialog"));
+			AlertDialog.error(this, bundle.getString("defs-retorno-dependencies-title" ),
+		                            bundle.getString("defs-retorno-dependencies-dialog"));
 					
 			return false;
 		}
@@ -775,7 +800,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		if (isProcessing) {
 			
 			// Atualizando a view
-			labelStatus.setText(bundle.getString("final-compile-processing"));
+			labelStatus.setText(bundle.getString("defs-compile-processing"));
 			labelStatus.setVisible(true);
 			
 			panelResults.setVisible(false);
@@ -802,8 +827,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 				buttonCompilacaoSelect.setEnabled(true);
 				
 				// Desbloqueando os botões do painel 'Arquivos de Entrada'
-				buttonRetornoSelect.setEnabled( this.retornoSistac == null );
-				buttonErrosSelect  .setEnabled( this.retornoExcel  == null );
+				buttonRetornoSelect.setEnabled( this.arqRetornoSistac == null );
+				buttonErrosSelect  .setEnabled( this.arqPlanilhaErros  == null );
 				
 				// Desbloqueando botão 'Exportar'
 				buttonReport.setEnabled(true);
@@ -830,20 +855,23 @@ public class TelaRetornoDefinitivo extends JFrame {
 			textCabecalho       .setEditable( !isProcessing );
 			buttonCabecalhoClear.setEnabled ( !isProcessing );
 			
+			buttonSaidaClear .setEnabled( !isProcessing );
+			buttonSaidaSelect.setEnabled( !isProcessing );
+			
 			// Controlando visualização dos botões do painel 'Arquivos de Entrada' e do label de status
 			if (isProcessing) {
 				
 				buttonRetornoSelect.setEnabled(false);
 				buttonErrosSelect  .setEnabled(false);
 				
-				labelStatus.setText(bundle.getString("final-export-processing"));
+				labelStatus.setText(bundle.getString("defs-export-processing"));
 				labelStatus.setVisible(true);
 				
 			}
 			else {
 				
-				buttonRetornoSelect.setEnabled( this.retornoSistac == null );
-				buttonErrosSelect  .setEnabled( this.retornoExcel  == null );
+				buttonRetornoSelect.setEnabled( this.arqRetornoSistac == null );
+				buttonErrosSelect  .setEnabled( this.arqPlanilhaErros == null );
 				
 				labelStatus.setVisible(false);
 				
@@ -881,7 +909,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		if (!configs.getInstituicao().equals(carregada)) {
 			
 			loadInstituicao(carregada, yellow);
-			AlertDialog.info(this, bundle.getString("final-update-statistics-title"), bundle.getString("final-update-statistics-dialog"));
+			AlertDialog.info(this, bundle.getString("defs-update-statistics-title"), bundle.getString("defs-update-statistics-dialog"));
 					
 		}
 		
@@ -914,17 +942,17 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Recupera a compilação
 			this.retornosProcessados = new ArrayList<File>();
-			this.listaRetornos = Compilation.retrieve(compilacao);
+			this.listaRetornos = Compilation.retrieve(arqCompilacao);
 			this.listaRecursos = new ListaRetornos();
 			this.currentCount  = new int[2];
 			this.previousCount = new int[2];
 			
 			// Processa os retornos (função do botão 'Recarregar')
-			if (this.retornoSistac != null)
-				CSVSheetReader.readRetorno(retornoSistac, listaRetornos, listaRecursos, false);
+			if (this.arqRetornoSistac != null)
+				CSVSheetReader.readRetorno(arqRetornoSistac, listaRetornos, listaRecursos, false);
 			
-			if (this.retornoExcel != null)
-				ExcelSheetReader.readErros(retornoExcel, listaRetornos, listaRecursos, false);
+			if (this.arqPlanilhaErros != null)
+				ExcelSheetReader.readErros(arqPlanilhaErros, listaRetornos, listaRecursos, false);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(500L);
@@ -939,8 +967,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error(this, bundle.getString("final-thread-retriever-title" ),
-					                bundle.getString("final-thread-retriever-error"));
+			AlertDialog.error(this, bundle.getString("defs-thread-retriever-title" ),
+					                bundle.getString("defs-thread-retriever-error"));
 			
 		}
 		finally {
@@ -958,10 +986,10 @@ public class TelaRetornoDefinitivo extends JFrame {
 		try {
 			
 			// Recuperando dados de edital do nome do arquivo retorno selecionado 
-			Edital edital = new Edital(retornoSistac);
+			Edital edital = new Edital(arqRetornoSistac);
 						
 			// Loop que busca lẽ todos os arquivos subsequentes com base na sequência do primeiro arquivo de retorno selecionado
-			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
+			for (File atual = arqRetornoSistac; atual.exists(); atual = edital.getNextRetornoFile(arqRetornoSistac)) {
 				
 				// Processa a lista de retornos do Sistac
 				CSVSheetReader.readRetorno(atual, listaRetornos, listaRecursos, false);
@@ -984,8 +1012,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error(this, bundle.getString("final-thread-sistac-title" ),
-					                bundle.getString("final-thread-sistac-error"));
+			AlertDialog.error(this, bundle.getString("defs-thread-sistac-title" ),
+					                bundle.getString("defs-thread-sistac-error"));
 			
 		}
 		finally {
@@ -1003,7 +1031,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		try {
 			
 			// Processa a lista de erros
-			ExcelSheetReader.readErros(retornoExcel, listaRetornos, listaRecursos, false);
+			ExcelSheetReader.readErros(arqPlanilhaErros, listaRetornos, listaRecursos, false);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(500L);
@@ -1018,8 +1046,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error(this, bundle.getString("final-thread-erros-title" ),
-					                bundle.getString("final-thread-erros-error"));
+			AlertDialog.error(this, bundle.getString("defs-thread-erros-title" ),
+					                bundle.getString("defs-thread-erros-error"));
 			
 		}
 		finally {
@@ -1046,34 +1074,31 @@ public class TelaRetornoDefinitivo extends JFrame {
 			listaRetornos.sort();
 			
 			// Gerando visualização do edital
-			PDFEdital.export(listaRetornos, cabecalho, windowTitle, Resultado.DEFINITIVO);
+			PDFEdital.export(Resultado.DEFINITIVO, cabecalho, listaRetornos.getList(), dirSaida);
 			
 			// Calculando e exibindo o relatório de distância e similaridade
 			final List<Similaridade> listaSimilaridades = computeSimilaridades();
 			
 			if (listaSimilaridades != null)
-				PDFSimilaridade.export(listaSimilaridades, textCabecalho.getText().trim(), null);
+				PDFSimilaridade.export(cabecalho, listaSimilaridades, this.dirSaida);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFRetorno.export(cabecalho, currentCount, previousCount, listaRecursos.getList(), listaProcessados);
+			PDFRetorno.export(cabecalho, currentCount, previousCount, listaRetornos.getList(), listaProcessados, dirSaida);
+			
+			setExportProcessing(false);
+			AlertDialog.info(this, windowTitle, bundle.getString("defs-thread-export-done"));
 			
 		}
 		catch (Exception exception) {
 			
-			exception.printStackTrace();
+			exception.printStackTrace(); setExportProcessing(false);
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
-			AlertDialog.error(this, bundle.getString("final-thread-export-title" ),
-					                bundle.getString("final-thread-export-error"));
-			
-		}
-		finally {
-			
-			// Desbloqueando botões e campos de texto
-			setExportProcessing(false);
+			AlertDialog.error(this, bundle.getString("defs-thread-export-title" ),
+					                bundle.getString("defs-thread-export-error"));
 			
 		}
 		

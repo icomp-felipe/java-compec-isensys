@@ -1,32 +1,10 @@
 ########## Título da Janela
-final-window-title     = IsenSys v.3.8 - Resultado Definitivo
+defs-window-title = IsenSys v.3.8 - Resultado Definitivo
 
 ########## Mensagens de erro da API MFV
-final-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
-final-mfv-cabecalho  = Informe o cabeçalho do edital
-
-########## Painéis
-final-panel-instituicao = Dados da Instituição
-final-panel-prelim      = Resultado Preliminar
-final-panel-results     = Análise do Arquivo
-final-panel-input-file  = Arquivos de Entrada
-final-panel-edital      = Edital
-
-########## Labels
-final-label-cnpj          = CNPJ:
-final-label-nome-fantasia = Nome Fantasia:
-final-label-razao-social  = Razão Social:
-
-final-label-compilacao = Compilação:
-
-final-label-deferidos   = Deferidos:
-final-label-indeferidos = Indeferidos
-final-label-total       = Total:
-
-final-label-retorno = Retorno Sistac:
-final-label-erros   = Planilha Erros:
-
-final-label-cabecalho = Cabeçalho:
+defs-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
+defs-mfv-cabecalho  = Informe o cabeçalho do edital
+defs-mfv-dirSaida   = Selecione o diretório de saída de arquivos
 
 ########## Dicas
 hint-text-compilacao = Arquivo de compilação (.bsf)
@@ -43,85 +21,92 @@ hint-button-erros-select = Busca o arquivo de erros
 hint-text-cabecalho = Título que fará parte do cabeçalho do edital
 hint-button-cabecalho-clear = Limpa o texto de cabeçalho
 
+hint-button-saida-clear  = Limpa a seleção do diretório de saída de arquivos
+hint-button-saida-select = Seleciona o diretório de saída de arquivos
+
 hint-button-report = Gera o edital
 
 ########## Métodos
-! TelaRetornoFinal::actionCompileClear
-final-compile-clear-title  = Limpar seleção
-final-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?\n\
-                             Os arquivos de retorno do Sistac e planilha de erros também\n\
-                             serão desselecionados!
+! TelaRetornoDefinitivo::actionCompileClear
+defs-compile-clear-title  = IsenSys v.3.8 - Limpar seleção
+defs-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?\n\
+                            Os arquivos de retorno do Sistac e planilha de erros também\n\
+                            serão desselecionados!
 
-! TelaRetornoFinal::actionCompileSelect
-final-compile-select-dtitle   = Selecionando novo arquivo de compilação
-final-compile-select-dmessage = Tem certeza que deseja selecionar outro arquivo de compilação?\n\
-                                Ao prosseguir, os arquivos de retorno e erros serão desselecionados!  
-final-compile-select-title    = Selecione o arquivo de compilação
-final-compile-select-thread   = TelaRetornoFinal.class - Thread de carregamento de arquivo de compilação
+! TelaRetornoDefinitivo::actionCompileSelect
+defs-compile-select-dtitle   = IsenSys v.3.8 - Selecionando novo arquivo de compilação
+defs-compile-select-dmessage = Tem certeza que deseja selecionar outro arquivo de compilação?\n\
+                               Ao prosseguir, os arquivos de retorno e erros serão desselecionados!  
+defs-compile-select-title    = IsenSys v.3.8 - Selecione o arquivo de compilação
+defs-compile-select-thread   = TelaRetornoDefinitivo.class - Thread de carregamento de arquivo de compilação
 
-! TelaRetornoFinal::actionRetornoSelect
-final-retorno-select-title  = Selecione o arquivo de retorno do Sistac
-final-retorno-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de retorno
+! TelaRetornoDefinitivo::actionRetornoSelect
+defs-retorno-select-title  = IsenSys v.3.8 - Selecione o primeiro arquivo de retorno do Sistac
+defs-retorno-select-thread = TelaRetornoDefinitivo.class - Thread de carregamento de arquivo de retorno
 
-! TelaRetornoFinal::actionErrosSelect
-final-erros-select-title  = Selecione o arquivo de erros
-final-erros-select-thread = TelaRetornoFinal.class - Thread de carregamento de arquivo de erros
+! TelaRetornoDefinitivo::actionSaidaSelect
+defs-saida-select-title = IsenSys v.3.8 - Selecione o diretório de saída
 
-! TelaRetornoFinal::actionHeaderClear
-final-header-clear-dtitle = Limpando texto de cabeçalho
-final-header-clear-dialog = Deseja mesmo limpar o texto de cabeçalho?
+! TelaRetornoDefinitivo::actionErrosSelect
+defs-erros-select-title  = IsenSys v.3.8 - Selecione a planilha de erros
+defs-erros-select-thread = TelaRetornoDefinitivo.class - Thread de carregamento de arquivo de erros
 
-! TelaRetornoFinal::actionExport
-final-export-title  = Gerando edital
-final-export-thread = TelaRetornoFinal.class - Thread de geração de relatório Jasper
+! TelaRetornoDefinitivo::actionHeaderClear
+defs-header-clear-dtitle = IsenSys v.3.8 - Limpando texto de cabeçalho
+defs-header-clear-dialog = Deseja mesmo limpar o texto de cabeçalho?
 
-! TelaRetornoFinal::compileFileErrorDialog
-final-file-error-dialog-title = Processando arquivo de entrada
-final-file-error-dialog-error = Primeiro selecione o arquivo de compilação!
+! TelaRetornoDefinitivo::actionExport
+defs-export-title  = IsenSys v.3.8 - Exportando arquivos
+defs-export-thread = TelaRetornoDefinitivo.class - Thread de geração de relatórios Jasper
 
-! TelaRetornoFinal::errosDependencies
-final-erros-dependencies-title  = Planilha de Erros
-final-erros-dependencies-dialog = A planilha selecionada parece não pertencer\n\
-                                  ao mesmo edital e instituição da compilação.
+! TelaRetornoDefinitivo::compileFileErrorDialog
+defs-file-error-dialog-title = IsenSys v.3.8 - Processando arquivo de entrada
+defs-file-error-dialog-error = Primeiro selecione o arquivo de compilação!
 
-! TelaRetornoFinal::loadInstituicao
-final-load-instituicao-title  = Configurações do Sistema
-final-load-instituicao-dialog = Houve uma falha ao carregar o arquivo de configurações.\n\
-                                Verifique se ele está em 'res/config/program.dat'\n\
-                                O console do sistema pode ser consultado para mais detalhes.
+! TelaRetornoDefinitivo::errosDependencies
+defs-erros-dependencies-title  = IsenSys v.3.8 - Planilha de Erros
+defs-erros-dependencies-dialog = A planilha selecionada parece não pertencer\n\
+                                 ao mesmo edital e instituição da compilação.
 
-! TelaRetornoFinal::retornoDependencies
-final-retorno-dependencies-title  = Arquivo de Retorno do Sistac
-final-retorno-dependencies-dialog = O arquivo selecionado parece não pertencer\n\
-                                    ao mesmo edital e instituição da compilação.
+! TelaRetornoDefinitivo::loadInstituicao
+defs-load-instituicao-title  = IsenSys v.3.8 - Configurações do Sistema
+defs-load-instituicao-dialog = Houve uma falha ao carregar o arquivo de configurações.\n\
+                               Verifique se ele está em 'res/config/program.dat'\n\
+                               O console do sistema pode ser consultado para mais detalhes.
 
-! TelaRetornoFinal::setCompileProcessing
-final-compile-processing = Processando arquivo...
+! TelaRetornoDefinitivo::retornoDependencies
+defs-retorno-dependencies-title  = IsenSys v.3.8 - Arquivo de Retorno do Sistac
+defs-retorno-dependencies-dialog = O arquivo selecionado parece não pertencer\n\
+                                   ao mesmo edital e instituição da compilação.
 
-! TelaRetornoFinal::setExportProcessing
-final-export-processing = Gerando visualização...
+! TelaRetornoDefinitivo::setCompileProcessing
+defs-compile-processing = Processando arquivo(s)...
 
-! TelaRetornoFinal::updateStatistics
-final-update-statistics-title  = Dados Institucionais
-final-update-statistics-dialog = Carregados novos dados institucionais do arquivo!
+! TelaRetornoDefinitivo::setExportProcessing
+defs-export-processing = Exportando arquivos...
 
-! TelaRetornoFinal::threadRetriever
-final-thread-retriever-title = Processando arquivo de entrada
-final-thread-retriever-error = Falha ao processar arquivo(s)!\n\
-                               Verifique se os arquivos de compilação,\n\
-                               retorno e erros estão corretos.
+! TelaRetornoDefinitivo::updateStatistics
+defs-update-statistics-title  = IsenSys v.3.8 - Dados Institucionais
+defs-update-statistics-dialog = Carregados novos dados institucionais do arquivo!
 
-! TelaRetornoFinal::threadSistac
-final-thread-sistac-title = Processando arquivo de retorno
-final-thread-sistac-error = Falha ao processar arquivo!\n\
-                            Verifique se vocẽ selecionou o arquivo correto.
+! TelaRetornoDefinitivo::threadRetriever
+defs-thread-retriever-title = IsenSys v.3.8 - Processando arquivo de entrada
+defs-thread-retriever-error = Falha ao processar arquivo(s)!\n\
+                              Verifique se os arquivos de compilação,\n\
+                              retorno e erros estão corretos.
 
-! TelaRetornoFinal::threadErros
-final-thread-erros-title = Processando arquivo de erros
-final-thread-erros-error = Falha ao processar arquivo!\n\
+! TelaRetornoDefinitivo::threadSistac
+defs-thread-sistac-title = IsenSys v.3.8 - Processando arquivo(s) de retorno
+defs-thread-sistac-error = Falha ao processar arquivo(s)!\n\
                            Verifique se vocẽ selecionou o arquivo correto.
 
-! TelaRetornoFinal::threadExport
-final-thread-export-title = Gerando visualização de edital
-final-thread-export-error = Falha ao gerar visualização.\n\
-                            Verifique o console para mais informações.
+! TelaRetornoDefinitivo::threadErros
+defs-thread-erros-title = IsenSys v.3.8 - Processando planilha de erros
+defs-thread-erros-error = Falha ao processar arquivo!\n\
+                          Verifique se vocẽ selecionou o arquivo correto.
+
+! TelaRetornoDefinitivo::threadExport
+defs-thread-export-title = IsenSys v.3.8 - Exportando arquivos
+defs-thread-export-done  = Arquivos exportados com sucesso!
+defs-thread-export-error = Falha ao exportar arquivos.\n\
+                           Verifique o console para mais informações.
