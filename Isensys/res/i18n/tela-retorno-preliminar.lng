@@ -2,32 +2,9 @@
 prelim-window-title = IsenSys v.3.8 - Resultado Preliminar
 
 ########## Mensagens de erro da API MFV
-prelim-mfv-retorno    = Selecione o arquivo de retorno do Sistac
-prelim-mfv-cabecalho  = Informe o cabeçalho do edital
-prelim-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
-
-########## Painéis
-prelim-panel-instituicao = Dados da Instituição
-prelim-panel-input-file  = Arquivos de Entrada
-prelim-panel-results     = Análise do Arquivo
-prelim-panel-edital      = Edital
-prelim-panel-final       = Resultado Final
-
-########## Labels
-prelim-label-cnpj          = CNPJ:
-prelim-label-nome-fantasia = Nome Fantasia:
-prelim-label-razao-social  = Razão Social:
-
-prelim-label-retorno = Retorno Sistac:
-prelim-label-erros   = Planilha Erros:
-
-prelim-label-deferidos   = Deferidos:
-prelim-label-indeferidos = Indeferidos:
-prelim-label-total       = Total:
-
-prelim-label-cabecalho = Cabeçalho:
-
-prelim-label-compilacao = Compilação:
+prelim-mfv-retorno   = Selecione o arquivo de retorno do Sistac
+prelim-mfv-cabecalho = Informe o cabeçalho do edital
+prelim-mfv-dirSaida  = Selecione o diretório de saída de arquivos
 
 ########## Dicas
 hint-text-retorno = Arquivo de retorno do Sistac (.txt)
@@ -41,78 +18,72 @@ hint-button-erros-clear  = Limpa a seleção do arquivo de erros
 hint-text-cabecalho = Título que fará parte do cabeçalho do edital
 hint-button-cabecalho-clear = Limpa o texto de cabeçalho
 
-hint-text-compilacao = Arquivo de compilação (.bsf) que servirá para o resultado final
-hint-button-compilacao-select = Busca o arquivo de compilação
-hint-button-compilacao-clear  = Limpa a seleção do arquivo de compilação
+hint-text-saida          = Diretório de exportação dos arquivos
+hint-button-saida-select = Seleciona o diretório de saída de arquivos
+hint-button-saida-clear  = Limpa a seleção do diretório de saída de arquivos
 
-hint-button-report = Gera o edital
+hint-button-report = Exporta os arquivos
 
 ########## Métodos
 ! TelaRetornoPreliminar::actionRetornoSelect
-prelim-retorno-select-title   = Selecione o arquivo de retorno do Sistac
+prelim-retorno-select-title   = IsenSys v.3.8 - Selecione o primeiro arquivo de retorno do Sistac
 prelim-retorno-select-dtitle  = Selecionando novo arquivo de retorno do Sistac
 prelim-retorno-select-dialog  = Tem certeza que deseja selecionar outro arquivo de retorno do Sistac?\n\
                                 Ao prosseguir, os arquivos de erro e compilação serão desselecionados!
 prelim-retorno-select-thread  = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de retorno
 
 ! TelaRetornoPreliminar::actionRetornoClear
-prelim-retorno-clear-dtitle = Arquivo de retorno do Sistac
+prelim-retorno-clear-dtitle = IsenSys v.3.8 - Arquivo de retorno do Sistac
 prelim-retorno-clear-dialog = Tem certeza que deseja desselecionar o arquivo de retorno do Sistac?\n\
                               Ao prosseguir, os arquivos de erro e compilação também serão desselecionados!  
 
 ! TelaRetornoPreliminar::actionErrosSelect
-prelim-erros-select-title  = Selecione o arquivo de erros
-prelim-erros-select-dtitle = Selecionando novo arquivo de erros
-prelim-erros-select-dialog = Tem certeza que deseja selecionar outro arquivo de erros?\n\
+prelim-erros-select-title  = IsenSys v.3.8 - Selecione a planilha de erros
+prelim-erros-select-dtitle = IsenSys v.3.8 - Selecionando nova planilha de erros
+prelim-erros-select-dialog = Tem certeza que deseja selecionar outra planilha de erros?\n\
                              Ao prosseguir, o sistema reprocessará os arquivos com a nova seleção!
-prelim-erros-select-thread = TelaRetornoPreliminar.class - Thread de carregamento de arquivo de erros
+prelim-erros-select-thread = TelaRetornoPreliminar.class - Thread de carregamento da planilha de erros
 
 ! TelaRetornoPreliminar::actionErrosClear
-prelim-erros-clear-dtitle = Arquivo de erros
-prelim-erros-clear-dialog = Tem certeza que deseja desselecionar o arquivo de erros?\n\
+prelim-erros-clear-dtitle = IsenSys v.3.8 - Planilha de erros
+prelim-erros-clear-dialog = Tem certeza que deseja desselecionar a planilha de erros?\n\
                             Ao prosseguir, o sistema voltará ao estado anterior à sua seleção!  
 
 ! TelaRetornoPreliminar::actionHeaderClear
-prelim-header-clear-dtitle = Limpando texto de cabeçalho
+prelim-header-clear-dtitle = IsenSys v.3.8 - Limpando texto de cabeçalho
 prelim-header-clear-dialog = Deseja mesmo limpar o texto de cabeçalho?
 
-! TelaRetornoPreliminar::actionCompileSelect
-prelim-compile-select-title = Selecione o arquivo de compilação
-prelim-compile-select-dtitle = Sobrescrevendo arquivo de compilação
-prelim-compile-select-dialog = Deseja mesmo sobrescrever o arquivo de compilação?
-
-! TelaRetornoPreliminar::actionCompileClear
-prelim-compile-clear-title  = Arquivo de compilação
-prelim-compile-clear-dialog = Tem certeza que deseja desselecionar o arquivo de compilação?
+! TelaRetornoPreliminar::actionSaidaSelect
+prelim-saida-select-title = IsenSys v.3.8 - Selecione o diretório de saída
 
 ! TelaRetornoPreliminar::actionExport
-prelim-export-title  = Gerando edital
-prelim-export-thread = TelaRetornoPreliminar.class - Thread de geração de relatório Jasper
+prelim-export-title  = IsenSys v.3.8 - Exportando arquivos
+prelim-export-thread = TelaRetornoPreliminar.class - Thread de exportação de arquivos
 
 ! TelaRetornoPreliminar::errosDependencies
-prelim-erros-dependencies-title   = Planilha de Erros
+prelim-erros-dependencies-title   = IsenSys v.3.8 - Planilha de Erros
 prelim-erros-dependencies-dialog  = O arquivo selecionado parece não pertencer ao processamento do retorno.\n\
                                     A planilha de erros deve conter, em seu nome de arquivo, o mesmo CNPJ,\n\
                                     número de edital e data do arquivo de retorno do Sistac.
-prelim-erros-dependencies-etitle  = Planilha de Erros
+prelim-erros-dependencies-etitle  = IsenSys v.3.8 - Planilha de Erros
 prelim-erros-dependencies-edialog = Falha ao ler atributos de instituição e edital\n\
                                     do nome do arquivo da planilha de erros.
 
 ! TelaRetornoPreliminar::loadInstituicao
-prelim-load-instituicao-title  = Configurações do Sistema
+prelim-load-instituicao-title  = IsenSys v.3.8 - Configurações do Sistema
 prelim-load-instituicao-dialog = Houve uma falha ao carregar o arquivo de configurações.\n\
                                  Verifique se ele está em 'res/config/program.dat'\n\
                                  O console do sistema pode ser consultado para mais detalhes.
 
 ! TelaRetornoPreliminar::retornoDependencies
-prelim-retorno-dependencies-wtitle  = Dados institucionais do retorno
+prelim-retorno-dependencies-wtitle  = IsenSys v.3.8 - Dados institucionais do retorno
 prelim-retorno-dependencies-wdialog = Alguns dados institucionais carregados do arquivo de retorno\n\
                                       são diferentes dos configurados neste sistema:\n\
                                       \n\
                                       %s\n\
                                       \n\
                                       Deseja considerar os novos dados provenientes deste arquivo? 
-prelim-retorno-dependencies-etitle  = Dados institucionais do retorno
+prelim-retorno-dependencies-etitle  = IsenSys v.3.8 - Dados institucionais do retorno
 prelim-retorno-dependencies-edialog = Há inconsistências nos dados institucionais carregados do arquivo de retorno:\n\
                                       \n\
                                       %s\n\
@@ -123,19 +94,20 @@ prelim-retorno-dependencies-edialog = Há inconsistências nos dados institucion
 prelim-input-processing = Processando arquivo...
 
 ! TelaRetornoPreliminar::setExportProcessing
-prelim-export-processing = Gerando visualização...
+prelim-export-processing = Exportando arquivos...
 
 ! TelaRetornoPreliminar::threadSistac
-prelim-thread-sistac-title = Processando arquivo de retorno
-prelim-thread-sistac-error = Falha ao processar arquivo!\n\
+prelim-thread-sistac-title = IsenSys v.3.8 - Processando arquivo(s) de retorno
+prelim-thread-sistac-error = Falha ao processar arquivo(s)!\n\
                              Verifique se vocẽ selecionou o arquivo correto.
 
 ! TelaRetornoPreliminar::threadErros
-final-thread-erros-title = Processando arquivo de erros
+final-thread-erros-title = IsenSys v.3.8 - Processando planilha de erros
 final-thread-erros-error = Falha ao processar arquivo!\n\
                            Verifique se vocẽ selecionou o arquivo correto.
 
 ! TelaRetornoPreliminar::threadExport
-prelim-thread-export-title = Gerando visualização de edital
-prelim-thread-export-error = Falha ao gerar visualização.\n\
+prelim-thread-export-title = IsenSys v.3.8 - Exportando arquivos
+prelim-thread-export-done  = Arquivos exportados com sucesso!
+prelim-thread-export-error = Falha ao exportar arquivos.\n\
                              Verifique o console para mais informações.

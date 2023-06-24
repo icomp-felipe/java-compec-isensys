@@ -22,7 +22,7 @@ import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 22/JUN/2023 */
+ *  @version 3.8, 24/JUN/2023 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -47,8 +47,8 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final JTextField textCabecalho;
 	private final JButton buttonCabecalhoClear;
 	
-	private final JTextField textCompilacao;
-	private final JButton buttonCompilacaoSelect, buttonCompilacaoClear;
+	private final JTextField textSaida;
+	private final JButton buttonSaidaSelect, buttonSaidaClear;
 	
 	private final JLabel labelStatus;
 	private final JButton buttonReport;
@@ -59,7 +59,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	// Atributos dinâmicos
 	private List<File> retornosProcessados;
 	private File lastFileSelected;
-	private File retornoSistac, retornoExcel, compilacao;
+	private File arqRetornoSistac, arqPlanilhaErros, arqCompilacao, dirSaida;
 	private ListaRetornos listaRetornos, lastListaRetornos;
 	
 	// MFV API
@@ -98,11 +98,11 @@ public class TelaRetornoPreliminar extends JFrame {
 		JPanel panelInstituicao = new JPanel();
 		panelInstituicao.setOpaque(false);
 		panelInstituicao.setLayout(null);
-		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-instituicao")));
-		panelInstituicao.setBounds(12, 10, 645, 105);
+		panelInstituicao.setBorder(instance.getTitledBorder("Dados da Instituição"));
+		panelInstituicao.setBounds(10, 10, 635, 105);
 		painel.add(panelInstituicao);
 		
-		JLabel labelCNPJ = new JLabel(bundle.getString("prelim-label-cnpj"));
+		JLabel labelCNPJ = new JLabel("CNPJ:");
 		labelCNPJ.setHorizontalAlignment(JLabel.RIGHT);
 		labelCNPJ.setFont(fonte);
 		labelCNPJ.setBounds(10, 25, 115, 20);
@@ -114,7 +114,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCNPJ.setBounds(130, 25, 145, 20);
 		panelInstituicao.add(textCNPJ);
 		
-		JLabel labelNomeFantasia = new JLabel(bundle.getString("prelim-label-nome-fantasia"));
+		JLabel labelNomeFantasia = new JLabel("Nome Fantasia:");
 		labelNomeFantasia.setHorizontalAlignment(JLabel.RIGHT);
 		labelNomeFantasia.setFont(fonte);
 		labelNomeFantasia.setBounds(10, 50, 115, 20);
@@ -126,7 +126,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		textNomeFantasia.setBounds(130, 50, 334, 20);
 		panelInstituicao.add(textNomeFantasia);
 		
-		JLabel labelRazaoSocial = new JLabel(bundle.getString("prelim-label-razao-social"));
+		JLabel labelRazaoSocial = new JLabel("Razão Social:");
 		labelRazaoSocial.setHorizontalAlignment(JLabel.RIGHT);
 		labelRazaoSocial.setFont(fonte);
 		labelRazaoSocial.setBounds(10, 75, 115, 20);
@@ -142,11 +142,11 @@ public class TelaRetornoPreliminar extends JFrame {
 		JPanel panelInputFile = new JPanel();
 		panelInputFile.setOpaque(false);
 		panelInputFile.setLayout(null);
-		panelInputFile.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-input-file")));
-		panelInputFile.setBounds(12, 115, 645, 160);
+		panelInputFile.setBorder(instance.getTitledBorder("Arquivos de Entrada"));
+		panelInputFile.setBounds(10, 115, 635, 160);
 		painel.add(panelInputFile);
 		
-		JLabel labelRetorno = new JLabel(bundle.getString("prelim-label-retorno"));
+		JLabel labelRetorno = new JLabel("Retorno Sistac:");
 		labelRetorno.setHorizontalAlignment(JLabel.RIGHT);
 		labelRetorno.setFont(fonte);
 		labelRetorno.setBounds(10, 30, 110, 20);
@@ -157,22 +157,22 @@ public class TelaRetornoPreliminar extends JFrame {
 		textRetorno.setForeground(color);
 		textRetorno.setFont(fonte);
 		textRetorno.setEditable(false);
-		textRetorno.setBounds(125, 30, 430, 25);
+		textRetorno.setBounds(125, 30, 425, 25);
 		panelInputFile.add(textRetorno);
 		
 		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
 		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
-		buttonRetornoSelect.setBounds(565, 30, 30, 25);
+		buttonRetornoSelect.setBounds(560, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
 		
 		buttonRetornoClear = new JButton(clearIcon);
 		buttonRetornoClear.setToolTipText(bundle.getString("hint-button-retorno-clear"));
 		buttonRetornoClear.addActionListener((event) -> actionRetornoClear());
-		buttonRetornoClear.setBounds(605, 30, 30, 25);
+		buttonRetornoClear.setBounds(595, 30, 30, 25);
 		panelInputFile.add(buttonRetornoClear);
 		
-		JLabel labelErros = new JLabel(bundle.getString("prelim-label-erros"));
+		JLabel labelErros = new JLabel("Planilha Erros:");
 		labelErros.setHorizontalAlignment(JLabel.RIGHT);
 		labelErros.setFont(fonte);
 		labelErros.setBounds(10, 65, 110, 20);
@@ -183,21 +183,21 @@ public class TelaRetornoPreliminar extends JFrame {
 		textErros.setForeground(color);
 		textErros.setFont(fonte);
 		textErros.setEditable(false);
-		textErros.setBounds(125, 65, 430, 25);
+		textErros.setBounds(125, 65, 425, 25);
 		panelInputFile.add(textErros);
 		
 		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
 		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
 		buttonErrosSelect.setEnabled(false);
-		buttonErrosSelect.setBounds(565, 65, 30, 25);
+		buttonErrosSelect.setBounds(560, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
 		
 		buttonErrosClear = new JButton(clearIcon);
 		buttonErrosClear.setToolTipText(bundle.getString("hint-button-erros-clear"));
 		buttonErrosClear.addActionListener((event) -> actionErrosClear());
 		buttonErrosClear.setEnabled(false);
-		buttonErrosClear.setBounds(605, 65, 30, 25);
+		buttonErrosClear.setBounds(595, 65, 30, 25);
 		panelInputFile.add(buttonErrosClear);
 		
 		// Painel 'Análise do Arquivo'
@@ -205,11 +205,11 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelResults.setOpaque(false);
 		panelResults.setVisible(false);
 		panelResults.setLayout(null);
-		panelResults.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-results")));
-		panelResults.setBounds(10, 95, 625, 55);
+		panelResults.setBorder(instance.getTitledBorder("Análise do Arquivo"));
+		panelResults.setBounds(10, 95, 615, 55);
 		panelInputFile.add(panelResults);
 		
-		JLabel labelDeferidos = new JLabel(bundle.getString("prelim-label-deferidos"));
+		JLabel labelDeferidos = new JLabel("Deferidos:");
 		labelDeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelDeferidos.setFont(fonte);
 		labelDeferidos.setBounds(65, 25, 80, 20);
@@ -222,7 +222,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		textDeferidos.setBounds(150, 25, 45, 20);
 		panelResults.add(textDeferidos);
 		
-		JLabel labelIndeferidos = new JLabel(bundle.getString("prelim-label-indeferidos"));
+		JLabel labelIndeferidos = new JLabel("Indeferidos:");
 		labelIndeferidos.setHorizontalAlignment(JLabel.RIGHT);
 		labelIndeferidos.setFont(fonte);
 		labelIndeferidos.setBounds(265, 25, 90, 20);
@@ -235,7 +235,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		textIndeferidos.setBounds(360, 25, 45, 20);
 		panelResults.add(textIndeferidos);
 		
-		JLabel labelTotal = new JLabel(bundle.getString("prelim-label-total"));
+		JLabel labelTotal = new JLabel("Total:");
 		labelTotal.setHorizontalAlignment(JLabel.RIGHT);
 		labelTotal.setFont(fonte);
 		labelTotal.setBounds(480, 25, 40, 20);
@@ -252,11 +252,11 @@ public class TelaRetornoPreliminar extends JFrame {
 		JPanel panelEdital = new JPanel();
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
-		panelEdital.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-edital")));
-		panelEdital.setBounds(12, 275, 645, 65);
+		panelEdital.setBorder(instance.getTitledBorder("Edital"));
+		panelEdital.setBounds(10, 275, 635, 65);
 		painel.add(panelEdital);
 		
-		JLabel labelCabecalho = new JLabel(bundle.getString("prelim-label-cabecalho"));
+		JLabel labelCabecalho = new JLabel("Cabeçalho:");
 		labelCabecalho.setHorizontalAlignment(JLabel.RIGHT);
 		labelCabecalho.setFont(fonte);
 		labelCabecalho.setBounds(10, 30, 80, 20);
@@ -266,60 +266,60 @@ public class TelaRetornoPreliminar extends JFrame {
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 500, 25);
+		textCabecalho.setBounds(95, 30, 490, 25);
 		panelEdital.add(textCabecalho);
 		
 		buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
 		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
-		buttonCabecalhoClear.setBounds(605, 30, 30, 25);
+		buttonCabecalhoClear.setBounds(595, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
-		// Painel 'Resultado Final'
-		JPanel panelFinal = new JPanel();
-		panelFinal.setOpaque(false);
-		panelFinal.setLayout(null);
-		panelFinal.setBorder(instance.getTitledBorder(bundle.getString("prelim-panel-final")));
-		panelFinal.setBounds(12, 340, 645, 65);
-		painel.add(panelFinal);
+		// Painel 'Arquivos de Saída'
+		JPanel panelSaida = new JPanel();
+		panelSaida.setOpaque(false);
+		panelSaida.setLayout(null);
+		panelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
+		panelSaida.setBounds(10, 340, 635, 65);
+		painel.add(panelSaida);
 		
-		JLabel labelCompilacao = new JLabel(bundle.getString("prelim-label-compilacao"));
-		labelCompilacao.setHorizontalAlignment(JLabel.RIGHT);
-		labelCompilacao.setFont(fonte);
-		labelCompilacao.setBounds(10, 30, 90, 20);
-		panelFinal.add(labelCompilacao);
+		JLabel labelSaida = new JLabel("Diretório:");
+		labelSaida.setHorizontalAlignment(JLabel.RIGHT);
+		labelSaida.setFont(fonte);
+		labelSaida.setBounds(10, 30, 80, 20);
+		panelSaida.add(labelSaida);
 		
-		textCompilacao = new JTextField();
-		textCompilacao.setToolTipText(bundle.getString("hint-text-compilacao"));
-		textCompilacao.setForeground(color);
-		textCompilacao.setFont(fonte);
-		textCompilacao.setEditable(false);
-		textCompilacao.setBounds(105, 30, 450, 25);
-		panelFinal.add(textCompilacao);
+		textSaida = new JTextField();
+		textSaida.setToolTipText(bundle.getString("hint-text-compilacao"));
+		textSaida.setForeground(color);
+		textSaida.setFont(fonte);
+		textSaida.setEditable(false);
+		textSaida.setBounds(95, 30, 455, 25);
+		panelSaida.add(textSaida);
 		
-		buttonCompilacaoSelect = new JButton(searchIcon);
-		buttonCompilacaoSelect.setToolTipText(bundle.getString("hint-button-compilacao-select"));
-		buttonCompilacaoSelect.addActionListener((event) -> actionCompileSelect());
-		buttonCompilacaoSelect.setBounds(565, 30, 30, 25);
-		panelFinal.add(buttonCompilacaoSelect);
+		buttonSaidaSelect = new JButton(searchIcon);
+		buttonSaidaSelect.setToolTipText(bundle.getString("hint-button-saida-select"));
+		buttonSaidaSelect.addActionListener((event) -> actionSaidaSelect());
+		buttonSaidaSelect.setBounds(560, 30, 30, 25);
+		panelSaida.add(buttonSaidaSelect);
 		
-		buttonCompilacaoClear = new JButton(clearIcon);
-		buttonCompilacaoClear.setToolTipText(bundle.getString("hint-button-compilacao-clear"));
-		buttonCompilacaoClear.addActionListener((event) -> actionCompileClear());
-		buttonCompilacaoClear.setBounds(605, 30, 30, 25);
-		panelFinal.add(buttonCompilacaoClear);
+		buttonSaidaClear = new JButton(clearIcon);
+		buttonSaidaClear.setToolTipText(bundle.getString("hint-button-saida-clear"));
+		buttonSaidaClear.addActionListener((event) -> { this.dirSaida = null; this.textSaida.setText(null); });
+		buttonSaidaClear.setBounds(595, 30, 30, 25);
+		panelSaida.add(buttonSaidaClear);
 		
 		// Fundo da janela
 		labelStatus = new JLabel(loadingIcon);
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(12, 420, 215, 20);
+		labelStatus.setBounds(10, 415, 215, 20);
 		painel.add(labelStatus);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(620, 415, 35, 30);
+		buttonReport.setBounds(610, 410, 35, 30);
 		buttonReport.addActionListener((event) -> actionExport());
 		painel.add(buttonReport);
 		
@@ -327,9 +327,9 @@ public class TelaRetornoPreliminar extends JFrame {
 		this.fieldValidator = new MandatoryFieldsManager();
 		this.fieldLogger    = new MandatoryFieldsLogger ();
 		
-		fieldValidator.addPermanent(labelRetorno   , () -> this.retornoSistac != null        , bundle.getString("prelim-mfv-retorno"   ), false);
-		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().isBlank(), bundle.getString("prelim-mfv-cabecalho" ), false);
-		fieldValidator.addPermanent(labelCompilacao, () -> this.compilacao != null           , bundle.getString("prelim-mfv-compilacao"), false);
+		fieldValidator.addPermanent(labelRetorno   , () -> this.arqRetornoSistac != null     , bundle.getString("prelim-mfv-retorno"  ), false);
+		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().isBlank(), bundle.getString("prelim-mfv-cabecalho"), false);
+		fieldValidator.addPermanent(labelSaida     , () -> this.dirSaida         != null     , bundle.getString("prelim-mfv-dirSaida" ), false);
 		
 		// Mostrando a janela
 		setSize(dimension);
@@ -360,7 +360,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.lastFileSelected = selected;
 			
 			// Se já existe um arquivo de retorno previamente selecionado, um diálogo de sobrescrever é exibido
-			if (this.retornoSistac != null) {
+			if (this.arqRetornoSistac != null) {
 				
 				// Recuperando strings do diálogo
 				final String dtitle = bundle.getString("prelim-retorno-select-dtitle");
@@ -372,11 +372,9 @@ public class TelaRetornoPreliminar extends JFrame {
 				// Limpa os campos do arquivo de erro apenas se o usuário escolheu 'OK'
 				if (choice == AlertDialog.OK_OPTION) {
 					
-					this.compilacao   = null;
-					this.retornoExcel = null;
+					this.arqPlanilhaErros = null;
 					
-					textCompilacao.setText(null);
-					textErros     .setText(null);
+					textErros.setText(null);
 					
 				}
 				else return;
@@ -388,10 +386,10 @@ public class TelaRetornoPreliminar extends JFrame {
 			if (!retornoDependencies(selected)) return;
 
 			// Atualizando arquivo interno
-			this.retornoSistac = selected;
+			this.arqRetornoSistac = selected;
 							
 			// Atualizando a view
-			textRetorno.setText(retornoSistac.getName());
+			textRetorno.setText(arqRetornoSistac.getName());
 			setInputProcessing(true);
 				
 			// Processando o arquivo
@@ -408,7 +406,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private void actionRetornoClear() {
 		
 		// Faz algo somente se algum arquivo de retorno já foi previamente selecionado 
-		if (this.retornoSistac != null) {
+		if (this.arqRetornoSistac != null) {
 			
 			// Recuperando strings do diálogo
 			final String dtitle = bundle.getString("prelim-retorno-clear-dtitle");
@@ -422,15 +420,13 @@ public class TelaRetornoPreliminar extends JFrame {
 				
 				// Limpando atributos
 				this.listaRetornos = null;
-				this.retornoSistac = null;
-				this.retornoExcel  = null;
-				this.compilacao    = null;
+				this.arqRetornoSistac = null;
+				this.arqPlanilhaErros = null;
 				this.retornosProcessados = null;
 				
 				// Limpando campos de texto
-				textRetorno   .setText(null);
-				textErros     .setText(null);
-				textCompilacao.setText(null);
+				textRetorno.setText(null);
+				textErros  .setText(null);
 				
 				// Bloquenado botões relacionados à planilha de erros
 				buttonErrosSelect.setEnabled(false);
@@ -455,7 +451,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		final String title = bundle.getString("prelim-erros-select-title");
 		
 		// Preparando o nome do arquivo de sugestão
-		final File suggestion = new Edital(this.retornoSistac).getErrorFilename(null);
+		final File suggestion = new Edital(this.arqRetornoSistac).getErrorFilename(null);
 		
 		// Recuperando o arquivo de retorno
 		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, suggestion);
@@ -467,7 +463,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.lastFileSelected = selected;
 			
 			// Se já existe um arquivo de erros previamente selecionado, um diálogo de sobrescrever é exibido
-			if (this.retornoExcel != null) {
+			if (this.arqPlanilhaErros != null) {
 							
 				// Recuperando strings do diálogo
 				final String dtitle = bundle.getString("prelim-erros-select-dtitle");
@@ -491,10 +487,10 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.lastListaRetornos = this.listaRetornos.clone();
 			
 			// Salvando arquivo
-			this.retornoExcel = selected;
+			this.arqPlanilhaErros = selected;
 			
 			// Atualizando a view
-			textErros.setText(retornoExcel.getName());
+			textErros.setText(arqPlanilhaErros.getName());
 			setInputProcessing(true);
 	
 			// Processando o arquivo
@@ -511,7 +507,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private void actionErrosClear() {
 		
 		// Faz algo somente se algum arquivo de erros foi previamente selecionado
-		if (this.retornoExcel != null) {
+		if (this.arqPlanilhaErros != null) {
 			
 			// Recuperando strings do diálogo
 			final String dtitle = bundle.getString("prelim-erros-clear-dtitle");
@@ -524,7 +520,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			if (choice == AlertDialog.OK_OPTION) {
 				
 				// Limpando campos
-				this.retornoExcel = null;
+				this.arqPlanilhaErros = null;
 				textErros.setText(null);
 				
 				// Recuperando estado anterior
@@ -566,67 +562,21 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 	}
 	
-	/** Seleciona o arquivo de compilação. */
-	private void actionCompileSelect() {
+	/** Seleciona o diretório de saída de arquivos */
+	private void actionSaidaSelect() {
 		
 		// Recuperando título da janela
-		final String title = bundle.getString("prelim-compile-select-title");
-		
-		// Preparando o nome do arquivo de sugestão
-		final File suggestion = new Edital(this.retornoSistac).getCompilationFilename();
+		final String title = bundle.getString("prelim-saida-select-title");
 								
-		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.BSF, PhillFileUtils.SAVE_DIALOG, this.lastFileSelected, suggestion);
+		// Recuperando o diretório de saída
+		final File suggestion = (this.arqRetornoSistac == null) ? this.arqPlanilhaErros : this.arqRetornoSistac;
+		final File selected = PhillFileUtils.loadDir(this, title, PhillFileUtils.SAVE_DIALOG, suggestion);
 								
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
 			
-			// Atualizando último arquivo selecionado
-			this.lastFileSelected = selected;
-			
-			// Tratamento de sobrescrição de arquivo
-			if (selected.exists()) {
-				
-				// Recuperando strings do diálogo
-				final String dtitle = bundle.getString("prelim-compile-select-dtitle");
-				final String dialog = bundle.getString("prelim-compile-select-dialog");
-				
-				// Exibe o diálogo de confirmação
-				final int choice = AlertDialog.dialog(this, dtitle, dialog);
-							
-				// Sai aqui se o usuário não selecionou 'OK'
-				if (choice != AlertDialog.OK_OPTION) return;
-				
-			}
-			
-			// Atualizando campos
-			this.compilacao = selected;
-			textCompilacao.setText(selected.getName());
-			
-		}
-		
-	}
-	
-	/** Limpa a seleção do arquivo de compilação */
-	private void actionCompileClear() {
-		
-		// Faz algo somente se algum arquivo foi selecionado
-		if (this.compilacao != null) {
-			
-			// Recuperando strings do diálogo
-			final String title   = bundle.getString("prelim-compile-clear-title");
-			final String message = bundle.getString("prelim-compile-clear-dialog");
-					
-			// Exibe o diálogo de confirmação
-			final int choice = AlertDialog.dialog(this, title, message);
-						
-			// Limpa os campos se o usuário escolheu 'OK'
-			if (choice == AlertDialog.OK_OPTION) {
-				
-				this.compilacao = null;
-				textCompilacao.setText(null);
-				
-			}
+			this.dirSaida = selected;
+			this.textSaida.setText(selected.getAbsolutePath());
 			
 		}
 		
@@ -662,7 +612,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		List<ArquivoProcessado> listaProcessados = new ArrayList<ArquivoProcessado>();
 
 		// Registrando o arquivo de compilação
-		listaProcessados.add(new ArquivoProcessado(compilacao, "Compilação"));
+		listaProcessados.add(new ArquivoProcessado(arqCompilacao, "Compilação"));
 		
 		// Registrando o(s) arquivo(s) de retorno do Sistac
 		if (this.retornosProcessados != null)
@@ -670,8 +620,8 @@ public class TelaRetornoPreliminar extends JFrame {
 				listaProcessados.add(new ArquivoProcessado(retorno, "Retorno do Sistac"));
 		
 		// Registrando a planilha de erros
-		if (this.retornoExcel != null)
-			listaProcessados.add(new ArquivoProcessado(this.retornoExcel, "Planilha de Erros"));
+		if (this.arqPlanilhaErros != null)
+			listaProcessados.add(new ArquivoProcessado(this.arqPlanilhaErros, "Planilha de Erros"));
 		
 		return listaProcessados;
 	}
@@ -682,7 +632,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	 *  @since 3.0, 22/04/2021 */
 	private boolean errosDependencies(final File planilha) {
 			
-		Edital retorno = new Edital(retornoSistac);
+		Edital retorno = new Edital(arqRetornoSistac);
 		Edital erros   = new Edital(planilha);
 			
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
@@ -838,8 +788,8 @@ public class TelaRetornoPreliminar extends JFrame {
 				// Desbloqueando os botões do painel 'Arquivos de Entrada'
 				buttonRetornoSelect.setEnabled(true);
 				buttonRetornoClear .setEnabled(true);
-				buttonErrosSelect  .setEnabled( this.retornoSistac != null );
-				buttonErrosClear   .setEnabled( this.retornoSistac != null );
+				buttonErrosSelect  .setEnabled( this.arqRetornoSistac != null );
+				buttonErrosClear   .setEnabled( this.arqRetornoSistac != null );
 				
 				// Desbloqueando botão 'Exportar'
 				buttonReport.setEnabled(true);
@@ -862,8 +812,8 @@ public class TelaRetornoPreliminar extends JFrame {
 			textCabecalho       .setEditable( !isProcessing );
 			buttonCabecalhoClear.setEnabled ( !isProcessing );
 			
-			buttonCompilacaoSelect.setEnabled( !isProcessing );
-			buttonCompilacaoClear .setEnabled( !isProcessing );
+			buttonSaidaSelect.setEnabled( !isProcessing );
+			buttonSaidaClear .setEnabled( !isProcessing );
 			
 			buttonReport.setEnabled( !isProcessing );
 			
@@ -880,8 +830,8 @@ public class TelaRetornoPreliminar extends JFrame {
 			}
 			else {
 				
-				buttonErrosSelect.setEnabled( this.retornoSistac != null );
-				buttonErrosClear .setEnabled( this.retornoSistac != null );
+				buttonErrosSelect.setEnabled( this.arqRetornoSistac != null );
+				buttonErrosClear .setEnabled( this.arqRetornoSistac != null );
 				
 			}
 			
@@ -932,10 +882,10 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.retornosProcessados = new ArrayList<File>();
 			
 			// Recuperando dados de edital do nome do arquivo retorno selecionado 
-			Edital edital = new Edital(retornoSistac);
+			Edital edital = new Edital(arqRetornoSistac);
 			
 			// Loop que busca lẽ todos os arquivos subsequentes com base na sequência do primeiro arquivo de retorno selecionado
-			for (File atual = retornoSistac; atual.exists(); atual = edital.getNextRetornoFile(retornoSistac)) {
+			for (File atual = arqRetornoSistac; atual.exists(); atual = edital.getNextRetornoFile(arqRetornoSistac)) {
 				
 				// Processa a lista de retornos do Sistac
 				CSVSheetReader.readRetorno(atual, listaRetornos, null, true);
@@ -944,6 +894,8 @@ public class TelaRetornoPreliminar extends JFrame {
 				this.retornosProcessados.add(atual);
 				
 			}
+			
+			Thread.sleep(500L);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
@@ -974,7 +926,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 			
 			// Processa a lista de erros
-			ExcelSheetReader.readErros(retornoExcel, listaRetornos, null, true);
+			ExcelSheetReader.readErros(arqPlanilhaErros, listaRetornos, null, true);
 			
 			// Só dorme um pouco pra mostrar progresso na view
 			Thread.sleep(500L);
@@ -1015,36 +967,36 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 			// Adicionando dados extras ao arquivo de compilação
 			listaRetornos.setInstituicao(configs.getInstituicao());
-			listaRetornos.setEdital     (new Edital(retornoSistac));
+			listaRetornos.setEdital     (new Edital(arqRetornoSistac));
 			listaRetornos.setCabecalho  (cabecalho);
 			
 			// Ordenando dados
 			listaRetornos.sort();
 			
+			// Calculando o nome do arquivo de compilação
+			this.arqCompilacao = new File(dirSaida, new Edital(arqRetornoSistac).getCompilationFilename());
+			
 			// Gerando visualização
-			PDFEdital.export(listaRetornos, cabecalho, windowTitle, Resultado.PRELIMINAR);
-			Compilation.save(listaRetornos, compilacao);
+			PDFEdital.export(Resultado.PRELIMINAR, cabecalho, listaRetornos.getList(), dirSaida);
+			Compilation.save(listaRetornos, arqCompilacao);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFRetorno.export(cabecalho, this.currentCount, listaProcessados);
+			PDFRetorno.export(cabecalho, currentCount, listaProcessados, dirSaida);
+			
+			setExportProcessing(false);
+			AlertDialog.info(this, windowTitle, bundle.getString("prelim-thread-export-done"));
 			
 		}
 		catch (Exception exception) {
 			
-			exception.printStackTrace();
+			exception.printStackTrace(); setExportProcessing(false);
 			
 			// Atualizando a view em caso de erro
 			SwingUtilities.invokeLater(() -> labelStatus.setVisible(false));
 			AlertDialog.error(this, bundle.getString("prelim-thread-export-title" ),
 					                bundle.getString("prelim-thread-export-error"));
-			
-		}
-		finally {
-			
-			// Desbloqueando botões e campos de texto
-			setExportProcessing(false);
 			
 		}
 		

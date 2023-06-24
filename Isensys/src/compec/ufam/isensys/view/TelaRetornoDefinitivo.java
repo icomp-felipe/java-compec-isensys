@@ -310,7 +310,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		
 		textSaida = new JTextField();
 		textSaida.setEditable(false);
-		textSaida.setToolTipText(bundle.getString("hint-text-cabecalho"));
+		textSaida.setToolTipText(bundle.getString("hint-text-saida"));
 		textSaida.setForeground(color);
 		textSaida.setFont(fonte);
 		textSaida.setBounds(95, 30, 455, 25);

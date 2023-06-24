@@ -11,7 +11,7 @@ import compec.ufam.isensys.model.retorno.*;
 
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 21/JUN/2023
+ *  @version 3.8, 24/JUN/2023
  *  @since 3.5, 24/04/2021 */
 public class Edital {
 	
@@ -109,12 +109,9 @@ public class Edital {
 	}
 	
 	/** Monta o nome do arquivo de compilação, com os dados internos desta classe.
-	 *  @return Um arquivo com o nome no formato 'COMPILACAO_CNPJ_EDITAL_DATA.xlsx' */
-	public File getCompilationFilename() {
-		
-		String filename = String.format(Constants.StringFormat.COMPILACAO_FILENAME_FORMAT, this.cnpj, this.edital, this.dataEdital);
-		
-		return new File(filename);
+	 *  @return Nome no formato 'COMPILACAO_CNPJ_EDITAL_DATA.xlsx' */
+	public String getCompilationFilename() {
+		return String.format(Constants.StringFormat.COMPILACAO_FILENAME_FORMAT, this.cnpj, this.edital, this.dataEdital);
 	}
 	
 	/** Verifica se o <code>edital</code> passado é exatamente igual a esta instância da classe.

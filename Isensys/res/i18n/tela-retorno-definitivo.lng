@@ -21,6 +21,7 @@ hint-button-erros-select = Busca o arquivo de erros
 hint-text-cabecalho = Título que fará parte do cabeçalho do edital
 hint-button-cabecalho-clear = Limpa o texto de cabeçalho
 
+hint-text-saida          = Diretório de exportação dos arquivos
 hint-button-saida-clear  = Limpa a seleção do diretório de saída de arquivos
 hint-button-saida-select = Seleciona o diretório de saída de arquivos
 
