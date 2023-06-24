@@ -32,7 +32,7 @@ public class TelaInicioIsensys extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		ESCDispose.register(this);
 		
-		Dimension dimension = new Dimension(475,350);
+		Dimension dimension = new Dimension(490,355);
 		JPanel painel = new JPaintedPanel("img/initial-screen.jpg", dimension);
 		painel.setLayout(null);
 		

@@ -290,7 +290,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelSaida.add(labelSaida);
 		
 		textSaida = new JTextField();
-		textSaida.setToolTipText(bundle.getString("hint-text-compilacao"));
+		textSaida.setToolTipText(bundle.getString("hint-text-saida"));
 		textSaida.setForeground(color);
 		textSaida.setFont(fonte);
 		textSaida.setEditable(false);

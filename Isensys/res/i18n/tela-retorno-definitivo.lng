@@ -9,23 +9,23 @@ defs-mfv-dirSaida   = Selecione o diretório de saída de arquivos
 ########## Dicas
 hint-text-compilacao = Arquivo de compilação (.bsf)
 
-hint-button-compilacao-clear  = Limpa a seleção do arquivo de compilação
-hint-button-compilacao-select = Busca o arquivo de compilação
+hint-button-compilacao-clear  = Limpar a seleção do arquivo de compilação
+hint-button-compilacao-select = Selecionar o arquivo de compilação (.bsf)
 
-hint-text-retorno = Arquivo de retorno do Sistac (.txt)
-hint-button-retorno-select = Busca o arquivo de retorno do Sistac
+hint-text-retorno          = Primeiro arquivo de retorno do Sistac (.txt)
+hint-button-retorno-select = Selecionar o primeiro arquivo de retorno do Sistac
 
-hint-text-erros = Arquivo de erros (.xlsx)
-hint-button-erros-select = Busca o arquivo de erros
+hint-text-erros          = Planilha de erros (.xlsx)
+hint-button-erros-select = Selecionar a planilha de erros
 
-hint-text-cabecalho = Título que fará parte do cabeçalho do edital
-hint-button-cabecalho-clear = Limpa o texto de cabeçalho
+hint-text-cabecalho         = Título que fará parte do cabeçalho do edital
+hint-button-cabecalho-clear = Limpar o texto de cabeçalho
 
 hint-text-saida          = Diretório de exportação dos arquivos
-hint-button-saida-clear  = Limpa a seleção do diretório de saída de arquivos
-hint-button-saida-select = Seleciona o diretório de saída de arquivos
+hint-button-saida-clear  = Limpar a seleção do diretório de saída de arquivos
+hint-button-saida-select = Selecionar o diretório de saída de arquivos
 
-hint-button-report = Gera o edital
+hint-button-report = Exportar os arquivos
 
 ########## Métodos
 ! TelaRetornoDefinitivo::actionCompileClear
