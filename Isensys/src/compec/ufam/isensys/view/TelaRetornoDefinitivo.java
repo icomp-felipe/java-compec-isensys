@@ -1085,7 +1085,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFRetorno.export(cabecalho, currentCount, previousCount, listaRetornos.getList(), listaProcessados, dirSaida);
+			PDFRetorno.export(cabecalho, currentCount, previousCount, listaRecursos.getList(), listaProcessados, dirSaida);
 			
 			setExportProcessing(false);
 			AlertDialog.info(this, windowTitle, bundle.getString("defs-thread-export-done"));
