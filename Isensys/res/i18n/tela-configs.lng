@@ -7,15 +7,6 @@ configs-mfv-fantasia = Nome fantasia vazio ou com caracteres inválidos
 configs-mfv-razao    = Razão social vazia ou com caracteres inválidos
 configs-mfv-table    = Alguns índices da tabela estão vazios ou são inválidos
 
-########## Painéis
-configs-panel-instituicao = Dados da Instituição
-configs-panel-sheet-index = Índices da Planilha de Importação
-
-########## Labels
-configs-label-cnpj          = CNPJ:
-configs-label-nome-fantasia = Nome Fantasia:
-configs-label-razao-social  = Razão Social:
-
 ########## Dicas
 hint-text-nome-fantasia = Nome fantasia da instituição, contendo no máximo 100 dígitos entre letras, números e espaços
 hint-text-razao-social  = Razão social da instituição, contendo no máximo 100 dígitos entre letras, números e espaços
@@ -25,7 +16,7 @@ hint-button-reload = Recarrega as configurações
 
 ########## Métodos
 ! TelaConfigs::load
-configs-load-title     = Recuperando configurações
+configs-load-title     = IsenSys v.3.8 - Recuperando configurações
 configs-load-new-file  = Arquivo de configurações não encontrado!\n\
                          Ao salvar, um novo arquivo será criado.
 configs-load-io-error  = Falha ao carregar arquivo de configurações!\n\
@@ -35,12 +26,12 @@ configs-load-exception = Ocorreu um erro desconhecido ao carregar arquivo de con
                          Nota: ao salvar, um novo arquivo será criado.
 
 ! TelaConfigs::reload
-configs-reload-title  = Recarregando configurações
+configs-reload-title  = IsenSys v.3.8 - Recarregando configurações
 configs-reload-dialog = Tem certeza que deseja recarregar as configurações do sistema?\n\
                         Todos os dados preenchidos na tela serão substituídos!
 
 ! TelaConfigs::save
-configs-save-title     = Salvando configurações
+configs-save-title     = IsenSys v.3.8 - Salvando configurações
 configs-save-mfv-error = Os seguintes erros precisam ser\n\
                          consertados antes de prosseguir:\n\
                          \n\

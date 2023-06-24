@@ -75,17 +75,12 @@ public class TelaRetornoDefinitivo extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		ESCDispose.register(this);
 		
-		//Dimension dimension = new Dimension(670, 555);
-		setSize(670,555);
+		Dimension dimension = new Dimension(670, 555);
+		setSize(dimension);
 		
-		//JPanel painel = new JPaintedPanel("img/defs-screen.jpg", dimension);
-		//painel.setLayout(null);
-		//setContentPane(painel);
-		
-		JPanel painel = new JPanel();
+		JPanel painel = new JPaintedPanel("img/defs-screen.jpg", dimension);
 		painel.setLayout(null);
 		setContentPane(painel);
-		
 		
 		// Recuperando ícones
 		Icon clearIcon  = ResourceManager.getIcon("icon/clear.png" ,20,20);

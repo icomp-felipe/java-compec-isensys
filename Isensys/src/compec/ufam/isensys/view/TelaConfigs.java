@@ -65,11 +65,11 @@ public class TelaConfigs extends JFrame {
 		JPanel panelInstituicao = new JPanel();
 		panelInstituicao.setOpaque(false);
 		panelInstituicao.setLayout(null);
-		panelInstituicao.setBorder(instance.getTitledBorder(bundle.getString("configs-panel-instituicao")));
-		panelInstituicao.setBounds(12, 10, 1000, 105);
+		panelInstituicao.setBorder(instance.getTitledBorder("Dados da Instituição"));
+		panelInstituicao.setBounds(10, 10, 990, 105);
 		painel.add(panelInstituicao);
 						
-		JLabel labelCNPJ = new JLabel(bundle.getString("configs-label-cnpj"));
+		JLabel labelCNPJ = new JLabel("CNPJ:");
 		labelCNPJ.setHorizontalAlignment(JLabel.RIGHT);
 		labelCNPJ.setFont(fonte);
 		labelCNPJ.setBounds(10, 25, 115, 20);
@@ -82,7 +82,7 @@ public class TelaConfigs extends JFrame {
 		textCNPJ.setBounds(130, 25, 170, 20);
 		panelInstituicao.add(textCNPJ);
 						
-		JLabel labelNomeFantasia = new JLabel(bundle.getString("configs-label-nome-fantasia"));
+		JLabel labelNomeFantasia = new JLabel("Nome Fantasia:");
 		labelNomeFantasia.setHorizontalAlignment(JLabel.RIGHT);
 		labelNomeFantasia.setFont(fonte);
 		labelNomeFantasia.setBounds(10, 50, 115, 20);
@@ -92,10 +92,10 @@ public class TelaConfigs extends JFrame {
 		textNomeFantasia.setToolTipText(bundle.getString("hint-text-nome-fantasia"));
 		textNomeFantasia.setFont(fonte);
 		textNomeFantasia.setForeground(color);
-		textNomeFantasia.setBounds(130, 50, 858, 20);
+		textNomeFantasia.setBounds(130, 50, 850, 20);
 		panelInstituicao.add(textNomeFantasia);
 						
-		JLabel labelRazaoSocial = new JLabel(bundle.getString("configs-label-razao-social"));
+		JLabel labelRazaoSocial = new JLabel("Razão Social:");
 		labelRazaoSocial.setHorizontalAlignment(JLabel.RIGHT);
 		labelRazaoSocial.setFont(fonte);
 		labelRazaoSocial.setBounds(10, 75, 115, 20);
@@ -105,21 +105,21 @@ public class TelaConfigs extends JFrame {
 		textRazaoSocial.setToolTipText(bundle.getString("hint-text-razao-social"));
 		textRazaoSocial.setFont(fonte);
 		textRazaoSocial.setForeground(color);
-		textRazaoSocial.setBounds(130, 75, 858, 20);
+		textRazaoSocial.setBounds(130, 75, 850, 20);
 		panelInstituicao.add(textRazaoSocial);
 		
 		// Painel 'Índices da Planilha de Importação'
 		JPanel panelSheetIndex = new JPanel();
 		panelSheetIndex.setOpaque(false);
 		panelSheetIndex.setLayout(null);
-		panelSheetIndex.setBorder(instance.getTitledBorder(bundle.getString("configs-panel-sheet-index")));
-		panelSheetIndex.setBounds(12, 115, 1000, 85);
+		panelSheetIndex.setBorder(instance.getTitledBorder("Índices da Planilha de Importação"));
+		panelSheetIndex.setBounds(10, 115, 990, 80);
 		painel.add(panelSheetIndex);
 		
 		JScrollPane scrollSheetindex = new JScrollPane();
 		scrollSheetindex.setOpaque(false);
 		scrollSheetindex.getViewport().setOpaque(false);
-		scrollSheetindex.setBounds(12, 30, 976, 40);
+		scrollSheetindex.setBounds(10, 30, 970, 40);
 		panelSheetIndex.add(scrollSheetindex);
 		
 		// Inicializando tabela
@@ -135,13 +135,13 @@ public class TelaConfigs extends JFrame {
 		JButton buttonReload = new JButton(reloadIcon);
 		buttonReload.setToolTipText(bundle.getString("hint-button-reload"));
 		buttonReload.addActionListener((event) -> reload());
-		buttonReload.setBounds(930, 210, 35, 30);
+		buttonReload.setBounds(920, 200, 35, 30);
 		painel.add(buttonReload);
 		
 		JButton buttonSave = new JButton(saveIcon);
 		buttonSave.setToolTipText(bundle.getString("hint-button-save"));
 		buttonSave.addActionListener((event) -> save());
-		buttonSave.setBounds(975, 210, 35, 30);
+		buttonSave.setBounds(965, 200, 35, 30);
 		painel.add(buttonSave);
 		
 		// Definindo validação de dados das células
