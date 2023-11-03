@@ -602,7 +602,7 @@ public class TelaEnvio extends JFrame {
 			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
 			
 			// Ordenando listas
-			this.resultList.sort();
+			this.resultList.sortLists();
 			
 			// Criando arquivo de saída - Sistac
 			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, instituicao, edital);

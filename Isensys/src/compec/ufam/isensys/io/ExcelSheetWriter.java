@@ -35,7 +35,7 @@ public class ExcelSheetWriter {
 		// Preenchendo a planilha com os dados de 'listaErros'
 		for (int i=0; i<listaErros.size(); i++) {
 			
-			String[] dados = listaErros.get(i).getErrorResume();	// Recuperando dados da 'listaErros'
+			String[] dados = listaErros.get(i).getErrorSummaryArray();	// Recuperando dados da 'listaErros'
 			XSSFRow  row   = xssfSheet.createRow(i+1);				// Criando nova linha na planilha 
 			
 			// Inserindo dados célula por célula desta linha 

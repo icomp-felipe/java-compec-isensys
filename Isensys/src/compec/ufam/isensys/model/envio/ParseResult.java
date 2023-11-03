@@ -57,7 +57,7 @@ public class ParseResult {
 	
 	/** Ordena as listas internas em ordem crescente de acordo com o nome do candidato.
 	 *  @since 3.0, 21/04/2021 */
-	public void sort() {
+	public void sortLists() {
 		
 		Comparator<Candidato>    comparaCandidato = (candidato1, candidato2) -> candidato1.compareTo(candidato2); 
 		Comparator<RowParseException> comparaErro = (exception1, exception2) -> exception1.compareTo(exception2);

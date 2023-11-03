@@ -111,18 +111,18 @@ public class RowParseException extends Exception {
 	 *  @return Uma String contendo uma detalhes da exceção. */
 	@Override
 	public String getMessage() {
-		return String.format("Linha: %d - NIS: '%s' - Nome: '%s' - CPF: '%s' - Situação: 'Indeferido' - Motivo(s) - '%s'", this.linha, this.nis, this.nome, this.cpf, listMotivos());
+		return String.format("Linha: %d - NIS: '%s' - Nome: '%s' - CPF: '%s' - Situação: 'Indeferido' - Motivo(s) - '%s'", this.linha, this.nis, this.nome, this.cpf, getErrorSummaryString());
 	}
 	
 	/** Método utilizado em {@link ExcelSheetWriter#write(ArrayList, java.io.File)} para montagem da planilha de erros.
 	 *  @return Dados para preenchimento de uma linha de erros da planilha, já organizados em um array. */
-	public String[] getErrorResume() {
-		return new String[] { Integer.toString(this.linha), this.nis, this.nome, this.cpf, "Indeferido", listMotivos() };
+	public String[] getErrorSummaryArray() {
+		return new String[] { Integer.toString(this.linha), this.nis, this.nome, this.cpf, "Indeferido", getErrorSummaryString() };
 	}
 	
 	/** Monta uma String com todos os motivos de violação de requisitos de um candidato.
 	 *  @return Uma String com todos os motivos de violação de requisitos de um candidato. */
-	private String listMotivos() {
+	private String getErrorSummaryString() {
 		
 		StringBuilder builder = new StringBuilder();
 		
