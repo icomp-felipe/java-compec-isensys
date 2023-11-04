@@ -655,7 +655,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		List<Similaridade> listaSimilaridades = null;
 		
 		// Recuperando apenas os candidatos deferidos no recurso 
-		List<Retorno> recursosDeferidos = this.listaRecursos.getList().stream().collect(Collectors.groupingBy(Retorno::deferido)).get(true);
+		List<Retorno> recursosDeferidos = this.listaRecursos.getList().stream().filter(Retorno::deferido).toList();
 		
 		// Se 'recursosDeferidos == null' significa que não houve recurso ou ninguém foi deferido
 		if (recursosDeferidos != null) {
@@ -937,7 +937,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Recupera a compilação
 			this.retornosProcessados = new ArrayList<File>();
-			this.listaRetornos = Compilation.retrieve(arqCompilacao);
+			this.listaRetornos = Compilation.load(arqCompilacao);
 			this.listaRecursos = new ListaRetornos();
 			this.currentCount  = new int[2];
 			this.previousCount = new int[2];
