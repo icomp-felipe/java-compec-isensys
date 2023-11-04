@@ -16,7 +16,7 @@ public class SituacaoDAO {
 	/** Carrega os motivos de erro de processamento do arquivo 'res/situacoes/situacoes.csv' para dentro de um ArrayList.
 	 *  @return Lista com os códigos de erro e duas devidas descrições.
 	 *  @throws IOException quando o arquivo de situacoes não foi encontrado ou não pode ser lido */
-	public static ArrayList<Situacao> getErros() throws IOException {
+	public static ArrayList<Situacao> load() throws IOException {
 		
 		String row;
 		ArrayList<Situacao> listaSituacoes = new ArrayList<Situacao>();

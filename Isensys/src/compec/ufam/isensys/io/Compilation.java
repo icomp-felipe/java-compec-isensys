@@ -30,7 +30,7 @@ public class Compilation {
 	 *  @param arquivo - caminho do arquivo .bsf
 	 *  @throws ClassNotFoundException caso as classes {@link ListaRetornos} ou {@link Retorno} não estejam disponíveis, ou mudaram de versão;
 	 *  @throws IOException caso haja alguma falha na leitura do arquivo. */
-	public static ListaRetornos retrieve(final File arquivo) throws ClassNotFoundException, IOException {
+	public static ListaRetornos load(final File arquivo) throws ClassNotFoundException, IOException {
 		
 		// Abrindo arquivo para leitura
 		ObjectInputStream stream = new ObjectInputStream(new FileInputStream(arquivo));

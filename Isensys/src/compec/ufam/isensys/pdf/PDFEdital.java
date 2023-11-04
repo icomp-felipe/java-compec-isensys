@@ -41,7 +41,7 @@ public class PDFEdital {
 		parameters.put("PAR_LOGO"          , image                   );
 		parameters.put("PAR_CABECALHO"     , cabecalho               );
 		parameters.put("PAR_TIPO_RESULTADO", tipoResultado.name    ());
-		parameters.put("PAR_LISTA_ERROS"   , SituacaoDAO  .getErros());
+		parameters.put("PAR_LISTA_ERROS"   , SituacaoDAO  .load());
 		parameters.put("PAR_LISTA_RETORNOS", listaRetornos           );
 		
 		// Construindo o relatório
