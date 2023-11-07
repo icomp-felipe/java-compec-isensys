@@ -15,13 +15,13 @@ public class Similaridade {
 	 *  @param nomeRecurso - nome informado no recurso de isenção
 	 *  @param algoDistancia - {@link JaroWinklerDistance}
 	 *  @param algoSimilaridade - {@link JaroWinklerSimilarity} */
-	public Similaridade(final String nomeSolicitacao, final String nomeRecurso, final JaroWinklerDistance algoDistancia, final JaroWinklerSimilarity algoSimilaridade) {
+	public Similaridade(final String nomeSolicitacao, final String nomeRecurso, final double distancia, final double similaridade) {
 
 		this.nomeSolicitacao = nomeSolicitacao;
 		this.nomeRecurso    = nomeRecurso;
 		
-		this.distancia    = algoDistancia   .apply(nomeSolicitacao, nomeRecurso);
-		this.similaridade = algoSimilaridade.apply(nomeSolicitacao, nomeRecurso);
+		this.distancia    = distancia;
+		this.similaridade = similaridade;
 		
 	}
 
