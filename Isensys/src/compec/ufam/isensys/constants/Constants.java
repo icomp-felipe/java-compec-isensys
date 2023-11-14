@@ -16,13 +16,13 @@ public class Constants {
 	
 	/** Formatos de arquivo utilizados nos métodos de seleção de arquivos.
 	 *  @author Felipe André - felipeandresouza@hotmail.com
-     *  @version 3.5, 23/04/2021 */
+     *  @version 3.5, 14/11/2023 */
 	public static class FileFormat {
 		
 		public static final FileNameExtensionFilter CSV = new FileNameExtensionFilter("Texto Separado por Vírgula (.csv)", "csv");
 		public static final FileNameExtensionFilter TXT = new FileNameExtensionFilter("Texto Separado por Vírgula (.txt)", "txt");
 		
-		public static final FileNameExtensionFilter BSF   = new FileNameExtensionFilter("Arquivo de Compilação (.bsf)"            , "bsf" );
+		public static final FileNameExtensionFilter ICF   = new FileNameExtensionFilter("Arquivo de Compilação do IsenSys (.icf)" , "icf" );
 		public static final FileNameExtensionFilter XLSX  = new FileNameExtensionFilter("Planilha do Excel 2007/2010/2013 (.xlsx)", "xlsx");
 		
 		public static final FileNameExtensionFilter SISTAC_SEND = new FileNameExtensionFilter("Arquivo de Envio Sistac (.txt)"  , "txt");
