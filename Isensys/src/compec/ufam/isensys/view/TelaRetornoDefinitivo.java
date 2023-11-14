@@ -1022,7 +1022,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			listaRetornos.sort();
 			
 			// Gerando visualização do edital
-			PDFEdital.export(Resultado.DEFINITIVO, cabecalho, listaRetornos.getList(), dirSaida);
+			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, listaRetornos.getList(), dirSaida);
 			
 			// Calculando e exibindo o relatório de distância e similaridade
 			final List<Similaridade> listaSimilaridades = JaroWinkler.compute(listaRetornos, listaRecursos);
@@ -1033,7 +1033,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFRetorno.export(cabecalho, currentCount, previousCount, listaRecursos.getList(), listaProcessados, dirSaida);
+			PDFEstatisticas.export(cabecalho, currentCount, previousCount, listaRecursos.getList(), listaProcessados, dirSaida);
 			
 			setExportProcessing(false);
 			AlertDialog.info(this, windowTitle, bundle.getString("defs-thread-export-done"));

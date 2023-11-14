@@ -15,8 +15,8 @@ import net.sf.jasperreports.engine.util.*;
 
 /** Classe que controla a visualização do relatório em PDF com o resultado do processamento.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 22/JUN/2023 */
-public class PDFEdital {
+ *  @version 3.8, 14/NOV/2023 */
+public class PDFResultado {
 
 	/** Monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo já compilado (.jasper).
      *  @param tipoResultado - {@link Resultado}
@@ -32,17 +32,17 @@ public class PDFEdital {
 		BufferedImage image = ImageIO.read(imagePath);
 		
 		// Carregando relatório Jasper
-		String reportPath = ResourceManager.getResource("relatorios/Edital.jasper");
+		String reportPath = ResourceManager.getResource("relatorios/Resultado.jasper");
 		JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(reportPath);
 		
 		// Preparando parâmetros do relatório
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		
-		parameters.put("PAR_LOGO"          , image                   );
-		parameters.put("PAR_CABECALHO"     , cabecalho               );
-		parameters.put("PAR_TIPO_RESULTADO", tipoResultado.name    ());
+		parameters.put("PAR_LOGO"          , image               );
+		parameters.put("PAR_CABECALHO"     , cabecalho           );
+		parameters.put("PAR_TIPO_RESULTADO", tipoResultado.name());
 		parameters.put("PAR_LISTA_ERROS"   , SituacaoDAO  .load());
-		parameters.put("PAR_LISTA_RETORNOS", listaRetornos           );
+		parameters.put("PAR_LISTA_RETORNOS", listaRetornos       );
 		
 		// Construindo o relatório
 		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());

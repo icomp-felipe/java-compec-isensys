@@ -18,8 +18,8 @@ import net.sf.jasperreports.engine.util.*;
 
 /** Constrói o relatório de processamento de retornos.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 22/JUN/2023 */
-public class PDFRetorno {
+ *  @version 3.8, 14/NOV/2023 */
+public class PDFEstatisticas {
 
 	/** Exporta o relatório de processamento do resultado preliminar para PDF, no diretório especificado.
 	 *  @param cabecalho - cabeçalho do edital
@@ -62,7 +62,7 @@ public class PDFRetorno {
 		BufferedImage image = ImageIO.read(imagePath);
 		
 		// Carregando relatório Jasper
-		String reportPath = ResourceManager.getResource("relatorios/Retorno.jasper");
+		String reportPath = ResourceManager.getResource("relatorios/Estatisticas.jasper");
 		JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(reportPath);
 		
 		final String stringResultado = StringUtils.BR.normaliza(tipoResultado.name());

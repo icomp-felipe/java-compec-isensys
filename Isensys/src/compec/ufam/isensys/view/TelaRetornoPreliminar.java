@@ -977,13 +977,13 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.arqCompilacao = new File(dirSaida, new Edital(arqRetornoSistac).getCompilationFilename());
 			
 			// Gerando visualização
-			PDFEdital.export(Resultado.PRELIMINAR, cabecalho, listaRetornos.getList(), dirSaida);
+			PDFResultado.export(Resultado.PRELIMINAR, cabecalho, listaRetornos.getList(), dirSaida);
 			Compilacao.save(listaRetornos, arqCompilacao);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFRetorno.export(cabecalho, currentCount, listaProcessados, dirSaida);
+			PDFEstatisticas.export(cabecalho, currentCount, listaProcessados, dirSaida);
 			
 			setExportProcessing(false);
 			AlertDialog.info(this, windowTitle, bundle.getString("prelim-thread-export-done"));
