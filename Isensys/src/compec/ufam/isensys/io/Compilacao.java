@@ -6,8 +6,8 @@ import compec.ufam.isensys.model.retorno.*;
 
 /** Classe de I/O da compilação do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 21/JUN/2023 */
-public class Compilation {
+ *  @version 3.8, 14/NOV/2023 */
+public class Compilacao {
 	
 	/** Salva a lista de retornos em um arquivo binário.
 	 *  @param listaRetornos - lista de retornos a ser salva em arquivo

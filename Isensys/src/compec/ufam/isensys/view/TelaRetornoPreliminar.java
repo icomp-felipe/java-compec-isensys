@@ -978,7 +978,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			
 			// Gerando visualização
 			PDFEdital.export(Resultado.PRELIMINAR, cabecalho, listaRetornos.getList(), dirSaida);
-			Compilation.save(listaRetornos, arqCompilacao);
+			Compilacao.save(listaRetornos, arqCompilacao);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();

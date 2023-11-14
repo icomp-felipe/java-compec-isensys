@@ -414,7 +414,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		final String title = bundle.getString("defs-compile-select-title");
 		
 		// Recuperando o arquivo de entrada
-		final File selected  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.BSF, PhillFileUtils.OPEN_DIALOG, this.arqCompilacaoHistorico, null);
+		final File selected  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.ICF, PhillFileUtils.OPEN_DIALOG, this.arqCompilacaoHistorico, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -890,7 +890,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Recupera a compilação
 			this.retornosProcessados = new ArrayList<File>();
-			this.listaRetornos = Compilation.load(arqCompilacao);
+			this.listaRetornos = Compilacao.load(arqCompilacao);
 			this.listaRecursos = new ListaRetornos();
 			this.currentCount  = new int[2];
 			this.previousCount = new int[2];
