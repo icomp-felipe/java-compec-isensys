@@ -175,6 +175,9 @@ public class ListaRetornos implements Serializable {
 			
 		}
 		
+		System.err.println("Candidato(a) recursante, porém, não solicitante: " + retorno.getNome());
+		add(retorno);
+		
 		return false;
 	}
 	
