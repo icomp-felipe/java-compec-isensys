@@ -45,8 +45,8 @@ public class JaroWinkler {
 				// ...e realizo o cálculo de distância com os nomes informados
 				String nomeAnterior = retornoIsencao.getNomeAnterior();
 				String nomeAtual    = deferidoRecurso.getNome();
-				double distancia    = algoDistancia.apply(nomeAnterior, nomeAtual);
-				double similaridade = algoSimilaridade.apply(nomeAnterior, nomeAtual);
+				double distancia    = (nomeAnterior == null) ? 0d : algoDistancia.apply(nomeAnterior, nomeAtual);
+				double similaridade = (nomeAnterior == null) ? 1d : algoSimilaridade.apply(nomeAnterior, nomeAtual);
 				
 				Similaridade sim = new Similaridade(nomeAnterior, nomeAtual, distancia, similaridade);
 				listaSimilaridades.add(sim);
