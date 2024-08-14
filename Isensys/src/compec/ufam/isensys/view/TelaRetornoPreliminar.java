@@ -21,8 +21,8 @@ import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.pdf.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
- *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 24/JUN/2023 */
+ *  @author Felipe André - felipeandre.eng@gmail.com
+ *  @version 3.9, 14/AGO/2024 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -974,16 +974,17 @@ public class TelaRetornoPreliminar extends JFrame {
 			listaRetornos.sort();
 			
 			// Calculando o nome do arquivo de compilação
-			this.arqCompilacao = new File(dirSaida, new Edital(arqRetornoSistac).getCompilationFilename());
+			final Edital edital = new Edital(arqRetornoSistac);
+			this.arqCompilacao = new File(dirSaida, edital.getCompilationFilename());
 			
 			// Gerando visualização
-			PDFResultado.export(Resultado.PRELIMINAR, cabecalho, listaRetornos.getList(), dirSaida);
+			PDFResultado.export(Resultado.PRELIMINAR, cabecalho, edital, listaRetornos.getList(), dirSaida);
 			Compilacao.save(listaRetornos, arqCompilacao);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFEstatisticas.export(cabecalho, currentCount, listaProcessados, dirSaida);
+			PDFEstatisticas.export(cabecalho, edital, currentCount, listaProcessados, dirSaida);
 			
 			setExportProcessing(false);
 			AlertDialog.info(this, windowTitle, bundle.getString("prelim-thread-export-done"));

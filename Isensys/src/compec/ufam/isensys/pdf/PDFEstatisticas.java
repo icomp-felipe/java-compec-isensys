@@ -17,23 +17,25 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.*;
 
 /** Constrói o relatório de processamento de retornos.
- *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 14/NOV/2023 */
+ *  @author Felipe André - felipeandre.eng@gmail.com
+ *  @version 3.9, 14/AGO/2024 */
 public class PDFEstatisticas {
 
 	/** Exporta o relatório de processamento do resultado preliminar para PDF, no diretório especificado.
 	 *  @param cabecalho - cabeçalho do edital
+	 *  @param edital - dados do edital
 	 *  @param contagemAtual - contador de deferiddos e indeferidos
 	 *  @param listaProcessados - lista de arquivos processados
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF 
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final String cabecalho, final int[] contagemAtual, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
-		export(Resultado.PRELIMINAR, cabecalho, contagemAtual, null, null, listaProcessados, diretorioDestino);
+	public static void export(final String cabecalho, final Edital edital, final int[] contagemAtual, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
+		export(Resultado.PRELIMINAR, cabecalho, edital, contagemAtual, null, null, listaProcessados, diretorioDestino);
 	}
 	
 	/** Exporta o relatório de processamento do resultado definitivo para PDF, no diretório especificado.
 	 *  @param cabecalho - cabeçalho do edital
+	 *  @param edital - dados do edital
 	 *  @param contagemAtual - contador de deferiddos e indeferidos
 	 *  @param contagemAnterior - contador de deferiddos e indeferidos (antes do recurso)
 	 *  @param listaRecursos - lista de recursantes 
@@ -41,13 +43,14 @@ public class PDFEstatisticas {
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF 
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final String cabecalho, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
-		export(Resultado.DEFINITIVO, cabecalho, contagemAtual, contagemAnterior, listaRecursos, listaProcessados, diretorioDestino);
+	public static void export(final String cabecalho, final Edital edital, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
+		export(Resultado.DEFINITIVO, cabecalho, edital, contagemAtual, contagemAnterior, listaRecursos, listaProcessados, diretorioDestino);
 	}
 	
 	/** Exporta o relatório de processamento do resultado preliminar/definitivo para PDF, no diretório especificado.
 	 *  @param tipoResultado - {@link Resultado}
 	 *  @param cabecalho - cabeçalho do edital
+	 *  @param edital - dados do edital
 	 *  @param contagemAtual - contador de deferiddos e indeferidos
 	 *  @param contagemAnterior - contador de deferiddos e indeferidos (antes do recurso)
 	 *  @param listaRecursos - lista de recursantes 
@@ -55,7 +58,7 @@ public class PDFEstatisticas {
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	private static void export(final Resultado tipoResultado, final String cabecalho, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
+	private static void export(final Resultado tipoResultado, final String cabecalho, final Edital edital, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
@@ -95,7 +98,8 @@ public class PDFEstatisticas {
 		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 
 		// Preparando o arquivo de saída
-		File arquivoDestino = new File(diretorioDestino, "Isenção - Processamento " + stringResultado + ".pdf");
+		String filename = String.format("Edital %s de %s - Isenção - Processamento %s.pdf", edital.getNumeroEdital(), edital.getAnoEdital(), stringResultado);
+		File arquivoDestino = new File(diretorioDestino, filename);
 		
 		// Exportando pra PDF
 		JasperExportManager.exportReportToPdfFile(relatorio, arquivoDestino.getAbsolutePath());

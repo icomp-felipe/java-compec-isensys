@@ -8,24 +8,26 @@ import java.awt.image.*;
 import com.phill.libs.*;
 
 import compec.ufam.isensys.constants.*;
+import compec.ufam.isensys.model.Edital;
 import compec.ufam.isensys.model.retorno.*;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.*;
 
 /** Classe que controla a visualização do relatório em PDF com o resultado do processamento.
- *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 14/NOV/2023 */
+ *  @author Felipe André - felipeandre.eng@gmail.com
+ *  @version 3.9, 14/AGO/2024 */
 public class PDFResultado {
 
 	/** Monta o relatório (edital) de acordo com os parâmetros. Utiliza o arquivo já compilado (.jasper).
      *  @param tipoResultado - {@link Resultado}
      *  @param cabecalho - cabeçalho do edital
+     *  @param edital - dados do edital
 	 *  @param listaRetornos - lista de retornos de processamento
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final Resultado tipoResultado, final String cabecalho, final List<Retorno> listaRetornos, final File diretorioDestino) throws JRException, IOException {
+	public static void export(final Resultado tipoResultado, final String cabecalho, final Edital edital, final List<Retorno> listaRetornos, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
@@ -48,7 +50,8 @@ public class PDFResultado {
 		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 		
 		// Preparando o arquivo de saída
-		File arquivoDestino = new File(diretorioDestino, "Isenção - Resultado " + StringUtils.BR.normaliza(tipoResultado.name()) + ".pdf");
+		String filename = String.format("Edital %s de %s - Isenção - Resultado %s.pdf", edital.getNumeroEdital(), edital.getAnoEdital(), StringUtils.BR.normaliza(tipoResultado.name()));
+		File arquivoDestino = new File(diretorioDestino, filename);
 		
 		// Exportando pra PDF
 		JasperExportManager.exportReportToPdfFile(relatorio, arquivoDestino.getAbsolutePath());

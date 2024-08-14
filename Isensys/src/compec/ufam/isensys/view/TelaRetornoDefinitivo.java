@@ -21,8 +21,8 @@ import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Classe que controla a view de processamento de Retorno Definitivo.
- *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 06/NOV/2023 */
+ *  @author Felipe André - felipeandre.eng@gmail.com
+ *  @version 3.9, 14/AGO/2024 */
 public class TelaRetornoDefinitivo extends JFrame {
 
 	// Serial
@@ -1022,18 +1022,19 @@ public class TelaRetornoDefinitivo extends JFrame {
 			listaRetornos.sort();
 			
 			// Gerando visualização do edital
-			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, listaRetornos.getList(), dirSaida);
+			Edital edital = new Edital(arqCompilacao);
+			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, edital, listaRetornos.getList(), dirSaida);
 			
 			// Calculando e exibindo o relatório de distância e similaridade
 			final List<Similaridade> listaSimilaridades = JaroWinkler.compute(listaRetornos, listaRecursos);
 			
 			if (listaSimilaridades != null)
-				PDFSimilaridade.export(cabecalho, listaSimilaridades, this.dirSaida);
+				PDFSimilaridade.export(cabecalho, edital, listaSimilaridades, this.dirSaida);
 			
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
-			PDFEstatisticas.export(cabecalho, currentCount, previousCount, listaRecursos.getList(), listaProcessados, dirSaida);
+			PDFEstatisticas.export(cabecalho, edital, currentCount, previousCount, listaRecursos.getList(), listaProcessados, dirSaida);
 			
 			setExportProcessing(false);
 			AlertDialog.info(this, windowTitle, bundle.getString("defs-thread-export-done"));

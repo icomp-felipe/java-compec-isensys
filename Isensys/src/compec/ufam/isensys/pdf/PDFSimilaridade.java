@@ -7,23 +7,25 @@ import java.awt.image.*;
 
 import com.phill.libs.*;
 
+import compec.ufam.isensys.model.Edital;
 import compec.ufam.isensys.model.retorno.*;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.*;
 
 /** Constrói o relatório de similaridade.
- *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 22/JUN/2023 */
+ *  @author Felipe André - felipeandre.eng@gmail.com
+ *  @version 3.9, 14/AGO/2024 */
 public class PDFSimilaridade {
 
 	/** Monta o relatório de distância e similaridade dos candidatos deferidos no recurso de isenção.
 	 *  @param cabecalho - cabeçalho do edital
+	 *  @param edital - dados do edital
 	 *  @param listaDeferidos - lista de deferidos no recurso
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final String cabecalho, final List<Similaridade> listaDeferidos, final File diretorioDestino) throws JRException, IOException {
+	public static void export(final String cabecalho, final Edital edital, final List<Similaridade> listaDeferidos, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
@@ -44,7 +46,8 @@ public class PDFSimilaridade {
 		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 
 		// Preparando o arquivo de saída
-		File arquivoDestino = new File(diretorioDestino, "Isenção - Relatório de Similaridade.pdf");
+		String filename = String.format("Edital %s de %s - Isenção - Relatório de Similaridade.pdf", edital.getNumeroEdital(), edital.getAnoEdital());
+		File arquivoDestino = new File(diretorioDestino, filename);
 		
 		// Exportando pra PDF
 		JasperExportManager.exportReportToPdfFile(relatorio, arquivoDestino.getAbsolutePath());

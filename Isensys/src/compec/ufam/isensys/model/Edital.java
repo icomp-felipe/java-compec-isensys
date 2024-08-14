@@ -11,7 +11,7 @@ import compec.ufam.isensys.model.retorno.*;
 
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 24/JUN/2023
+ *  @version 3.9, 14/AGO/2024
  *  @since 3.5, 24/04/2021 */
 public class Edital {
 	
@@ -79,6 +79,16 @@ public class Edital {
 	 *  @return String contendo a data de envio do arquivo Sistac. */
 	public String getDataEdital() {
 		return this.dataEdital;
+	}
+	
+	/** @return Número do edital, calculado a partir do nome do arquivo. */
+	public String getNumeroEdital() {
+		return this.edital.substring(0, 2);
+	}
+	
+	/** @return Ano do edital, calculado a partir do nome do arquivo. */
+	public String getAnoEdital() {
+		return this.edital.substring(2);
 	}
 	
 	/** Getter da sequência de arquivo.
