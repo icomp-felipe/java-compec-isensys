@@ -9,8 +9,8 @@ import com.phill.libs.br.*;
  *  Encapsula apenas neste objeto tanto os candidatos válidos (vindos do arquivo do Sistac),
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
- *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.8, 22/JUN/2023 */
+ *  @author Felipe André - felipeandre.eng@gmail.com
+ *  @version 3.8, 04/OUT/2024 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
@@ -137,4 +137,9 @@ public class Retorno implements Serializable {
 		return this.motivo;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s;%s;%s;%s;", this.nome, this.cpf, this.nis, this.deferido() ? "deferido" : "indeferido");
+	}
+	
 }
