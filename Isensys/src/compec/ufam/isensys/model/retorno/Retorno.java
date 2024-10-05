@@ -138,6 +138,11 @@ public class Retorno implements Serializable {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		return toString().equals(obj.toString());
+	}
+	
+	@Override
 	public String toString() {
 		return String.format("%s;%s;%s;%s;", this.nome, this.cpf, this.nis, this.deferido() ? "deferido" : "indeferido");
 	}
