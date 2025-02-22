@@ -134,13 +134,13 @@ public class TelaConfigs extends JFrame {
 		
 		JButton buttonReload = new JButton(reloadIcon);
 		buttonReload.setToolTipText(bundle.getString("hint-button-reload"));
-		buttonReload.addActionListener((event) -> reload());
+		buttonReload.addActionListener((_) -> reload());
 		buttonReload.setBounds(920, 200, 35, 30);
 		painel.add(buttonReload);
 		
 		JButton buttonSave = new JButton(saveIcon);
 		buttonSave.setToolTipText(bundle.getString("hint-button-save"));
-		buttonSave.addActionListener((event) -> save());
+		buttonSave.addActionListener((_) -> save());
 		buttonSave.setBounds(965, 200, 35, 30);
 		painel.add(buttonSave);
 		

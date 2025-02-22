@@ -162,13 +162,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		buttonRetornoSelect = new JButton(searchIcon);
 		buttonRetornoSelect.setToolTipText(bundle.getString("hint-button-retorno-select"));
-		buttonRetornoSelect.addActionListener((event) -> actionRetornoSelect());
+		buttonRetornoSelect.addActionListener((_) -> actionRetornoSelect());
 		buttonRetornoSelect.setBounds(560, 30, 30, 25);
 		panelInputFile.add(buttonRetornoSelect);
 		
 		buttonRetornoClear = new JButton(clearIcon);
 		buttonRetornoClear.setToolTipText(bundle.getString("hint-button-retorno-clear"));
-		buttonRetornoClear.addActionListener((event) -> actionRetornoClear());
+		buttonRetornoClear.addActionListener((_) -> actionRetornoClear());
 		buttonRetornoClear.setBounds(595, 30, 30, 25);
 		panelInputFile.add(buttonRetornoClear);
 		
@@ -188,14 +188,14 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		buttonErrosSelect = new JButton(searchIcon);
 		buttonErrosSelect.setToolTipText(bundle.getString("hint-button-erros-select"));
-		buttonErrosSelect.addActionListener((event) -> actionErrosSelect());
+		buttonErrosSelect.addActionListener((_) -> actionErrosSelect());
 		buttonErrosSelect.setEnabled(false);
 		buttonErrosSelect.setBounds(560, 65, 30, 25);
 		panelInputFile.add(buttonErrosSelect);
 		
 		buttonErrosClear = new JButton(clearIcon);
 		buttonErrosClear.setToolTipText(bundle.getString("hint-button-erros-clear"));
-		buttonErrosClear.addActionListener((event) -> actionErrosClear());
+		buttonErrosClear.addActionListener((_) -> actionErrosClear());
 		buttonErrosClear.setEnabled(false);
 		buttonErrosClear.setBounds(595, 65, 30, 25);
 		panelInputFile.add(buttonErrosClear);
@@ -271,7 +271,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		buttonCabecalhoClear = new JButton(clearIcon);
 		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
-		buttonCabecalhoClear.addActionListener((event) -> actionHeaderClear());
+		buttonCabecalhoClear.addActionListener((_) -> actionHeaderClear());
 		buttonCabecalhoClear.setBounds(595, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
@@ -299,13 +299,13 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		buttonSaidaSelect = new JButton(searchIcon);
 		buttonSaidaSelect.setToolTipText(bundle.getString("hint-button-saida-select"));
-		buttonSaidaSelect.addActionListener((event) -> actionSaidaSelect());
+		buttonSaidaSelect.addActionListener((_) -> actionSaidaSelect());
 		buttonSaidaSelect.setBounds(560, 30, 30, 25);
 		panelSaida.add(buttonSaidaSelect);
 		
 		buttonSaidaClear = new JButton(clearIcon);
 		buttonSaidaClear.setToolTipText(bundle.getString("hint-button-saida-clear"));
-		buttonSaidaClear.addActionListener((event) -> { this.dirSaida = null; this.textSaida.setText(null); });
+		buttonSaidaClear.addActionListener((_) -> { this.dirSaida = null; this.textSaida.setText(null); });
 		buttonSaidaClear.setBounds(595, 30, 30, 25);
 		panelSaida.add(buttonSaidaClear);
 		
@@ -320,7 +320,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
 		buttonReport.setBounds(610, 410, 35, 30);
-		buttonReport.addActionListener((event) -> actionExport());
+		buttonReport.addActionListener((_) -> actionExport());
 		painel.add(buttonReport);
 		
 		// Cadastrando validação de campos

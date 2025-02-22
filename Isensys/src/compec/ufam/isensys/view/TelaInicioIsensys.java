@@ -49,13 +49,13 @@ public class TelaInicioIsensys extends JFrame {
 		buttonEnvio.setBorderPainted(false);
 		buttonEnvio.setOpaque(false);
 		buttonEnvio.setContentAreaFilled(false);
-		buttonEnvio.addActionListener((event) -> new TelaEnvio());
+		buttonEnvio.addActionListener((_) -> new TelaEnvio());
 		buttonEnvio.setBounds(20, 145, 442, 30);
 		painel.add(buttonEnvio);
 		
 		JButton buttonRetornoPrelim = new JButton(iconPrelim);
 		buttonRetornoPrelim.setToolTipText(bundle.getString("hint-button-retorno-prelim"));
-		buttonRetornoPrelim.addActionListener((event) -> new TelaRetornoPreliminar());
+		buttonRetornoPrelim.addActionListener((_) -> new TelaRetornoPreliminar());
 		buttonRetornoPrelim.setBorderPainted(false);
 		buttonRetornoPrelim.setOpaque(false);
 		buttonRetornoPrelim.setContentAreaFilled(false);
@@ -64,7 +64,7 @@ public class TelaInicioIsensys extends JFrame {
 		
 		JButton buttonRetornoFinal = new JButton(iconFinal);
 		buttonRetornoFinal.setToolTipText(bundle.getString("hint-button-retorno-final"));
-		buttonRetornoFinal.addActionListener((event) -> new TelaRetornoDefinitivo());
+		buttonRetornoFinal.addActionListener((_) -> new TelaRetornoDefinitivo());
 		buttonRetornoFinal.setBorderPainted(false);
 		buttonRetornoFinal.setOpaque(false);
 		buttonRetornoFinal.setContentAreaFilled(false);
@@ -73,7 +73,7 @@ public class TelaInicioIsensys extends JFrame {
 		
 		JButton buttonConfigs = new JButton(iconConfigs);
 		buttonConfigs.setToolTipText(bundle.getString("hint-button-configs"));
-		buttonConfigs.addActionListener((event) -> new TelaConfigs());
+		buttonConfigs.addActionListener((_) -> new TelaConfigs());
 		buttonConfigs.setBorderPainted(false);
 		buttonConfigs.setOpaque(false);
 		buttonConfigs.setContentAreaFilled(false);
@@ -81,7 +81,7 @@ public class TelaInicioIsensys extends JFrame {
 		painel.add(buttonConfigs);
 		
 		JButton buttonEasterEgg = new JButton(isensysIcon);
-		buttonEasterEgg.addActionListener((event) -> actionEasterEgg());
+		buttonEasterEgg.addActionListener((_) -> actionEasterEgg());
 		buttonEasterEgg.setBorderPainted(false);
 		buttonEasterEgg.setOpaque(false);
 		buttonEasterEgg.setContentAreaFilled(false);

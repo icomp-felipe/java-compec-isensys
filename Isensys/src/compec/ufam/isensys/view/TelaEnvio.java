@@ -137,20 +137,20 @@ public class TelaEnvio extends JFrame {
 		painelEntrada.add(textInputName);
 		
 		buttonInputReload = new JButton(reloadIcon);
-		buttonInputReload.addActionListener((event) -> actionInputReload());
+		buttonInputReload.addActionListener((_) -> actionInputReload());
 		buttonInputReload.setToolTipText(bundle.getString("hint-button-input-reload"));
 		buttonInputReload.setBounds(355, 30, 30, 25);
 		painelEntrada.add(buttonInputReload);
 		
 		buttonInputClear = new JButton(clearIcon);
-		buttonInputClear.addActionListener((event) -> actionInputClear());
+		buttonInputClear.addActionListener((_) -> actionInputClear());
 		buttonInputClear.setToolTipText(bundle.getString("hint-button-input-clear"));
 		buttonInputClear.setBounds(395, 30, 30, 25);
 		painelEntrada.add(buttonInputClear);
 		
 		buttonInputSelect = new JButton(searchIcon);
 		buttonInputSelect.setToolTipText(bundle.getString("hint-button-input-select"));
-		buttonInputSelect.addActionListener((event) -> actionInputSelect());
+		buttonInputSelect.addActionListener((_) -> actionInputSelect());
 		buttonInputSelect.setBounds(435, 30, 30, 25);
 		painelEntrada.add(buttonInputSelect);
 		
@@ -244,13 +244,13 @@ public class TelaEnvio extends JFrame {
 		
 		buttonOutputSelect = new JButton(searchIcon);
 		buttonOutputSelect.setToolTipText(bundle.getString("hint-button-output-select"));
-		buttonOutputSelect.addActionListener((event) -> actionOutputSelect());
+		buttonOutputSelect.addActionListener((_) -> actionOutputSelect());
 		buttonOutputSelect.setBounds(394, 65, 30, 25);
 		painelSaida.add(buttonOutputSelect);
 		
 		buttonOutputClear = new JButton(clearIcon);
 		buttonOutputClear.setToolTipText(bundle.getString("hint-button-output-clear"));
-		buttonOutputClear.addActionListener((event) -> actionOutputClear());
+		buttonOutputClear.addActionListener((_) -> actionOutputClear());
 		buttonOutputClear.setBounds(434, 65, 30, 25);
 		painelSaida.add(buttonOutputClear);
 		
@@ -263,7 +263,7 @@ public class TelaEnvio extends JFrame {
 		
 		buttonExport = new JButton(exportIcon);
 		buttonExport.setToolTipText(bundle.getString("hint-button-export"));
-		buttonExport.addActionListener((event) -> actionExport());
+		buttonExport.addActionListener((_) -> actionExport());
 		buttonExport.setBounds(453, 340, 35, 30);
 		painel.add(buttonExport);
 
