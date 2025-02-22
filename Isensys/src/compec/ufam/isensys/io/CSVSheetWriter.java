@@ -9,7 +9,7 @@ import compec.ufam.isensys.model.envio.*;
 import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class CSVSheetWriter {
 

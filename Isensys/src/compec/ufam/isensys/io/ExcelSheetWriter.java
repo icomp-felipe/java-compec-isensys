@@ -9,7 +9,7 @@ import compec.ufam.isensys.exception.*;
 import org.apache.poi.xssf.usermodel.*;
 
 /** Classe que escreve a planilha de erros de processamento no formato Excel.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class ExcelSheetWriter {
 

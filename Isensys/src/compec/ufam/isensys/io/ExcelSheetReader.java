@@ -14,7 +14,7 @@ import compec.ufam.isensys.model.envio.*;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Classe que lê e processa os dados de um arquivo .xlsx com os dados necessários para solicitação de isenção.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class ExcelSheetReader {
 

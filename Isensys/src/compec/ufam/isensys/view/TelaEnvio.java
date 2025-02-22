@@ -17,7 +17,7 @@ import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class TelaEnvio extends JFrame {
 

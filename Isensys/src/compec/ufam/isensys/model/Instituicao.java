@@ -3,7 +3,7 @@ package compec.ufam.isensys.model;
 import java.io.Serializable;
 
 /** Armazena dados referentes à instituição utilizadora do Sistac.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023
  *  @since 3.0, 22/04/2021 */
 public class Instituicao implements Serializable {

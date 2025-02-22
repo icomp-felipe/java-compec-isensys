@@ -11,7 +11,7 @@ import compec.ufam.isensys.model.envio.*;
  *  Representa as violações de requisitos que os dados de um candidato pode gerar. 
  *  Contém internamente dados que identificam o candidato, bem como uma lista de {@link FieldParseException}
  *  identificando cada uma das violações de requisitos.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.5.1, 26/04/2021 */
 public class RowParseException extends Exception {
 

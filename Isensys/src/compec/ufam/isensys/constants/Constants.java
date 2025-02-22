@@ -7,7 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.phill.libs.ResourceManager;
 
 /** Armazena as diversas constantes utilizadas em todo o sistema.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class Constants {
 	
@@ -15,7 +15,7 @@ public class Constants {
 	public static final File SYS_CONFIGS_FILE = ResourceManager.getResourceAsFile("config/program.dat");
 	
 	/** Formatos de arquivo utilizados nos métodos de seleção de arquivos.
-	 *  @author Felipe André - felipeandresouza@hotmail.com
+	 *  @author Felipe André - felipeandre.eng@gmail.com
      *  @version 3.5, 14/11/2023 */
 	public static class FileFormat {
 		
@@ -33,7 +33,7 @@ public class Constants {
 	}
 	
 	/** Índices de coluna de planilha.
-	 *  @author Felipe André - felipeandresouza@hotmail.com
+	 *  @author Felipe André - felipeandre.eng@gmail.com
      *  @version 3.5, 23/04/2021 */
 	public static class SheetIndex {
 		
@@ -61,7 +61,7 @@ public class Constants {
 	}
 	
 	/** Formatos de String.
-	 *  @author Felipe André - felipeandresouza@hotmail.com
+	 *  @author Felipe André - felipeandre.eng@gmail.com
      *  @version 3.6, 05/MAR/2024 */
 	public static class StringFormat {
 		

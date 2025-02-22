@@ -10,7 +10,7 @@ import compec.ufam.isensys.model.*;
  *  e que também pode ser escrita em disco, por ser serializável. Também armazena alguns
  *  atributos referentes à instituição geradora dos arquivos + informações sobre o(s)
  *  arquivo(s) de retorno sendo atualmente processado(s).
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023
  *  @see Retorno */
 public class ListaRetornos implements Serializable {

@@ -7,7 +7,7 @@ import com.phill.libs.ui.*;
 import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 23/JUN/2023 */
 public class TelaInicioIsensys extends JFrame {
 

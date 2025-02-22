@@ -15,7 +15,7 @@ import compec.ufam.isensys.exception.*;
  *  Aqui são realizadas verificações na planilha e geradas uma lista de candidatos aptos a serem exportados para o Sistac e uma lista de erros,
  *  útil para a construção do edital.
  *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class CSVSheetReader {
 

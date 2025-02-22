@@ -5,7 +5,7 @@ import java.io.*;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Classe de I/O da compilação do sistema.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.9, 05/MAR/2024 */
 public class Compilacao {
 	

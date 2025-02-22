@@ -3,7 +3,7 @@ package compec.ufam.isensys.model.retorno;
 import org.apache.commons.text.similarity.*;
 
 /** Implementa a classe de cálculo de similaridade entre nomes de solicitantes de recurso de isenção.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 22/JUN/2023 */
 public class Similaridade {
 

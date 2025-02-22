@@ -9,7 +9,7 @@ import com.phill.libs.files.*;
 
 /** Classe que carrega os motivos de erro de processamento de um arquivo .csv com codificação UTF-8.
  *  Esta lista foi extraída do manual do Sistac em anexo neste projeto (res/development/manual-sistac-mds.pdf).
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023 */
 public class SituacaoDAO {
 

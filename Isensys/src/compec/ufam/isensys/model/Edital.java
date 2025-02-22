@@ -10,7 +10,7 @@ import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.9, 14/AGO/2024
  *  @since 3.5, 24/04/2021 */
 public class Edital {

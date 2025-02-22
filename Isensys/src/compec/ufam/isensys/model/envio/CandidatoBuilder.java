@@ -8,7 +8,7 @@ import com.phill.libs.time.*;
 import compec.ufam.isensys.exception.*;
 
 /** Classe que monta um {@link Candidato} e realiza uma série de validações de dados nos campos.
- *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.8, 21/JUN/2023
  *  @see Candidato */
 public class CandidatoBuilder {
