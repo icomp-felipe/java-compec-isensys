@@ -1023,7 +1023,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Gerando visualização do edital
 			Edital edital = new Edital(arqCompilacao);
-			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, edital, listaRetornos.getList(), dirSaida);
+			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, edital, null, listaRetornos.getList(), dirSaida);
 			
 			// Calculando e exibindo o relatório de distância e similaridade
 			final List<Similaridade> listaSimilaridades = JaroWinkler.compute(listaRetornos, listaRecursos);

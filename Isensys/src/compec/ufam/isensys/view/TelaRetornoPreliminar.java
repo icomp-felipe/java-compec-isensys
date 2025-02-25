@@ -20,6 +20,8 @@ import compec.ufam.isensys.model.retorno.*;
 import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.pdf.*;
 
+import com.github.lgooddatepicker.components.*;
+
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.9, 14/AGO/2024 */
@@ -46,6 +48,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	
 	private final JTextField textCabecalho;
 	private final JButton buttonCabecalhoClear;
+	private final DatePicker pickerPublicacao;
 	
 	private final JTextField textSaida;
 	private final JButton buttonSaidaSelect, buttonSaidaClear;
@@ -79,7 +82,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		ESCDispose.register(this);
 		
-		Dimension dimension = new Dimension(670,485);
+		Dimension dimension = new Dimension(670,525);
 		
 		JPanel painel = new JPaintedPanel("img/prelim-screen.jpg", dimension);
 		painel.setLayout(null);
@@ -253,20 +256,20 @@ public class TelaRetornoPreliminar extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder("Edital"));
-		panelEdital.setBounds(10, 275, 635, 65);
+		panelEdital.setBounds(10, 275, 635, 105);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel("Cabeçalho:");
 		labelCabecalho.setHorizontalAlignment(JLabel.RIGHT);
 		labelCabecalho.setFont(fonte);
-		labelCabecalho.setBounds(10, 30, 80, 20);
+		labelCabecalho.setBounds(10, 30, 85, 20);
 		panelEdital.add(labelCabecalho);
 		
 		textCabecalho = new JTextField();
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
 		textCabecalho.setForeground(color);
 		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 490, 25);
+		textCabecalho.setBounds(100, 30, 485, 25);
 		panelEdital.add(textCabecalho);
 		
 		buttonCabecalhoClear = new JButton(clearIcon);
@@ -275,12 +278,22 @@ public class TelaRetornoPreliminar extends JFrame {
 		buttonCabecalhoClear.setBounds(595, 30, 30, 25);
 		panelEdital.add(buttonCabecalhoClear);
 		
+		JLabel labelPublicacao = new JLabel("Publicação:");
+		labelPublicacao.setHorizontalAlignment(JLabel.RIGHT);
+		labelPublicacao.setFont(fonte);
+		labelPublicacao.setBounds(10, 65, 85, 20);
+		panelEdital.add(labelPublicacao);
+		
+		pickerPublicacao = LGoodDatePickerUtils.getDatePicker();
+		pickerPublicacao.setBounds(100, 65, 150, 30);
+		panelEdital.add(pickerPublicacao);
+		
 		// Painel 'Arquivos de Saída'
 		JPanel panelSaida = new JPanel();
 		panelSaida.setOpaque(false);
 		panelSaida.setLayout(null);
 		panelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
-		panelSaida.setBounds(10, 340, 635, 65);
+		panelSaida.setBounds(10, 380, 635, 65);
 		painel.add(panelSaida);
 		
 		JLabel labelSaida = new JLabel("Diretório:");
@@ -314,12 +327,12 @@ public class TelaRetornoPreliminar extends JFrame {
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(10, 415, 215, 20);
+		labelStatus.setBounds(10, 455, 215, 20);
 		painel.add(labelStatus);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(610, 410, 35, 30);
+		buttonReport.setBounds(610, 450, 35, 30);
 		buttonReport.addActionListener((_) -> actionExport());
 		painel.add(buttonReport);
 		
@@ -330,6 +343,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		fieldValidator.addPermanent(labelRetorno   , () -> this.arqRetornoSistac != null     , bundle.getString("prelim-mfv-retorno"  ), false);
 		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().isBlank(), bundle.getString("prelim-mfv-cabecalho"), false);
 		fieldValidator.addPermanent(labelSaida     , () -> this.dirSaida         != null     , bundle.getString("prelim-mfv-dirSaida" ), false);
+		fieldValidator.addPermanent(labelPublicacao, () -> pickerPublicacao.getDate() != null, bundle.getString("prelim-mfv-dataPubli"), false);
 		
 		// Mostrando a janela
 		setSize(dimension);
@@ -978,7 +992,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.arqCompilacao = new File(dirSaida, edital.getCompilationFilename());
 			
 			// Gerando visualização
-			PDFResultado.export(Resultado.PRELIMINAR, cabecalho, edital, listaRetornos.getList(), dirSaida);
+			PDFResultado.export(Resultado.PRELIMINAR, cabecalho, edital, pickerPublicacao.getDate(), listaRetornos.getList(), dirSaida);
 			Compilacao.save(listaRetornos, arqCompilacao);
 			
 			// Montando a lista de arquivos processados

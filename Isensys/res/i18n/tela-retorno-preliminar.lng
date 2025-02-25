@@ -5,6 +5,7 @@ prelim-window-title = IsenSys v.3.8 - Resultado Preliminar
 prelim-mfv-retorno   = Selecione o arquivo de retorno do Sistac
 prelim-mfv-cabecalho = Informe o cabeçalho do edital
 prelim-mfv-dirSaida  = Selecione o diretório de saída de arquivos
+prelim-mfv-dataPubli = A data de publicação não pode ser vazia
 
 ########## Dicas
 hint-text-retorno          = Primeiro arquivo de retorno do Sistac (.txt)
@@ -17,6 +18,7 @@ hint-button-erros-clear  = Limpar a seleção da planilha de erros
 
 hint-text-cabecalho         = Título que fará parte do cabeçalho do edital
 hint-button-cabecalho-clear = Limpar o texto de cabeçalho
+hint-button-publi-clear     = Limpar a data de publicação
 
 hint-text-saida          = Diretório de exportação dos arquivos
 hint-button-saida-select = Selecionar o diretório de saída de arquivos
