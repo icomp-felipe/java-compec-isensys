@@ -8,7 +8,7 @@ import com.phill.libs.i18n.*;
 
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 23/JUN/2023 */
+ *  @version 3.9, 25/FEV/2025 */
 public class TelaInicioIsensys extends JFrame {
 
 	private static final long serialVersionUID = -6673738709226295401L;

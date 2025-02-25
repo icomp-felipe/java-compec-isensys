@@ -1,8 +1,8 @@
 ########## Título da Janela
-inicio-window-title = IsenSys v.3.8
+inicio-window-title = IsenSys v.3.9
 
 ########## Labels
-inicio-panel-info = <html>Bem vindo ao IsenSys v.3.8!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
+inicio-panel-info = <html>Bem vindo ao IsenSys v.3.9!<br><br>Escolha uma das opções<br>abaixo para prosseguir...</html>
 
 ########## Dicas
 hint-button-envio          = Abre o módulo de preparo do arquivo de envio
@@ -13,4 +13,4 @@ hint-button-configs        = Abre a tela de configurações do sistema
 ########## Métodos
 ! TelaInicioIsensys::actionEasterEgg
 inicio-button-help-title  = Notas de Versão
-inicio-button-help-dialog = IsenSys v.3.8 - Build 20230621
+inicio-button-help-dialog = IsenSys v.3.9 - Build 20250225

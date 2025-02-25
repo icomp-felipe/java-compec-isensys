@@ -24,7 +24,7 @@ import com.github.lgooddatepicker.components.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 14/AGO/2024 */
+ *  @version 3.9, 25/FEV/2025 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
