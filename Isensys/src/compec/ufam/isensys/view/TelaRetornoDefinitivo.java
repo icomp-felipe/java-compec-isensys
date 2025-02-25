@@ -20,9 +20,11 @@ import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.model.retorno.*;
 
+import com.github.lgooddatepicker.components.*;
+
 /** Classe que controla a view de processamento de Retorno Definitivo.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 14/AGO/2024 */
+ *  @version 3.9, 25/FEV/2025 */
 public class TelaRetornoDefinitivo extends JFrame {
 
 	// Serial
@@ -47,6 +49,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 	private final JButton buttonRetornoSelect, buttonErrosSelect;
 	
 	private final JTextField textCabecalho;
+	private final DatePicker pickerPublicacao;
+	
 	private final JLabel labelStatus;
 	private final JButton buttonCabecalhoClear, buttonReport;
 	
@@ -73,7 +77,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"icon/isensys-icon.png");
 		ESCDispose.register(this);
 		
-		Dimension dimension = new Dimension(670, 555);
+		Dimension dimension = new Dimension(670, 595);
 		setSize(dimension);
 		
 		JPanel painel = new JPaintedPanel("img/defs-screen.jpg", dimension);
@@ -270,7 +274,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		panelEdital.setOpaque(false);
 		panelEdital.setLayout(null);
 		panelEdital.setBorder(instance.getTitledBorder("Edital"));
-		panelEdital.setBounds(10, 345, 635, 65);
+		panelEdital.setBounds(10, 345, 635, 105);
 		painel.add(panelEdital);
 		
 		JLabel labelCabecalho = new JLabel("Cabeçalho:");
@@ -278,6 +282,16 @@ public class TelaRetornoDefinitivo extends JFrame {
 		labelCabecalho.setFont(fonte);
 		labelCabecalho.setBounds(10, 30, 80, 20);
 		panelEdital.add(labelCabecalho);
+		
+		JLabel labelPublicacao = new JLabel("Publicação:");
+		labelPublicacao.setHorizontalAlignment(JLabel.RIGHT);
+		labelPublicacao.setFont(fonte);
+		labelPublicacao.setBounds(10, 65, 85, 20);
+		panelEdital.add(labelPublicacao);
+		
+		pickerPublicacao = LGoodDatePickerUtils.getDatePicker();
+		pickerPublicacao.setBounds(100, 65, 150, 30);
+		panelEdital.add(pickerPublicacao);
 		
 		textCabecalho = new JTextField();
 		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
@@ -297,7 +311,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 		panelSaida.setOpaque(false);
 		panelSaida.setLayout(null);
 		panelSaida.setBorder(instance.getTitledBorder("Arquivos de Saída"));
-		panelSaida.setBounds(10, 410, 635, 65);
+		panelSaida.setBounds(10, 450, 635, 65);
 		painel.add(panelSaida);
 		
 		JLabel labelSaida = new JLabel("Diretório:");
@@ -331,12 +345,12 @@ public class TelaRetornoDefinitivo extends JFrame {
 		labelStatus.setHorizontalAlignment(JLabel.LEFT);
 		labelStatus.setFont(fonte);
 		labelStatus.setVisible(false);
-		labelStatus.setBounds(10, 485, 215, 20);
+		labelStatus.setBounds(10, 525, 215, 20);
 		painel.add(labelStatus);
 		
 		buttonReport = new JButton(reportIcon);
 		buttonReport.setToolTipText(bundle.getString("hint-button-report"));
-		buttonReport.setBounds(610, 480, 35, 30);
+		buttonReport.setBounds(610, 520, 35, 30);
 		buttonReport.addActionListener((_) -> actionExport());
 		painel.add(buttonReport);
 		
@@ -344,12 +358,12 @@ public class TelaRetornoDefinitivo extends JFrame {
 		this.fieldValidator = new MandatoryFieldsManager();
 		this.fieldLogger    = new MandatoryFieldsLogger ();
 		
-		fieldValidator.addPermanent(labelCompilacao, () -> this.arqCompilacao != null, bundle.getString("defs-mfv-compilacao"), false);
-		fieldValidator.addPermanent(labelSaida     , () -> this.dirSaida      != null, bundle.getString("defs-mfv-dirSaida"  ), false);
-		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().trim().isEmpty(), bundle.getString("defs-mfv-cabecalho"), false);
+		fieldValidator.addPermanent(labelCompilacao, () -> this.arqCompilacao != null        , bundle.getString("defs-mfv-compilacao"), false);
+		fieldValidator.addPermanent(labelSaida     , () -> this.dirSaida      != null        , bundle.getString("defs-mfv-dirSaida"  ), false);
+		fieldValidator.addPermanent(labelCabecalho , () -> !textCabecalho.getText().isBlank(), bundle.getString("defs-mfv-cabecalho" ), false);
+		fieldValidator.addPermanent(labelPublicacao, () -> pickerPublicacao.getDate() != null, bundle.getString("defs-mfv-dataPubli" ), false);
 		
 		// Mostrando a janela
-		// setSize(dimension);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -1023,7 +1037,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			
 			// Gerando visualização do edital
 			Edital edital = new Edital(arqCompilacao);
-			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, edital, null, listaRetornos.getList(), dirSaida);
+			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, edital, pickerPublicacao.getDate(), listaRetornos.getList(), dirSaida);
 			
 			// Calculando e exibindo o relatório de distância e similaridade
 			final List<Similaridade> listaSimilaridades = JaroWinkler.compute(listaRetornos, listaRecursos);

@@ -5,6 +5,7 @@ defs-window-title = IsenSys v.3.8 - Resultado Definitivo
 defs-mfv-compilacao = Selecione um arquivo de compilação (.bsf)
 defs-mfv-cabecalho  = Informe o cabeçalho do edital
 defs-mfv-dirSaida   = Selecione o diretório de saída de arquivos
+defs-mfv-dataPubli  = A data de publicação não pode ser vazia
 
 ########## Dicas
 hint-text-compilacao = Arquivo de compilação (.bsf)
