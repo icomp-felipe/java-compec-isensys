@@ -15,7 +15,7 @@ import net.sf.jasperreports.engine.util.*;
 
 /** Constrói o relatório de similaridade.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 14/AGO/2024 */
+ *  @version 3.9, 25/FEV/2025 */
 public class PDFSimilaridade {
 
 	/** Monta o relatório de distância e similaridade dos candidatos deferidos no recurso de isenção.
@@ -28,7 +28,7 @@ public class PDFSimilaridade {
 	public static void export(final String cabecalho, final Edital edital, final List<Similaridade> listaDeferidos, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
-		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
+		File imagePath = new File(ResourceManager.getResource("img/compec-header.png"));
 		BufferedImage image = ImageIO.read(imagePath);
 		
 		// Carregando relatório Jasper

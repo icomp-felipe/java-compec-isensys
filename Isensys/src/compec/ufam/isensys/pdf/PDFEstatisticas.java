@@ -18,7 +18,7 @@ import net.sf.jasperreports.engine.util.*;
 
 /** Constrói o relatório de processamento de retornos.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 14/AGO/2024 */
+ *  @version 3.9, 25/FEV/2025 */
 public class PDFEstatisticas {
 
 	/** Exporta o relatório de processamento do resultado preliminar para PDF, no diretório especificado.
@@ -61,7 +61,7 @@ public class PDFEstatisticas {
 	private static void export(final Resultado tipoResultado, final String cabecalho, final Edital edital, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
-		File imagePath = new File(ResourceManager.getResource("img/logo.jpg"));
+		File imagePath = new File(ResourceManager.getResource("img/compec-header.png"));
 		BufferedImage image = ImageIO.read(imagePath);
 		
 		// Carregando relatório Jasper
