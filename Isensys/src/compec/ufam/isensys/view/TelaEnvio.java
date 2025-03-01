@@ -18,7 +18,7 @@ import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 3.9, 28/FEV/2025 */
 public class TelaEnvio extends JFrame {
 
 	// Serial
@@ -39,7 +39,7 @@ public class TelaEnvio extends JFrame {
 	
 	// Atributos dinâmicos
 	private ParseResult resultList;
-	private File inputFile, outputDir;
+	private File inputFile, outputDir, lastFileSelected;
 	
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
@@ -376,10 +376,12 @@ public class TelaEnvio extends JFrame {
 		final String title = bundle.getString("envio-input-select-title");
 		
 		// Recuperando o arquivo de entrada
-		this.inputFile  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG, null, null);
+		this.inputFile  = PhillFileUtils.loadFile(this, title, Constants.FileFormat.SISTAC_INPUT, PhillFileUtils.OPEN_DIALOG,  this.lastFileSelected, null);
 		
 		// Faz algo somente se algum arquivo foi selecionado
 		if (this.inputFile != null) {
+			
+			this.lastFileSelected = this.inputFile;
 			
 			// Atualizando a view
 			textInputName.setText(inputFile.getName());
@@ -402,11 +404,15 @@ public class TelaEnvio extends JFrame {
 		final String title = bundle.getString("envio-output-select-title");
 		
 		// Recuperando o diretório de saída
-		this.outputDir = PhillFileUtils.loadDir(this, title, PhillFileUtils.OPEN_DIALOG, null);
+		this.outputDir = PhillFileUtils.loadDir(this, title, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected);
 		
 		// Atualizando a view
-		if (outputDir != null)
+		if (outputDir != null) {
+			
+			this.lastFileSelected = this.outputDir;
 			textOutputFolder.setText(outputDir.getAbsolutePath());
+			
+		}
 		
 	}
 	
@@ -556,7 +562,7 @@ public class TelaEnvio extends JFrame {
 				resultList = CSVSheetReader.read(inputFile, this.configs.getIndices());
 		
 			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
+			Thread.sleep(1000L);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
@@ -617,7 +623,10 @@ public class TelaEnvio extends JFrame {
 			}
 			
 			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(2000L);
+			Thread.sleep(1000L);
+			
+			// Desbloqueando campos e botões
+			setExportProcessing(false);
 			
 			// Mostrando status na view
 			AlertDialog.info(this, bundle.getString("envio-export-title" ),
@@ -628,15 +637,12 @@ public class TelaEnvio extends JFrame {
 			
 			exception.printStackTrace();
 			
+			// Desbloqueando campos e botões
+			setExportProcessing(false);
+			
 			// Mostrando status na view
 			AlertDialog.error(this, bundle.getString("envio-export-title" ),
 							        bundle.getString("envio-export-error"));
-			
-		}
-		finally {
-			
-			// Desbloqueando campos e botões
-			setExportProcessing(false);
 			
 		}
 		
