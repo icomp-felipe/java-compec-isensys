@@ -24,7 +24,7 @@ import com.github.lgooddatepicker.components.*;
 
 /** Classe que controla a view de processamento de Retorno Definitivo.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 25/FEV/2025 */
+ *  @version 3.9, 18/MAR/2025 */
 public class TelaRetornoDefinitivo extends JFrame {
 
 	// Serial
@@ -1048,6 +1048,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Montando a lista de arquivos processados
 			final List<ArquivoProcessado> listaProcessados = computeFiles();
 			
+			listaRecursos.sort();
 			PDFEstatisticas.export(cabecalho, edital, currentCount, previousCount, listaRecursos.getList(), listaProcessados, dirSaida);
 			
 			setExportProcessing(false);
