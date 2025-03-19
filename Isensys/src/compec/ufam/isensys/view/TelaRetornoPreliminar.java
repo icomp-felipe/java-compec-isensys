@@ -24,7 +24,7 @@ import com.github.lgooddatepicker.components.*;
 
 /** Classe que controla a view de processamento de Retorno Preliminar.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 25/FEV/2025 */
+ *  @version 3.9, 18/MAR/2025 */
 public class TelaRetornoPreliminar extends JFrame {
 
 	// Serial
@@ -286,6 +286,7 @@ public class TelaRetornoPreliminar extends JFrame {
 		
 		pickerPublicacao = LGoodDatePickerUtils.getDatePicker();
 		pickerPublicacao.setBounds(100, 65, 150, 30);
+		pickerPublicacao.getComponentDateTextField().setHorizontalAlignment(JTextField.CENTER);
 		panelEdital.add(pickerPublicacao);
 		
 		// Painel 'Arquivos de Saída'

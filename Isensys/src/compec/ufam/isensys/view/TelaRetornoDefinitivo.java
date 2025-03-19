@@ -280,8 +280,21 @@ public class TelaRetornoDefinitivo extends JFrame {
 		JLabel labelCabecalho = new JLabel("Cabeçalho:");
 		labelCabecalho.setHorizontalAlignment(JLabel.RIGHT);
 		labelCabecalho.setFont(fonte);
-		labelCabecalho.setBounds(10, 30, 80, 20);
+		labelCabecalho.setBounds(10, 30, 85, 20);
 		panelEdital.add(labelCabecalho);
+		
+		textCabecalho = new JTextField();
+		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
+		textCabecalho.setForeground(color);
+		textCabecalho.setFont(fonte);
+		textCabecalho.setBounds(100, 30, 485, 25);
+		panelEdital.add(textCabecalho);
+		
+		buttonCabecalhoClear = new JButton(clearIcon);
+		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
+		buttonCabecalhoClear.addActionListener((_) -> actionHeaderClear());
+		buttonCabecalhoClear.setBounds(595, 30, 30, 25);
+		panelEdital.add(buttonCabecalhoClear);
 		
 		JLabel labelPublicacao = new JLabel("Publicação:");
 		labelPublicacao.setHorizontalAlignment(JLabel.RIGHT);
@@ -290,21 +303,9 @@ public class TelaRetornoDefinitivo extends JFrame {
 		panelEdital.add(labelPublicacao);
 		
 		pickerPublicacao = LGoodDatePickerUtils.getDatePicker();
+		pickerPublicacao.getComponentDateTextField().setHorizontalAlignment(JTextField.CENTER);
 		pickerPublicacao.setBounds(100, 65, 150, 30);
 		panelEdital.add(pickerPublicacao);
-		
-		textCabecalho = new JTextField();
-		textCabecalho.setToolTipText(bundle.getString("hint-text-cabecalho"));
-		textCabecalho.setForeground(color);
-		textCabecalho.setFont(fonte);
-		textCabecalho.setBounds(95, 30, 490, 25);
-		panelEdital.add(textCabecalho);
-		
-		buttonCabecalhoClear = new JButton(clearIcon);
-		buttonCabecalhoClear.setToolTipText(bundle.getString("hint-button-cabecalho-clear"));
-		buttonCabecalhoClear.addActionListener((_) -> actionHeaderClear());
-		buttonCabecalhoClear.setBounds(595, 30, 30, 25);
-		panelEdital.add(buttonCabecalhoClear);
 		
 		// Painel 'Arquivos de Saída'
 		JPanel panelSaida = new JPanel();
