@@ -1,24 +1,25 @@
 package compec.ufam.isensys.model.envio;
 
-import org.joda.time.*;
-import com.phill.libs.time.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import compec.ufam.isensys.constants.*;
+import compec.ufam.isensys.constants.Constants;
 
 /** Classe que representa um candidato processado com sucesso pelo sistema. Se houve algum erro
  *  durante o processo de leitura e parse dos arquivos, o objeto criado será o 'RowParseException'
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023
+ *  @version 4.0, 02/AGO/2025
  *  @see CandidatoBuilder */
 public class Candidato {
 
 	private final String nome, nis, rg, orgaoEmissorRG, cpf, nomeMae;
-	private final DateTime dataNascimento, dataEmissaoRG;
+	private final LocalDate dataNascimento, dataEmissaoRG;
 	private final char sexo;
+	private final DateTimeFormatter formatter;
 	
 	/** Construtor da classe inicializando os atributos. */
-	protected Candidato(final String nome, final String nis, final DateTime dataNascimento, final char sexo, final String rg,
-			            final DateTime dataEmissaoRG, final String orgaoEmissorRG, final String cpf, final String nomeMae) {
+	protected Candidato(final String nome, final String nis, final LocalDate dataNascimento, final char sexo, final String rg,
+			            final LocalDate dataEmissaoRG, final String orgaoEmissorRG, final String cpf, final String nomeMae) {
 		
 		this.nome = nome;
 		this.nis  = nis;
@@ -30,6 +31,8 @@ public class Candidato {
 		this.dataEmissaoRG  = dataEmissaoRG;
 		this.orgaoEmissorRG = orgaoEmissorRG;
 		
+		this.formatter = DateTimeFormatter.ofPattern("ddMMuuuu");
+		
 	}
 	
 	/** @return Nome do candidato. */
@@ -40,20 +43,20 @@ public class Candidato {
 	/** Getter para a data de nascimento do candidato.
 	 *  @return Uma string com a data de nascimento do candidato no formato Sistac (ddMMyyyy). */
 	public String getDataNascimento() {
-		return PhillsDateParser.retrieveDate(this.dataNascimento, PhillsDateFormatter.RAW_DATE);
+		return this.dataNascimento.format(formatter);
 	}
 	
 	/** Getter para a data de emissão do RG do candidato.
 	 *  @return Uma string com a data de emissão do RG do candidato no formato Sistac (ddMMyyyy). */
 	public String getDataEmissaoRG() {
-		return PhillsDateParser.retrieveDate(this.dataEmissaoRG, PhillsDateFormatter.RAW_DATE);
+		return this.dataEmissaoRG.format(formatter);
 	}
 	
 	/** Retorna uma String com os dados organizados e preparados para escrita no arquivo texto de acordo com o formato do Sistac.
 	 *  @return Uma string com os dados desta classe no formato Sistac. */
 	public String getDadosSistac() {
 		return String.format(Constants.StringFormat.ROW_DATA_FORMAT,
-				             this.nome, this.nis, getDataNascimento(), this.sexo, this.rg, getDataEmissaoRG(), this.orgaoEmissorRG, this.cpf, this.nomeMae);
+				             this.nome, this.cpf, getDataNascimento());
 	}
 	
 	/** Compara todos os atributos de um <code>object</code>, caso ele seja da classe {@link Candidato}, senão o método pai é chamado passando o objeto.

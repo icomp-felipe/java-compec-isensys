@@ -1,15 +1,17 @@
 package compec.ufam.isensys.model.envio;
 
-import org.joda.time.*;
-import com.phill.libs.*;
-import com.phill.libs.br.*;
-import com.phill.libs.time.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import compec.ufam.isensys.exception.*;
+import com.phill.libs.StringUtils;
+import com.phill.libs.br.CPFParser;
+
+import compec.ufam.isensys.exception.FieldParseException;
+import compec.ufam.isensys.exception.RowParseException;
 
 /** Classe que monta um {@link Candidato} e realiza uma série de validações de dados nos campos.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023
+ *  @version 4.0, 02/AGO/2025
  *  @see Candidato */
 public class CandidatoBuilder {
 
@@ -30,7 +32,7 @@ public class CandidatoBuilder {
 
 		char sexo = ' ';
 		String nome, nis, rg, orgaoEmissorRG, cpf, nomeMae;
-		DateTime dataNascimento, dataEmissaoRG;
+		LocalDate dataNascimento, dataEmissaoRG;
 		
 		// Inicialização das Variáveis
 		nome = nomeMae = nis = rg = cpf = null;
@@ -122,19 +124,28 @@ public class CandidatoBuilder {
 	/** Verifica e formata datas.
 	 *  @param data - data com ou sem máscara
 	 *  @return Um {@link DateTime} com a <code>data</code> informada. */
-	private static DateTime parseData(String data) {
+	private static LocalDate parseData(String data) {
 		
-		// Tratamento especial para datas processadas no Excel
-		if (data.length() == 7)
-			data = "0" + data;
+		try {
+			
+			if (data.length() == 7)
+				return LocalDate.parse(data, DateTimeFormatter.ofPattern("dMMuuuu"));
+			
+			if (data.length() == 8)
+				return LocalDate.parse(data, DateTimeFormatter.ofPattern("ddMMuuuu"));
+			
+			if (data.matches(".*/.*/.*"))
+				return LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/uuuu"));
 		
-		DateTime dateTime = PhillsDateParser.createDate(data);
+			return LocalDate.of(2000, 1, 1);
+			
+		}
+		catch (Exception exception) {
+			
+			return LocalDate.of(2000, 1, 1);
+			
+		}
 		
-		// Força o retorno da data '01/jan/2000' em caso de erro, já que este não é um dado tão crítico
-		if (dateTime == null)
-			dateTime = PhillsDateParser.createDate("2000-01-01");
-		
-		return dateTime;
 	}
 	
 	/** Verifica o sexo.

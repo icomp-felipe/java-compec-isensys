@@ -1,18 +1,19 @@
 package compec.ufam.isensys.model;
 
-import java.io.*;
+import java.io.File;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
-import org.joda.time.*;
-import org.joda.time.format.*;
-
-import compec.ufam.isensys.view.*;
-import compec.ufam.isensys.constants.*;
-import compec.ufam.isensys.model.retorno.*;
+import compec.ufam.isensys.constants.Constants;
+import compec.ufam.isensys.model.retorno.ListaRetornos;
+import compec.ufam.isensys.view.TelaEnvio;
+import compec.ufam.isensys.view.TelaRetornoDefinitivo;
+import compec.ufam.isensys.view.TelaRetornoPreliminar;
 
 /** Armazena dados referentes ao edital e instituição utilizadora do Sistac.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 14/AGO/2024
- *  @since 3.5, 24/04/2021 */
+ *  @version 4.0, 02/AGO/2025 */
 public class Edital {
 	
 	private String cnpj, edital, dataEdital;
@@ -144,10 +145,9 @@ public class Edital {
 	 *  @return Uma String contendo a data atual do Sistac no formato DDMMYYYY. */
 	private String getDataSistac() {
 		
-		DateTime sistac = DateTime.now().withZone(DateTimeZone.forID("UTC"));
-		DateTimeFormatter formatter = DateTimeFormat.forPattern("ddMMyyyy");
+		LocalDate sistac = LocalDate.now(ZoneOffset.UTC);
 		
-	    return sistac.toString(formatter);
+	    return sistac.format(DateTimeFormatter.ofPattern("ddMMyyyy"));
 	}
 	
 	/** Imprime todos os atributos dessa classe, útil para debug. */
