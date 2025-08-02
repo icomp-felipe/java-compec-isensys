@@ -1,56 +1,52 @@
 package compec.ufam.isensys.model.retorno;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import com.phill.libs.*;
-import com.phill.libs.br.*;
+import com.phill.libs.StringUtils;
+import com.phill.libs.br.CPFParser;
 
 /** Entidade principal da parte de processamento de arquivos de retornos do sistema.
  *  Encapsula apenas neste objeto tanto os candidatos válidos (vindos do arquivo do Sistac),
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 04/OUT/2024 */
+ *  @version 4.0, 02/AGO/2025 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
-	private static final transient long serialVersionUID = 3;
+	private static final transient long serialVersionUID = 4;
 	
 	// Atributos serializáveis
-	private char situacao;
-	protected String nome, nis, cpf;
+	private Character situacao;
+	protected String nome, cpf;
+	protected LocalDate dataNascimento;
 	protected int motivo;
 	
 	// Utilizado apenas pro cálculo de similaridade. Logo, não faz parte da serialização!
 	private transient String nomeAnterior;
 
-	/** Construtor principal e obrigatório desta classe.
-	 *  @param nome - nome do candidato
-	 *  @param nis - Número de Identicação Social (NIS) do candidato
-	 *  @param cof - número de CPF do candidato
-	 *  @param situacao - situação de deferimento do pedido de isenção ("N" para indeferido ou "S" para deferido)
-	 *  @param motivo - código de motivo da situação:<br>"-1" para erros de processamento<br>"" para deferido<br>">0" para indeferimentos de acordo com manual do Sistac. */
-	public Retorno(final String nome, final String nis, final String cpf, final String situacao, final String motivo) {
+	public Retorno(final String row) {
 		
-		this.nome = nome;
-		this.nis  = nis ;
-		this.cpf  = cpf ;
+		String[] splitted = row.split(";", -1);
 		
-		this.situacao = situacao.charAt(0);
-		this.motivo   = motivo.isEmpty() ? 0 : Integer.parseInt(motivo);
+		this.nome = splitted[1];
+		this.cpf = splitted[2];
+		this.dataNascimento = LocalDate.parse(splitted[3], DateTimeFormatter.ofPattern("ddMMuuuu"));
+		this.situacao = splitted[4].charAt(0);
+		this.motivo = splitted[5].isEmpty() ? 0 : Integer.parseInt(splitted[5]);
 		
 	}
 	
 	/*************************** Bloco de Setters ******************************/
 	
-	/** Setter para o número do NIS.
-	 *  @param nis - número do NIS do candidato */
-	public void setNIS(final String nis) {
-		this.nis = nis;
+	/** @param nis - número do CPF do candidato */
+	public void setCPF(final String cpf) {
+		this.cpf = cpf;
 	}
 	
-	/** Setter pro nome.
-	 *  @param nome - nome do candidato */
+	/** @param nome - nome do candidato */
 	public void setNome(final String nome) {
 		this.nomeAnterior = this.nome;
 		this.nome = nome;
@@ -115,16 +111,6 @@ public class Retorno implements Serializable {
 		return StringUtils.BR.normaliza(this.nome);
 	}
 	
-	/** @return Número de Identicação Social (NIS) do candidato (com máscara). */
-	public String getNIS() {
-		return PISParser.format(this.nis);
-	}
-	
-	/** @return Número de Identicação Social (NIS) do candidato (LGPD). */
-	public String getNISOculto() {
-		return PISParser.oculta(this.nis);
-	}
-	
 	/** Getter para a situação de odeferimento do pedido de isenção do candidato.
 	 *  @return Situação de deferimento do pedido de isenção do candidato. */
 	public char getSituacao() {
@@ -144,7 +130,11 @@ public class Retorno implements Serializable {
 	
 	@Override
 	public String toString() {
-		return String.format("%s;%s;%s;%s;", this.nome, this.cpf, this.nis, this.deferido() ? "deferido" : "indeferido");
+		return String.format("[%s,%s,%s,%s,%s]", this.nome,
+												this.cpf,
+												this.dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/uuuu")),
+												this.deferido() ? "deferido" : "indeferido",
+												this.motivo);
 	}
 	
 }

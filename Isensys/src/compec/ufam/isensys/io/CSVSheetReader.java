@@ -2,13 +2,14 @@ package compec.ufam.isensys.io;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.nio.file.Files;
+import java.util.stream.Stream;
 
 import com.phill.libs.files.*;
 
 import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.model.envio.*;
 import compec.ufam.isensys.model.retorno.*;
-import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.exception.*;
 
 /** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
@@ -85,40 +86,32 @@ public class CSVSheetReader {
 	 *  @throws IOException quando a planilha não pode ser lida. */
 	public static void readRetorno(final File planilha, final ListaRetornos listaRetornos, final ListaRetornos listaRecursos, final boolean preliminar) throws IOException {
 		
-		// Variável auxiliar ao loop de leitura do csv
-		String row;
-		
-		// Abrindo planilha para leitura
-		BufferedReader stream = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
-
-		// Recuperando delimitador do csv
-		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
-		
-		// Lendo e processando as linhas de retorno do arquivo
-		while ( (row = stream.readLine() ) != null) {
+		try (Stream<String> lines = Files.lines(planilha.toPath(), StandardCharsets.UTF_8)) {
 			
-			// Recuperando os dados de uma linha já separados em um array
-			String[] dados = readLine(row, csvDelimiter, Constants.SheetIndex.CSV_RETURN_SHEET);
-			
-			// Montando objeto 'Retorno'
-			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], dados[3], dados[4] );
-			
-			// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
-			if (preliminar)
-				listaRetornos.add(retorno);
-			
-			// Se o resultado é definitivo, o novo retorno é atualizado na lista já existente e cadastrado na lista de recursantes
-			else {
-				
-				listaRetornos.update(retorno);
-				listaRecursos.add   (retorno);
-				
-			}
+			lines.skip(1)				// Ignora a linha de cabeçalho
+				 .map(Retorno::new)		// Cria um objeto 'Retorno' para cada linha
+				 .forEach(retorno -> {
+					 
+					// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
+					if (preliminar)
+						listaRetornos.add(retorno);
+						
+					// Se o resultado é definitivo, o novo retorno é atualizado na lista já existente e cadastrado na lista de recursantes
+					else {
+							
+						listaRetornos.update(retorno);
+						listaRecursos.add   (retorno);
+							
+					}
+					 
+				 });
 			
 		}
-		
-		// Fechando a planilha
-		stream.close();
+		catch (IOException exception) {
+			
+			exception.printStackTrace();
+			
+		}
 		
 	}
 	

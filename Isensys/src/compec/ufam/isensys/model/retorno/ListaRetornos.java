@@ -164,7 +164,7 @@ public class ListaRetornos implements Serializable {
 					presente.defere();
 
 				// Aqui são atualizados os dados de acordo com o recurso
-				presente.setNIS   (retorno.nis   );
+				presente.setCPF   (retorno.cpf   );
 				presente.setNome  (retorno.nome  );
 				presente.setMotivo(retorno.motivo);
 				

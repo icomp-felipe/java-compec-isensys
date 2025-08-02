@@ -40,10 +40,10 @@ public class Constants {
 		/** Índices dos campos aproveitados do arquivo de retorno do Sistac. */
 		public static final int[] CSV_RETURN_SHEET = {
 				                                       1,   // Nome do solicitante
-                                                       2,   // NIS
-                                                       8,   // CPF
-                                                       10,  // Situação ('N' para indeferido ou 'S' para deferido
-                                                       11   // Código de situação (motivo), caso esta seja 'N' (ver manual do Sistac)
+                                                       2,   // CPF
+                                                       3,   // Data de nascimento
+                                                       4,  // Situação ('N' para indeferido ou 'S' para deferido
+                                                       5   // Código de situação (motivo), caso esta seja 'N' (ver manual do Sistac)
                                                      };
 		
 		/** Índices dos campos aproveitados da planilha de erros. */
