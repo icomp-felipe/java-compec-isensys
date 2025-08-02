@@ -79,6 +79,10 @@ public class Retorno implements Serializable {
 		return StringUtils.BR.normaliza(this.nomeAnterior);
 	}
 	
+	public LocalDate getDataNascimento() {
+		return this.dataNascimento;
+	}
+	
 	/** Comparador de objetos de retorno. Útil para métodos de ordenação. Usa o nome do candidato como base nos cálculos.
 	 *  @param retorno - retorno a ser comparado com esta instância
 	 *  @since 3.5, 23/04/2021 */
