@@ -1,9 +1,8 @@
 Código de Erro;Situação;Descrição da Situação;
 1;Dados inválidos;Envio impossibilitado ao órgão gestor (CadÚnico) devido a inconsistência nos dados pessoais;
-2;Dados divergentes;Os dados informados na solicitação de isenção ou de recurso de isenção não estão associados ao CPF do candidato;
-3;NIS inválido;O NIS é inválido;
-4;NIS não cadastrado;O NIS não foi identificado na base de dados do Cadastro Único;
-5;NIS excluído;O NIS foi identificado na base de dados do Cadastro Único, porém com status excluído;
-6;NIS com renda fora do perfil;O NIS foi identificado na base do Cadastro Único, porém com renda per capita familiar fora do perfil;
-7;NIS não é o da pessoa informada;O NIS foi identificado na base do Cadastro Único, com renda per capita familiar dentro do perfil, porém não pertence a pessoa informada;
-13;Cadastro desatualizado;Pessoa identificada em família com cadastro desatualizado;
+3;CPF inválido;O CPF informado é inválido;
+4;CPF não encontrado;Pessoa não encontrada no Cadastro Único;
+5;Pessoa excluída;Pessoa está excluída da base de dados do Cadastro Único;
+6;Pessoa fora do perfil de renda;Pessoa identificada no Cadastro Único, com renda familiar per capita maior do que meio salário mínimo vigente;
+7;Divergência nos dados consultados;CPF identificado no Cadastro Único, mas os dados fornecidos pelo candidato (nome completo ou data de nascimento) não permitiram confirmar a sua identidade;
+13;Cadastro desatualizado;Pessoa em família com data da inclusão ou data da última atualização cadastral maior do que 24 meses;
