@@ -10,6 +10,9 @@ import org.apache.poi.openxml4j.exceptions.*;
 
 import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.exception.*;
+import compec.ufam.isensys.model.Candidato;
+import compec.ufam.isensys.model.CandidatoBuilder;
+import compec.ufam.isensys.model.CandidatoValidator;
 import compec.ufam.isensys.model.envio.*;
 import compec.ufam.isensys.model.retorno.*;
 
@@ -51,7 +54,9 @@ public class ExcelSheetReader {
 			try {
 				
 				// Montando uma classe candidato com os 'dados' lidos da 'linha'
-				Candidato candidato = CandidatoBuilder.parse(linha, dados);
+				Candidato candidato = CandidatoBuilder.build(dados);
+				
+				CandidatoValidator.validate(candidato, linha);
 				
 				// Se não houve nenhum erro de processamento, o candidato é adicionado a uma lista própria
 				resultados.addCandidato(candidato);

@@ -5,7 +5,7 @@ import java.util.*;
 import java.nio.charset.*;
 
 import compec.ufam.isensys.model.*;
-import compec.ufam.isensys.model.envio.*;
+import compec.ufam.isensys.model.Candidato;
 import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac

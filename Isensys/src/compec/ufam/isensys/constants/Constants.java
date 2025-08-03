@@ -1,6 +1,7 @@
 package compec.ufam.isensys.constants;
 
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -57,6 +58,17 @@ public class Constants {
 		
 		/** Títulos das colunas de importação de dados */
 		public static final String[] IMPORT_COLUMN_TITLES = {"Nome", "NIS", "Dt. Nascimento", "Sexo", "RG", "Data Emissão RG", "Órgão Emissor RG", "CPF", "Nome da Mãe"};
+		
+	}
+	
+	/** Formatos de data mais utilizados no sistema.
+	 *  @author Felipe André - felipeandre.eng@gmail.com
+     *  @version 4.0, 02/AGO/2025 */
+	public static class DateFormatters {
+		
+		public static final DateTimeFormatter EXCEL_DATE = DateTimeFormatter.ofPattern("dMMuuuu");
+		public static final DateTimeFormatter SISTAC_DATE = DateTimeFormatter.ofPattern("ddMMuuuu");
+		public static final DateTimeFormatter BRAZILIAN_DATE = DateTimeFormatter.ofPattern("dd/MM/uuuu");
 		
 	}
 	

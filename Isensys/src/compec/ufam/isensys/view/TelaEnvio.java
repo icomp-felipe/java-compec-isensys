@@ -559,11 +559,8 @@ public class TelaEnvio extends JFrame {
 			if (inputFile.getName().endsWith("xlsx"))
 				resultList = ExcelSheetReader.read(inputFile, this.configs.getIndices());
 			else
-				resultList = CSVSheetReader.read(inputFile, this.configs.getIndices());
+				resultList = CSVSheetReader.read(inputFile);
 		
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(1000L);
-			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
 			

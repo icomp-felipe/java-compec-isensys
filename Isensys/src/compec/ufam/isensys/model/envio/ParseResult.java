@@ -2,6 +2,8 @@ package compec.ufam.isensys.model.envio;
 
 import java.util.*;
 
+import compec.ufam.isensys.model.Candidato;
+
 import compec.ufam.isensys.exception.*;
 
 /** Objeto que concentra listas de {@link Candidato} (objetos lidos com sucesso dos arquivos)

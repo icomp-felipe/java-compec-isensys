@@ -3,11 +3,13 @@ package compec.ufam.isensys.io;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.Files;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import com.phill.libs.files.*;
 
 import compec.ufam.isensys.model.*;
+import compec.ufam.isensys.model.CandidatoBuilder;
 import compec.ufam.isensys.model.envio.*;
 import compec.ufam.isensys.model.retorno.*;
 import compec.ufam.isensys.exception.*;
@@ -22,59 +24,51 @@ public class CSVSheetReader {
 
 	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
 	 *  @param planilha - caminho da planilha csv
-	 *  @param indexes - índices dos campos de importação de dados
 	 *  @return Objeto com TODAS as entradas lidas do arquivo csv.
 	 *  @throws IOException quando há alguma falha na leitura da planilha. */
-	public static ParseResult read(final File planilha, final int[] indexes) throws IOException {
+	public static ParseResult read(final File planilha) throws IOException {
 		
-		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo csv
-		int linha = 2;
-		
-		// Variável auxiliar ao loop de leitura do csv
-		String row;
-		
-		// Abrindo planilha para leitura
-		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
-		ParseResult resultados = new ParseResult();
-		
-		// Recuperando delimitador do .csv
-		final String csvDelimiter = CSVUtils.getCSVDelimiter(stream);
-		
-		// Iterando as linhas do .csv
-		while ( (row = stream.readLine()) != null ) {
+		try (Stream<String> lines = Files.lines(planilha.toPath(), StandardCharsets.UTF_8)) {
 			
-			// Recuperando os dados de uma linha já separados em um array
-			String[] dados = readLine(row, csvDelimiter, indexes);
+			// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo csv
+			final AtomicInteger contadorLinha = new AtomicInteger(2);
 			
-			try {
-				
-				// Montando uma classe candidato com os 'dados' lidos da 'linha'
-				Candidato candidato = CandidatoBuilder.parse(linha, dados);
-				
-				// Se não houve nenhum erro de processamento, o candidato é adicionado a uma lista própria
-				if (!resultados.addCandidato(candidato))
-					System.err.printf("* Ignorando candidato duplicado na linha %d: '%s'\n", linha, candidato.getNome());
-				
-			}
-			catch (RowParseException exception) {
-				
-				// Se houver um erro no processamento dos campos, este é adicionado a uma lista separada da lista de candidatos
-				resultados.addExcecao(exception);
-				
-			}
-			finally {
-				
-				// Incrementando a contagem de linhas de arquivo processadas
-				linha++;
-				
-			}
+			ParseResult resultados = new ParseResult();
 			
+			lines.skip(1)											// Ignora a linha de cabeçalho
+			 	 .map(linha -> linha.split(";", -1))				// Quebra cada linha por ; (considerando campos vazios)
+			 	 .map(campos -> new String[] {campos[1].strip(),	// Extrai apenas os campos 'nome, CPF e data de nascimento' do arquivo original do PSConcursos
+			 			 					  campos[8].strip(),
+			 			 					  campos[3].strip()})
+			 	 .map(CandidatoBuilder::build)						// Monta o objeto 'Candidato'
+			 	 .forEach(candidato -> {
+			 		 
+			 		 try {
+			 			 
+			 			CandidatoValidator.validate(candidato, contadorLinha.get());
+			 			 
+			 			// Se não houve nenhum erro de processamento, o candidato é adicionado a uma lista própria
+						if (!resultados.addCandidato(candidato))
+							System.err.printf("* Ignorando candidato duplicado na linha %d: '%s'%n", contadorLinha.get(), candidato.getNome());
+			 			 
+			 		 }
+			 		 catch (RowParseException exception) {
+			 			 
+			 			// Se houver um erro no processamento dos campos, este é adicionado a uma lista separada da lista de candidatos
+						resultados.addExcecao(exception);
+			 			 
+			 		 }
+			 		finally {
+						
+						// Incrementando a contagem de linhas de arquivo processadas
+						contadorLinha.incrementAndGet();
+						
+					}
+
+			});
+
+			return resultados;
 		}
-		
-		// Fechando a planilha
-		stream.close();
-		
-		return resultados;
 		
 	}
 	
@@ -134,31 +128,6 @@ public class CSVSheetReader {
 		
 		// Retornando os dados institucionais
 		return new Instituicao(firstLine, csvDelimiter);
-	}
-	
-	/** Monta um array de {@link String} com os dados extraídos da 'linha' e organizados de acordo com os 'indexes'.
-	 *  @param linha - linha extraída do arquivo .csv
-	 *  @param csvDelimiter - string delimitadora do .csv
-	 *  @param indexes - índices de importação de dados
-	 *  @return Um array de {@link String} com os dados extraídos de uma linha do .csv. */
-	private static String[] readLine(final String linha, final String csvDelimiter, final int[] indexes) {
-		
-		String[] dados = new String[indexes.length];	// Array que armazena os dados lidos e formatados de cada linha do arquivo .csv
-		String[] aux;									// Array que armazena temporariamente os dados lidos do .csv
-		
-		// Separando dados de uma linha em um array de Strings. Aqui os espaços em branco não são ignorados!
-		aux = linha.trim().toUpperCase().split(csvDelimiter, -1);
-		
-		// Copia as colunas descritas por 'indexes' para 'dados'. A ordem do objeto de retornos é SEMPRE igual a descrita abaixo:
-		// Nome, NIS, Data de Nascimento, Sexo, RG, Data de Emissão do RG, órgão Emissor do RG, CPF, Nome da Mãe
-		for (short i=0; i<indexes.length; i++) {
-			
-			int currentField = indexes[i];		// Recupera o índice atual de 'indexes'
-			dados[i] = aux[currentField];		// Copia os dados de 'aux' para 'dados' de acordo com os 'indexes'
-			
-		}
-		
-		return dados;
 	}
 	
 }
