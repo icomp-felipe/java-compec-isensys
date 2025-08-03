@@ -1,36 +1,42 @@
 package compec.ufam.isensys.io;
 
-import java.io.*;
-import java.nio.charset.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import com.phill.libs.files.*;
+import com.phill.libs.files.CSVUtils;
 
-import compec.ufam.isensys.model.*;
+import compec.ufam.isensys.exception.RowParseException;
 import compec.ufam.isensys.model.CandidatoBuilder;
-import compec.ufam.isensys.model.envio.*;
-import compec.ufam.isensys.model.retorno.*;
-import compec.ufam.isensys.exception.*;
+import compec.ufam.isensys.model.CandidatoValidator;
+import compec.ufam.isensys.model.Instituicao;
+import compec.ufam.isensys.model.envio.ParseResult;
+import compec.ufam.isensys.model.retorno.ListaRetornos;
+import compec.ufam.isensys.model.retorno.Retorno;
 
 /** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
  *  Aqui são realizadas verificações na planilha e geradas uma lista de candidatos aptos a serem exportados para o Sistac e uma lista de erros,
  *  útil para a construção do edital.
  *  Há um modelo válido deste arquivo em 'res/examples/input-sistac.csv'
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 4.0, 03/AGO/2025 */
 public class CSVSheetReader {
 
-	/** Processa o arquivo .csv 'planilha' e retorna para dentro de um objeto {@link ParseResult}.
-	 *  @param planilha - caminho da planilha csv
-	 *  @return Objeto com TODAS as entradas lidas do arquivo csv.
+	/** Extrai os dados de solicitações da <code>planilha</code> para dentro de um objeto {@link ParseResult}.
+	 *  @param planilha - arquivo da planilha (modo texto)
+	 *  @return Objeto com TODAS as entradas lidas da planilha.
 	 *  @throws IOException quando há alguma falha na leitura da planilha. */
 	public static ParseResult read(final File planilha) throws IOException {
 		
 		try (Stream<String> lines = Files.lines(planilha.toPath(), StandardCharsets.UTF_8)) {
 			
-			// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo csv
+			// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo
 			final AtomicInteger contadorLinha = new AtomicInteger(2);
 			
 			ParseResult resultados = new ParseResult();

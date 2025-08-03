@@ -48,6 +48,15 @@ public class CandidatoValidator {
 			
 		}
 		
+		if (candidato.getDataNascimento() == null) {
+			
+			if (exceptions == null)
+				exceptions = new RowParseException(candidato, linha);
+			
+			exceptions.addException(new FieldParseException("Data de nascimento inválida ou vazia", ""));
+			
+		}
+		
 		if (exceptions != null) {
 			System.out.println(Arrays.toString(exceptions.getErrorSummaryArray()));
 			throw exceptions;
