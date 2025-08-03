@@ -1,7 +1,5 @@
 package compec.ufam.isensys.exception;
 
-import compec.ufam.isensys.model.envio.*;
-
 /** Classe especial de exceção utilizada pelos métodos 'parse()' da classe {@link CandidatoBuilder}.
  *  @author Felipe André - felipeandre.eng@gmail.com
  *  @version 3.5.1, 26/04/2021 */
