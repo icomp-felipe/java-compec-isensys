@@ -16,7 +16,7 @@ import compec.ufam.isensys.model.*;
 public class ListaRetornos implements Serializable {
 
 	// Serial de versionamento da classe
-	private static final transient long serialVersionUID = 3;
+	private static final long serialVersionUID = 3;
 	
 	// Lista de retornos
 	private ArrayList<Retorno> listaRetornos;
@@ -149,24 +149,23 @@ public class ListaRetornos implements Serializable {
 	}
 	
 	/** Atualiza os dados do candidato indicado no objeto 'retorno' e sua situação de deferimento.
-	 *  @param retorno - objeto retorno com os dados a serem atualizados
+	 *  @param retornoNovo - objeto retorno com os dados a serem atualizados
 	 *  @return 'true' se, e somente se, o candidato já existir na lista, ou seja, o CPF do <code>retorno</code> já foi previamente inserido nesta instância de {@link ListaRetornos}. */
-	public synchronized boolean update(final Retorno retorno) {
+	public synchronized boolean update(final Retorno retornoNovo) {
 		
 		// Aqui percorro a lista de retornos e, para cada objeto...
-		for (Retorno presente: listaRetornos) {
+		for (Retorno retornoLista: listaRetornos) {
 			
 			// ...identifico o candidato e...
-			if (presente.equals(retorno)) {
+			if (retornoLista.getCandidato().temMesmoCPF(retornoNovo.getCandidato())) {
 			
 				// ...se este encontra-se indeferido na listagem preliminar, mas foi deferido na final, o defiro.
-				if ((!presente.deferido()) && (retorno.deferido()))
-					presente.defere();
+				if ((!retornoLista.deferido()) && (retornoNovo.deferido()))
+					retornoLista.defere();
 
 				// Aqui são atualizados os dados de acordo com o recurso
-				presente.setCPF   (retorno.cpf   );
-				presente.setNome  (retorno.nome  );
-				presente.setMotivo(retorno.motivo);
+				retornoLista.setCandidato(retornoNovo.getCandidato());
+				retornoLista.setMotivo(retornoNovo.motivo);
 				
 				// Evita processamento desnecessário
 				return true;
@@ -175,8 +174,8 @@ public class ListaRetornos implements Serializable {
 			
 		}
 		
-		System.err.println("Candidato(a) recursante, porém, não solicitante: " + retorno.getNome());
-		add(retorno);
+		System.err.println("Candidato(a) recursante, porém, não solicitante: " + retornoNovo.getCandidato().toString());
+		add(retornoNovo);
 		
 		return false;
 	}

@@ -3,16 +3,18 @@ package compec.ufam.isensys.model.retorno;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import com.phill.libs.StringUtils;
-import com.phill.libs.br.CPFParser;
+
+import compec.ufam.isensys.model.Candidato;
 
 /** Entidade principal da parte de processamento de arquivos de retornos do sistema.
  *  Encapsula apenas neste objeto tanto os candidatos válidos (vindos do arquivo do Sistac),
  *  quanto os erros de processamento (vindos da planilha de erros do Excel).
  *  Implementa também alguns tratamentos de dados pertinentes a esta classe.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 4.0, 02/AGO/2025 */
+ *  @version 4.0, 03/AGO/2025 */
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
@@ -20,36 +22,24 @@ public class Retorno implements Serializable {
 	
 	// Atributos serializáveis
 	private Character situacao;
-	protected String nome, cpf;
-	protected LocalDate dataNascimento;
+	private Candidato candidato;
 	protected int motivo;
 	
 	// Utilizado apenas pro cálculo de similaridade. Logo, não faz parte da serialização!
 	private transient String nomeAnterior;
 
-	public Retorno(final String row) {
+	public Retorno(final String[] data) {
 		
-		String[] splitted = row.split(";", -1);
-		
-		this.nome = splitted[1];
-		this.cpf = splitted[2];
-		this.dataNascimento = LocalDate.parse(splitted[3], DateTimeFormatter.ofPattern("ddMMuuuu"));
-		this.situacao = splitted[4].charAt(0);
-		this.motivo = splitted[5].isEmpty() ? 0 : Integer.parseInt(splitted[5]);
+		this.candidato = new Candidato(data[1], data[2], LocalDate.parse(data[3], DateTimeFormatter.ofPattern("ddMMuuuu")));
+		this.situacao = data[4].charAt(0);
+		this.motivo = data[5].isEmpty() ? 0 : Integer.parseInt(data[5]);
 		
 	}
 	
 	/*************************** Bloco de Setters ******************************/
 	
-	/** @param nis - número do CPF do candidato */
-	public void setCPF(final String cpf) {
-		this.cpf = cpf;
-	}
-	
-	/** @param nome - nome do candidato */
-	public void setNome(final String nome) {
-		this.nomeAnterior = this.nome;
-		this.nome = nome;
+	public void setCandidato(final Candidato candidato) {
+		this.candidato = candidato;
 	}
 	
 	/** Setter do motivo de indeferimento, utilizado apenas no resultado definitivo, após os recursos.
@@ -74,71 +64,61 @@ public class Retorno implements Serializable {
 		return (this.situacao == 'S');
 	}
 	
+	/** @return Candidato solicitante. */
+	public Candidato getCandidato() {
+		return this.candidato;
+	}
+	
 	/** @return Nome antes da atualização pelo método {@link #setNome(String)}. */
 	public String getNomeAnterior() {
 		return StringUtils.BR.normaliza(this.nomeAnterior);
 	}
 	
-	public LocalDate getDataNascimento() {
-		return this.dataNascimento;
-	}
-	
 	/** Comparador de objetos de retorno. Útil para métodos de ordenação. Usa o nome do candidato como base nos cálculos.
-	 *  @param retorno - retorno a ser comparado com esta instância
-	 *  @since 3.5, 23/04/2021 */
+	 *  @param retorno - retorno a ser comparado com esta instância */
 	public int compareTo(final Retorno retorno) {
-		return this.nome.compareTo(retorno.nome);
-	}
-	
-	/** Verifica se dois retornos são iguais (seus CPF's são os mesmos).
-	 *  @param retorno - retorno a ser comparado
-	 *  @return 'true' caso os CPF's sejam iguais, 'false' caso contrário.
-	 *  @since 3.5, 23/04/2021 */
-	public boolean equals(final Retorno retorno) {
-		return this.cpf.equals(retorno.cpf);
+		return candidato.compareTo(retorno.getCandidato());
 	}
 	
 	/******************** Bloco de Getters (Jasper) ****************************/
 	
-	 /** @return Número de CPF do candidato (com máscara). */
-	public String getCPF() {
-		return CPFParser.format(this.cpf);
-	}
-	
-	/** @return Número de CPF do candidato (LGPD). */
-	public String getCPFOculto() {
-		return CPFParser.oculta(this.cpf);
-	}
-	
-	/** @return Nome do candidato (normalizado). */
-	public String getNome() {
-		return StringUtils.BR.normaliza(this.nome);
-	}
-	
-	/** Getter para a situação de odeferimento do pedido de isenção do candidato.
-	 *  @return Situação de deferimento do pedido de isenção do candidato. */
+	/** @return Situação de deferimento do pedido de isenção do candidato. */
 	public char getSituacao() {
 		return this.situacao;
 	}
 	
-	/** Getter para o motivo de indeferimento do candidato.
-	 *  @return -1 para erros de processamento<br>0 para deferido<br>>0 para indeferimentos de acordo com manual do Sistac. */
+	/** @return -1 para erros de processamento<br>0 para deferido<br>>0 para indeferimentos de acordo com manual do Sistac. */
 	public int getMotivo() {
 		return this.motivo;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return toString().equals(obj.toString());
+	public int hashCode() {
+		return Objects.hash(candidato, motivo, situacao);
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		
+		if (obj == null)
+			return false;
+		
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Retorno other = (Retorno) obj;
+		
+		return Objects.equals(candidato, other.candidato) &&
+			   motivo == other.motivo &&
+			   Objects.equals(situacao, other.situacao);
+	}
+
 	@Override
 	public String toString() {
-		return String.format("[%s,%s,%s,%s,%s]", this.nome,
-												this.cpf,
-												this.dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/uuuu")),
-												this.deferido() ? "deferido" : "indeferido",
-												this.motivo);
+		return String.format("Retorno [candidato={%s}, situacao=%c, motivo=%d", candidato.toString(), situacao, motivo);
 	}
 	
 }

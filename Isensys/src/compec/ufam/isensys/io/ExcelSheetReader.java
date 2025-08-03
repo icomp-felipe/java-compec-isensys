@@ -14,7 +14,6 @@ import compec.ufam.isensys.model.Candidato;
 import compec.ufam.isensys.model.CandidatoBuilder;
 import compec.ufam.isensys.model.CandidatoValidator;
 import compec.ufam.isensys.model.ParseResult;
-import compec.ufam.isensys.model.envio.*;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Classe que lê e processa os dados de um arquivo .xlsx com os dados necessários para solicitação de isenção.

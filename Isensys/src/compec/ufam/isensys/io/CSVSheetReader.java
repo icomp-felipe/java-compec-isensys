@@ -88,8 +88,9 @@ public class CSVSheetReader {
 		
 		try (Stream<String> lines = Files.lines(planilha.toPath(), StandardCharsets.UTF_8)) {
 			
-			lines.skip(1)				// Ignora a linha de cabeçalho
-				 .map(Retorno::new)		// Cria um objeto 'Retorno' para cada linha
+			lines.skip(1)								// Ignora a linha de cabeçalho
+				 .map(linha -> linha.split(";", -1))	// Quebra cada linha por ; (considerando campos vazios)
+				 .map(Retorno::new)						// Cria um objeto 'Retorno' para cada linha
 				 .forEach(retorno -> {
 					 
 					// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
@@ -105,11 +106,6 @@ public class CSVSheetReader {
 					}
 					 
 				 });
-			
-		}
-		catch (IOException exception) {
-			
-			exception.printStackTrace();
 			
 		}
 		

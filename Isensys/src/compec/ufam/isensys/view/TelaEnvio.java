@@ -14,7 +14,6 @@ import com.phill.libs.mfvapi.*;
 import compec.ufam.isensys.io.*;
 import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.constants.*;
-import compec.ufam.isensys.model.envio.*;
 
 /** Implementa a tela de processamento do arquivo de solicitações de isenção.
  *  @author Felipe André - felipeandre.eng@gmail.com
