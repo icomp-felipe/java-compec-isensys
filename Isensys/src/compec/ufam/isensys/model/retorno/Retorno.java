@@ -6,7 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import com.phill.libs.StringUtils;
+import com.phill.libs.br.CPFParser;
 
+import compec.ufam.isensys.constants.Constants;
 import compec.ufam.isensys.model.Candidato;
 
 /** Entidade principal da parte de processamento de arquivos de retornos do sistema.
@@ -81,6 +83,20 @@ public class Retorno implements Serializable {
 	}
 	
 	/******************** Bloco de Getters (Jasper) ****************************/
+	
+	/** @return Nome do candidato (normalizado). */
+	public String getNome() {
+		return (candidato != null) ? StringUtils.BR.normaliza(candidato.getNome()) : null;
+	}
+	
+	/** @return Número de CPF do candidato (LGPD). */
+	public String getCPFOculto() {
+		return (candidato != null) ? CPFParser.oculta(candidato.getCpf()) : null;
+	}
+	
+	public String getNascimentoOculto() {
+		return (candidato != null && candidato.getDataNascimento() != null) ? candidato.getDataNascimento().format(Constants.DateFormatters.BRAZILIAN_LGPD) : null;
+	}
 	
 	/** @return Situação de deferimento do pedido de isenção do candidato. */
 	public char getSituacao() {

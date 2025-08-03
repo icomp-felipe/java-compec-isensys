@@ -63,12 +63,13 @@ public class Constants {
 	
 	/** Formatos de data mais utilizados no sistema.
 	 *  @author Felipe André - felipeandre.eng@gmail.com
-     *  @version 4.0, 02/AGO/2025 */
+     *  @version 4.0, 03/AGO/2025 */
 	public static class DateFormatters {
 		
 		public static final DateTimeFormatter EXCEL_DATE = DateTimeFormatter.ofPattern("dMMuuuu");
 		public static final DateTimeFormatter SISTAC_DATE = DateTimeFormatter.ofPattern("ddMMuuuu");
 		public static final DateTimeFormatter BRAZILIAN_DATE = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		public static final DateTimeFormatter BRAZILIAN_LGPD = DateTimeFormatter.ofPattern("**/MM/uuuu");
 		
 	}
 	
