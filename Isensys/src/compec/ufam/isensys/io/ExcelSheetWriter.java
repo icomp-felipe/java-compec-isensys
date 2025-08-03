@@ -1,16 +1,21 @@
 package compec.ufam.isensys.io;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
-import compec.ufam.isensys.constants.*;
-import compec.ufam.isensys.exception.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import org.apache.poi.xssf.usermodel.*;
+import compec.ufam.isensys.constants.Constants;
+import compec.ufam.isensys.exception.RowParseException;
 
 /** Classe que escreve a planilha de erros de processamento no formato Excel.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 4.0, 03/AGO/2025 */
 public class ExcelSheetWriter {
 
 	/** Cria uma nova <code>planilha</code> no formato Excel, com os dados vindos da <code>listaErros</code>.
@@ -19,45 +24,46 @@ public class ExcelSheetWriter {
 	 *  @throws IOException caso a haja alguma falha de acesso ou escrita no arquivo da planilha. */
 	public static void write(final ArrayList<RowParseException> listaErros, final File planilha) throws IOException {
 		
-		// Tratamento de arquivo nulo
-		if (planilha == null) return;
-
-		// Se a lista não contém erros, a planilha nem é criada
-		if (listaErros.size() == 0) return;
-		
-		// Criando a planilha (RAM)
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet   xssfSheet = workbook.createSheet("Lista de Erros");
-		
-		// Imprimindo o cabeçalho da planilha
-		printHeader(xssfSheet);
-		
-		// Preenchendo a planilha com os dados de 'listaErros'
-		for (int i=0; i<listaErros.size(); i++) {
+		// Só prossegue se tanto o arquivo quanto a lista de erros não são vazios
+		if ((planilha != null) && (!listaErros.isEmpty())) {
 			
-			String[] dados = listaErros.get(i).getErrorSummaryArray();	// Recuperando dados da 'listaErros'
-			XSSFRow  row   = xssfSheet.createRow(i+1);				// Criando nova linha na planilha 
-			
-			// Inserindo dados célula por célula desta linha 
-			for (int j=0; j<dados.length; j++) {
+			try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 				
-				XSSFCell cell = row.createCell(j);
-				cell.setCellValue(dados[j]);
+				XSSFSheet xssfSheet = workbook.createSheet("Lista de Erros");
+				
+				// Imprimindo o cabeçalho da planilha
+				printHeader(xssfSheet);
+				
+				// Preenchendo a planilha com os dados de 'listaErros'
+				for (int i=0; i<listaErros.size(); i++) {
+					
+					String[] dados = listaErros.get(i).getErrorSummaryArray();	// Recuperando dados da 'listaErros'
+					XSSFRow  row   = xssfSheet.createRow(i+1);					// Criando nova linha na planilha 
+					
+					// Inserindo dados célula por célula
+					for (int j=0; j<dados.length; j++) {
+						
+						XSSFCell cell = row.createCell(j);
+						cell.setCellValue(dados[j]);
+						
+					}
+					
+				}
+				
+				// Calculando largura das colunas
+				for (int i=0; i<Constants.SheetIndex.XLSX_COLUMN_TITLES.length; i++)
+					xssfSheet.autoSizeColumn(i);
+				
+				// Escrevendo a planilha no disco
+				try (FileOutputStream stream = new FileOutputStream(planilha)) {
+					
+					workbook.write(stream);
+					
+				}
 				
 			}
 			
 		}
-		
-		// Calculando largura das colunas
-		for (int i=0; i<Constants.SheetIndex.XLSX_COLUMN_TITLES.length; i++)
-			xssfSheet.autoSizeColumn(i);
-
-		// Escrevendo a planilha no disco
-		FileOutputStream stream = new FileOutputStream(planilha);
-		
-		// Liberando recursos
-		workbook.write(stream);
-		workbook.close();
 		
 	}
 	
