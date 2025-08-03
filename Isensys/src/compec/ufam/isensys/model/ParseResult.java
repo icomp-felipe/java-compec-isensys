@@ -1,15 +1,15 @@
-package compec.ufam.isensys.model.envio;
+package compec.ufam.isensys.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-import compec.ufam.isensys.model.Candidato;
-
-import compec.ufam.isensys.exception.*;
+import compec.ufam.isensys.exception.RowParseException;
 
 /** Objeto que concentra listas de {@link Candidato} (objetos lidos com sucesso dos arquivos)
  *  e {@link RowParseException} (objetos com alguma falha de processamento).
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023
+ *  @version 4.0, 03/AGO/2025
  *  @see Candidato
  *  @see RowParseException */
 public class ParseResult {
@@ -17,8 +17,7 @@ public class ParseResult {
 	private final ArrayList<Candidato> listaCandidatos;
 	private final ArrayList<RowParseException> listaExcecoes;
 	
-	/** Construtor apenas inicializando as listas internas. */
-	public ParseResult() {
+	{
 		this.listaCandidatos = new ArrayList<Candidato>();
 		this.listaExcecoes   = new ArrayList<RowParseException>();
 	}
@@ -57,8 +56,7 @@ public class ParseResult {
 		return this.listaExcecoes;
 	}
 	
-	/** Ordena as listas internas em ordem crescente de acordo com o nome do candidato.
-	 *  @since 3.0, 21/04/2021 */
+	/** Ordena as listas internas em ordem crescente de acordo com o nome do candidato. */
 	public void sortLists() {
 		
 		Comparator<Candidato>    comparaCandidato = (candidato1, candidato2) -> candidato1.compareTo(candidato2); 

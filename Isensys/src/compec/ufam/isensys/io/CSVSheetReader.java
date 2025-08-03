@@ -16,7 +16,7 @@ import compec.ufam.isensys.exception.RowParseException;
 import compec.ufam.isensys.model.CandidatoBuilder;
 import compec.ufam.isensys.model.CandidatoValidator;
 import compec.ufam.isensys.model.Instituicao;
-import compec.ufam.isensys.model.envio.ParseResult;
+import compec.ufam.isensys.model.ParseResult;
 import compec.ufam.isensys.model.retorno.ListaRetornos;
 import compec.ufam.isensys.model.retorno.Retorno;
 
