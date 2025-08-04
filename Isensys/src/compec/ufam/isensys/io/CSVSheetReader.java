@@ -13,11 +13,11 @@ import java.util.stream.Stream;
 import com.phill.libs.files.CSVUtils;
 
 import compec.ufam.isensys.exception.RowParseException;
-import compec.ufam.isensys.model.CandidatoBuilder;
-import compec.ufam.isensys.model.CandidatoValidator;
 import compec.ufam.isensys.model.Instituicao;
-import compec.ufam.isensys.model.ParseResult;
+import compec.ufam.isensys.model.envio.CandidatoBuilder;
+import compec.ufam.isensys.model.envio.CandidatoValidator;
 import compec.ufam.isensys.model.retorno.ListaRetornos;
+import compec.ufam.isensys.model.retorno.ParseResult;
 import compec.ufam.isensys.model.retorno.Retorno;
 
 /** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.

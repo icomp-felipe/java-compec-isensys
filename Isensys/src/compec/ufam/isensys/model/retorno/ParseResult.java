@@ -1,10 +1,11 @@
-package compec.ufam.isensys.model;
+package compec.ufam.isensys.model.retorno;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 import compec.ufam.isensys.exception.RowParseException;
+import compec.ufam.isensys.model.Candidato;
 
 /** Objeto que concentra listas de {@link Candidato} (objetos lidos com sucesso dos arquivos)
  *  e {@link RowParseException} (objetos com alguma falha de processamento).

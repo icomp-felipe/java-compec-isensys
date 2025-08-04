@@ -1,4 +1,4 @@
-package compec.ufam.isensys.model;
+package compec.ufam.isensys.model.retorno;
 
 import java.io.File;
 

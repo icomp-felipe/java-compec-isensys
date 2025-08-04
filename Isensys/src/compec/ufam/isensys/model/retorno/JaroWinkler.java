@@ -1,4 +1,4 @@
-package compec.ufam.isensys.model;
+package compec.ufam.isensys.model.retorno;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,10 +7,6 @@ import java.util.List;
 
 import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
-
-import compec.ufam.isensys.model.retorno.ListaRetornos;
-import compec.ufam.isensys.model.retorno.Retorno;
-import compec.ufam.isensys.model.retorno.Similaridade;
 
 public class JaroWinkler {
 

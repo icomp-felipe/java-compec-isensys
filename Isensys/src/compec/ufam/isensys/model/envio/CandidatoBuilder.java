@@ -1,10 +1,11 @@
-package compec.ufam.isensys.model;
+package compec.ufam.isensys.model.envio;
 
 import java.time.LocalDate;
 
 import com.phill.libs.StringUtils;
 
 import compec.ufam.isensys.constants.Constants;
+import compec.ufam.isensys.model.Candidato;
 
 /** Contém métodos de extração e adequação de dados do candidato solicitante.
  *  @author Felipe André - felipeandre.eng@gmail.com

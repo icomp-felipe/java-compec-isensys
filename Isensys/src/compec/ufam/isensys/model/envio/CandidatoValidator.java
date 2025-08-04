@@ -1,4 +1,4 @@
-package compec.ufam.isensys.model;
+package compec.ufam.isensys.model.envio;
 
 import java.util.Arrays;
 
@@ -7,6 +7,7 @@ import com.phill.libs.br.CPFParser;
 
 import compec.ufam.isensys.exception.FieldParseException;
 import compec.ufam.isensys.exception.RowParseException;
+import compec.ufam.isensys.model.Candidato;
 
 public class CandidatoValidator {
 
