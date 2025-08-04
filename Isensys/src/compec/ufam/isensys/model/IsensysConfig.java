@@ -2,16 +2,14 @@ package compec.ufam.isensys.model;
 
 import java.io.Serializable;
 
-/** Armazena dados referentes à instituição utilizadora do Sistac.
+/** Armazena as configurações globais do sistema.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023
- *  @since 3.0, 22/04/2021 */
-public class Instituicao implements Serializable {
+ *  @version 4.0, 04/AGO/2024 */
+public class IsensysConfig implements Serializable {
 
 	// Serial de versionamento da classe
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	
-	// Atributos de texto
 	private final String cnpj, nomeFantasia, razaoSocial;
 
 	/************************ Bloco de Construtores ****************************/
@@ -20,7 +18,7 @@ public class Instituicao implements Serializable {
 	 *  @param cnpj - CNPJ da instituição
 	 *  @param nomeFantasia - nome fantasia da instituição
 	 *  @param razaoSocial - razão social da instituição */
-	public Instituicao(final String cnpj, final String nomeFantasia, final String razaoSocial) {
+	public IsensysConfig(final String cnpj, final String nomeFantasia, final String razaoSocial) {
 		
 		this.cnpj         = cnpj;
 		this.nomeFantasia = nomeFantasia;
@@ -33,7 +31,7 @@ public class Instituicao implements Serializable {
 	 *  ou <code>ArrayIndexOutOfBoundsException</code>, nesses casos, as exceções serão lançadas!
 	 *  @param primeiraLinha - primeira linha do arquivo Sistac
 	 *  @param delimitador - delimitador do texto csv */
-	public Instituicao(final String primeiraLinha, final String delimitador) {
+	public IsensysConfig(final String primeiraLinha, final String delimitador) {
 		
 		String[] dados = primeiraLinha.split(delimitador);
 		
@@ -72,7 +70,7 @@ public class Instituicao implements Serializable {
 	/** Verifica se a <code>instituicao</code> passada é exatamente igual a esta instância da classe.
 	 *  @param instituicao - instituicao a ser comparada
 	 *  @return 'true' se o resultado da comparação de todos os campos dos objetos for 'true';<br>'false' caso algum dado seja diferente ou nulo. */
-	public boolean equals(final Instituicao instituicao) {
+	public boolean equals(final IsensysConfig instituicao) {
 		return (this.cnpj.equals(instituicao.cnpj) && this.nomeFantasia.equals(instituicao.nomeFantasia) && this.razaoSocial.equals(instituicao.razaoSocial));
 	}
 	
@@ -114,7 +112,7 @@ public class Instituicao implements Serializable {
 	/** Compara os dados da instância atual desta classe com a recebida via parâmetro.
 	 *  @param instituicao - instituição a ser comparada
 	 *  @return Uma String com o nome dos campos diferentes ou 'null' se todos os campos forem iguais. */
-	public String compare(final Instituicao instituicao) {
+	public String compare(final IsensysConfig instituicao) {
 		
 		StringBuilder builder = new StringBuilder("(");
 		

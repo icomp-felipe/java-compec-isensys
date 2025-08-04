@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import com.phill.libs.files.CSVUtils;
 
 import compec.ufam.isensys.exception.RowParseException;
-import compec.ufam.isensys.model.Instituicao;
+import compec.ufam.isensys.model.IsensysConfig;
 import compec.ufam.isensys.model.envio.CandidatoBuilder;
 import compec.ufam.isensys.model.envio.CandidatoValidator;
 import compec.ufam.isensys.model.retorno.ListaRetornos;
@@ -116,7 +116,7 @@ public class CSVSheetReader {
 	 *  @return Um objeto contendo os dados institucionais carregados do arquivo Sistac.
 	 *  @throws IOException quando a planilha não pode ser lida.
 	 *  @since 3.0, 21/04/2021 */
-	public static Instituicao getInstituicao(final File planilha) throws IOException {
+	public static IsensysConfig getInstituicao(final File planilha) throws IOException {
 		
 		// Abrindo planilha para leitura
 		BufferedReader stream  = new BufferedReader(new InputStreamReader(new FileInputStream(planilha), StandardCharsets.UTF_8));
@@ -129,7 +129,7 @@ public class CSVSheetReader {
 		stream.close();
 		
 		// Retornando os dados institucionais
-		return new Instituicao(firstLine, csvDelimiter);
+		return new IsensysConfig(firstLine, csvDelimiter);
 	}
 	
 }

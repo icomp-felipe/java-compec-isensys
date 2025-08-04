@@ -9,12 +9,10 @@ import com.phill.libs.*;
 import com.phill.libs.br.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.i18n.*;
-import com.phill.libs.table.*;
 import com.phill.libs.mfvapi.*;
 
 import compec.ufam.isensys.io.*;
 import compec.ufam.isensys.model.*;
-import compec.ufam.isensys.constants.*;
 
 /** Implementa a tela de ajustes de configurações do sistema.
  *  @author Felipe André - felipeandre.eng@gmail.com
@@ -30,8 +28,6 @@ public class TelaConfigs extends JFrame {
 	// Declaração de atributos gráficos
 	private final CNPJTextField textCNPJ;
 	private final JTextField textNomeFantasia, textRazaoSocial;
-	private final JTable tableSheetIndex;
-	private final PositiveIntegerTableModel modelo;
 	
 	// MFV API
 	private final MandatoryFieldsManager fieldValidator;
@@ -108,30 +104,6 @@ public class TelaConfigs extends JFrame {
 		textRazaoSocial.setBounds(130, 75, 850, 20);
 		panelInstituicao.add(textRazaoSocial);
 		
-		// Painel 'Índices da Planilha de Importação'
-		JPanel panelSheetIndex = new JPanel();
-		panelSheetIndex.setOpaque(false);
-		panelSheetIndex.setLayout(null);
-		panelSheetIndex.setBorder(instance.getTitledBorder("Índices da Planilha de Importação"));
-		panelSheetIndex.setBounds(10, 115, 990, 80);
-		painel.add(panelSheetIndex);
-		
-		JScrollPane scrollSheetindex = new JScrollPane();
-		scrollSheetindex.setOpaque(false);
-		scrollSheetindex.getViewport().setOpaque(false);
-		scrollSheetindex.setBounds(10, 30, 970, 40);
-		panelSheetIndex.add(scrollSheetindex);
-		
-		// Inicializando tabela
-		modelo = new PositiveIntegerTableModel(Constants.SheetIndex.IMPORT_COLUMN_TITLES);
-		
-		tableSheetIndex = new JTable(modelo);
-		tableSheetIndex .setOpaque(false);
-		tableSheetIndex.setFont(fonte);
-		tableSheetIndex.setForeground(color);
-		tableSheetIndex.getTableHeader().setFont(instance.getFont(11));
-		scrollSheetindex.setViewportView(tableSheetIndex);
-		
 		JButton buttonReload = new JButton(reloadIcon);
 		buttonReload.setToolTipText(bundle.getString("hint-button-reload"));
 		buttonReload.addActionListener((_) -> reload());
@@ -144,15 +116,6 @@ public class TelaConfigs extends JFrame {
 		buttonSave.setBounds(965, 200, 35, 30);
 		painel.add(buttonSave);
 		
-		// Definindo validação de dados das células
-		final TableCellValidator validator = (cellData) -> ((cellData == null) || !(cellData instanceof Integer)) ? false : (int) cellData >= 0;
-		
-		final ValidatorCellRenderer cellRenderer = new ValidatorCellRenderer(validator, Color.WHITE, new Color(0xEF8E84));
-		cellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		for (int i=0; i<Constants.SheetIndex.IMPORT_COLUMN_TITLES.length; i++)
-			tableSheetIndex.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
-		
 		// Cadastrando validação de campos
 		this.fieldValidator = new MandatoryFieldsManager();
 		this.fieldLogger    = new MandatoryFieldsLogger ();
@@ -160,7 +123,6 @@ public class TelaConfigs extends JFrame {
 		fieldValidator.addPermanent(labelCNPJ        , () -> textCNPJ.valido()                    , bundle.getString("configs-mfv-cnpj"    ), false);
 		fieldValidator.addPermanent(labelNomeFantasia, () -> parseNome(textNomeFantasia.getText()), bundle.getString("configs-mfv-fantasia"), false);
 		fieldValidator.addPermanent(labelRazaoSocial , () -> parseNome(textRazaoSocial .getText()), bundle.getString("configs-mfv-razao"   ), false);
-		fieldValidator.addPermanent(new JLabel()     , () -> parseIndices()                       , bundle.getString("configs-mfv-table"   ), false);
 		
 		// Carregando configurações
 		load();
@@ -183,38 +145,20 @@ public class TelaConfigs extends JFrame {
 		return StringUtils.isAlphanumericStringOnly(nome.trim(), false);
 	}
 	
-	/** Verifica se todos os índices da tabela estão preenchidos.
-	 *  @return Estado de preenchimento de todos os índices da tabela. */
-	private boolean parseIndices() {
-		
-		for (int i=0; i<Constants.SheetIndex.IMPORT_COLUMN_TITLES.length; i++)
-			if (tableSheetIndex.getValueAt(0,i) == null)
-				return false;
-		
-		return true;
-	}
-	
 	/************************* Bloco de Métodos  de I/O ***********************************/
 	
 	/** Carrega o arquivo de configurações do sistema e atualiza a tela com seus dados. */
 	private void load() {
 		
-		// Limpando a tabela
-		TableUtils.clear(modelo);
-		
 		try {
 			
 			// Recuperando objeto de configurações
-			final Configs configs   = SystemConfigs.retrieve();
-			Instituicao instituicao = configs.getInstituicao();
+			IsensysConfig instituicao = IsensysConfigDAO.retrieve();
 			
 			// Atualizando campos de texto
 			textCNPJ        .setValue(instituicao.getCNPJ        ());
 			textNomeFantasia.setText (instituicao.getNomeFantasia());
 			textRazaoSocial .setText (instituicao.getRazaoSocial ());
-			
-			// Atualizando a tabela
-			TableUtils.add(modelo, () -> configs.getIndicesTabela());
 			
 		}
 		catch (FileNotFoundException exception) {
@@ -235,13 +179,6 @@ public class TelaConfigs extends JFrame {
 			exception.printStackTrace();
 			AlertDialog.error(this, bundle.getString("configs-load-title"),
                                     bundle.getString("configs-load-io-error"));
-			
-		}
-		finally {
-			
-			// Caso haja alguma exceção, inicializa a tabela
-			if (modelo.getRowCount() == 0)
-				modelo.addRow(new Object[9]);
 			
 		}
 		
@@ -280,19 +217,10 @@ public class TelaConfigs extends JFrame {
 			final String nome  = textNomeFantasia.getText ().trim();
 			final String razao = textRazaoSocial .getText ().trim();
 			
-			Instituicao instituicao = new Instituicao(cnpj, nome, razao);
+			IsensysConfig instituicao = new IsensysConfig(cnpj, nome, razao);
 		
-			// Recuperando índices da tabela
-			final int[] indices = new int[Constants.SheetIndex.IMPORT_COLUMN_TITLES.length];
-			
-			for (int i=0; i<Constants.SheetIndex.IMPORT_COLUMN_TITLES.length; i++)
-				indices[i] = (int) tableSheetIndex.getValueAt(0,i);
-			
-			// Preparando objeto de configurações
-			final Configs configs = new Configs(instituicao, indices);
-			
 			// Salvando configurações no disco
-			SystemConfigs.save(configs);
+			IsensysConfigDAO.save(instituicao);
 		
 			// Exibindo mensagem de sucesso
 			AlertDialog.info(this, bundle.getString("configs-save-title"), bundle.getString("configs-save-success"));

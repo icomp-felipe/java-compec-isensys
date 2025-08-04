@@ -30,7 +30,7 @@ public class ExcelSheetReader {
 	 *  @return Objeto com TODAS as entradas lidas do arquivo .csv.
 	 *  @throws IOException quando há alguma falha na leitura da planilha. 
 	 *  @throws InvalidFormatException quando a planilha está com um formato desconhecido ou corrompida. */
-	public static ParseResult read(final File planilha, final int[] indexes) throws IOException, InvalidFormatException {
+	public static ParseResult read(final File planilha) throws IOException, InvalidFormatException {
 		
 		// Variável usada para controle de erros. Os dados começam sempre na linha 2 do arquivo .csv
 		int linha = 2;
@@ -48,7 +48,7 @@ public class ExcelSheetReader {
 		while (rowIterator.hasNext()) {
 			
 			Row row = rowIterator.next();				// Recuperando uma linha da planilha
-			String[] dados = readLine(row, indexes);	// Recuperando os dados de uma linha já separados em um array
+			String[] dados = readLine(row, null);	// Recuperando os dados de uma linha já separados em um array
 			
 			try {
 				
@@ -106,7 +106,7 @@ public class ExcelSheetReader {
 			String[] dados = readLine(row, Constants.SheetIndex.XLSX_ERROR_SHEET);	// Recuperando os dados de uma linha já separados em um array
 
 			// Montando objeto 'Retorno'
-			Retorno retorno = new Retorno( dados[0], dados[1], dados[2], "N", "1" );
+			Retorno retorno = new Retorno( new String[] { dados[0], dados[1], dados[2], "N", "1" });
 						
 			// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
 			if (preliminar)

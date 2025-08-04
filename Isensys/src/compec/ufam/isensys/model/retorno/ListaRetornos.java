@@ -59,7 +59,7 @@ public class ListaRetornos implements Serializable {
 	
 	/** Setter da instituição.
 	 *  @param instituicao - dados institucionais a serem copiados para esta instância da classe */
-	public void setInstituicao(final Instituicao instituicao) {
+	public void setInstituicao(final IsensysConfig instituicao) {
 		
 		if (instituicao != null) {
 			
@@ -94,8 +94,8 @@ public class ListaRetornos implements Serializable {
 	
 	/** Getter da instituição.
 	 *  @return Uma nova instituição com os dados internos desta instância. */
-	public Instituicao getInstituicao() {
-		return new Instituicao(this.cnpj, this.nomeFantasia, this.razaoSocial);
+	public IsensysConfig getInstituicao() {
+		return new IsensysConfig(this.cnpj, this.nomeFantasia, this.razaoSocial);
 	}
 	
 	/** Getter do edital.

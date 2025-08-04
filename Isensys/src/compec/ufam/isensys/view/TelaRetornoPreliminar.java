@@ -57,7 +57,7 @@ public class TelaRetornoPreliminar extends JFrame {
 	private final JButton buttonReport;
 	
 	// Configurações do sistema
-	private Configs configs;
+	private IsensysConfig configs;
 	
 	// Atributos dinâmicos
 	private List<File> retornosProcessados;
@@ -670,11 +670,10 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Recuperando configurações do sistema
 		try {
 
-			this.configs = SystemConfigs.retrieve();
-			final Instituicao instituicao = configs.getInstituicao();
+			this.configs = IsensysConfigDAO.retrieve();
 			
 			// Atualizando a view
-			loadInstituicao(instituicao, this.padrao);
+			loadInstituicao(configs, this.padrao);
 			
 		}
 		catch (Exception exception) {
@@ -693,10 +692,10 @@ public class TelaRetornoPreliminar extends JFrame {
 	 *  @param instituicao - dados institucionais
 	 *  @param color - cor para pintar os campos de texto referentes aos dados institucionais
 	 *  @since 3.0, 22/04/2021 */
-	private void loadInstituicao(final Instituicao instituicao, final Color color) {
+	private void loadInstituicao(final IsensysConfig instituicao, final Color color) {
 		
 		// Atualizando a instituição das configurações (apenas em memória)
-		this.configs.setInstituicao(instituicao);
+		this.configs = instituicao;
 		
 		// Atualizando a view
 		textCNPJ.setText      (StringUtils.BR.formataCNPJ(instituicao.getCNPJ()));
@@ -721,10 +720,10 @@ public class TelaRetornoPreliminar extends JFrame {
 		try {
 
 			// Recuperando dados institucionais do arquivo de retorno
-			final Instituicao instituicao = CSVSheetReader.getInstituicao(retorno);
+			final IsensysConfig instituicao = CSVSheetReader.getInstituicao(retorno);
 			
 			// Comparando dados institucionais do sistema com os carregados do arquivo de retorno 
-			final String compare  = this.configs.getInstituicao().compare(instituicao);
+			final String compare  = this.configs.compare(instituicao);
 			
 			// Se os dados são diferentes...
 			if (compare != null) {
@@ -981,7 +980,7 @@ public class TelaRetornoPreliminar extends JFrame {
 			final String cabecalho = textCabecalho.getText().trim();
 			
 			// Adicionando dados extras ao arquivo de compilação
-			listaRetornos.setInstituicao(configs.getInstituicao());
+			listaRetornos.setInstituicao(configs);
 			listaRetornos.setEdital     (new Edital(arqRetornoSistac));
 			listaRetornos.setCabecalho  (cabecalho);
 			

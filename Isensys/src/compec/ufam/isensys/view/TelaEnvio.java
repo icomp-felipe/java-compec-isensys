@@ -35,7 +35,7 @@ public class TelaEnvio extends JFrame {
 	private final ImageIcon loadingIcon = new ImageIcon(ResourceManager.getResource("img/loader.gif"));
 	
 	// Dados da instituição
-	private Configs configs;
+	private IsensysConfig configs;
 	
 	// Atributos dinâmicos
 	private ParseResult resultList;
@@ -284,17 +284,16 @@ public class TelaEnvio extends JFrame {
 		try {
 			
 			// Carrega as configurações do sistema e...
-			this.configs = SystemConfigs.retrieve();
-			Instituicao instituicao = this.configs.getInstituicao();
+			this.configs = IsensysConfigDAO.retrieve();
 			
 			// ...atualiza a view
-			textCNPJ.setText(StringUtils.BR.formataCNPJ(this.configs.getInstituicao().getCNPJ()));
+			textCNPJ.setText(StringUtils.BR.formataCNPJ(configs.getCNPJ()));
 			
-			textNomeFantasia.setText       (instituicao.getNomeFantasia());
-			textNomeFantasia.setToolTipText(instituicao.getNomeFantasia());
+			textNomeFantasia.setText       (configs.getNomeFantasia());
+			textNomeFantasia.setToolTipText(configs.getNomeFantasia());
 			
-			textRazaoSocial.setText       (instituicao.getRazaoSocial());
-			textRazaoSocial.setToolTipText(instituicao.getRazaoSocial());
+			textRazaoSocial.setText       (configs.getRazaoSocial());
+			textRazaoSocial.setToolTipText(configs.getRazaoSocial());
 					
 		}
 		catch (Exception exception) {
@@ -557,7 +556,7 @@ public class TelaEnvio extends JFrame {
 			
 			// Seleciona o tipo de leitor de acordo com a extensão do arquivo de entrada
 			if (inputFile.getName().endsWith("xlsx"))
-				resultList = ExcelSheetReader.read(inputFile, this.configs.getIndices());
+				resultList = ExcelSheetReader.read(inputFile);
 			else
 				resultList = CSVSheetReader.read(inputFile);
 		
@@ -598,17 +597,14 @@ public class TelaEnvio extends JFrame {
 		
 		try {
 
-			// Recuperando instituição das configurações do sistema
-			Instituicao instituicao = this.configs.getInstituicao();
-			
 			// Recuperando edital e sequência
-			final Edital edital = new Edital(instituicao.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
+			final Edital edital = new Edital(configs.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
 			
 			// Ordenando listas
 			this.resultList.sortLists();
 			
 			// Criando arquivo de saída - Sistac
-			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, instituicao, edital);
+			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, configs, edital);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
 			if (this.resultList.getListaExcecoes().size() > 0) {

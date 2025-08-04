@@ -55,7 +55,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 	private final JButton buttonCabecalhoClear, buttonReport;
 	
 	// Configurações do sistema
-	private Configs configs;
+	private IsensysConfig configs;
 	
 	// Atributos dinâmicos
 	private List<File> retornosProcessados;
@@ -690,11 +690,10 @@ public class TelaRetornoDefinitivo extends JFrame {
 		// Recuperando configurações do sistema
 		try {
 
-			this.configs = SystemConfigs.retrieve();
-			final Instituicao instituicao = configs.getInstituicao();
+			this.configs = IsensysConfigDAO.retrieve();
 			
 			// Atualizando a view
-			loadInstituicao(instituicao, this.padrao);
+			loadInstituicao(configs, this.padrao);
 			
 		}
 		catch (Exception exception) {
@@ -713,10 +712,10 @@ public class TelaRetornoDefinitivo extends JFrame {
 	 *  @param instituicao - dados institucionais
 	 *  @param color - cor para pintar os campos de texto referentes aos dados institucionais
 	 *  @since 3.0, 22/04/2021 */
-	private void loadInstituicao(final Instituicao instituicao, final Color color) {
+	private void loadInstituicao(final IsensysConfig instituicao, final Color color) {
 		
 		// Atualizando a instituição das configurações (apenas em memória)
-		this.configs.setInstituicao(instituicao);
+		this.configs = instituicao;
 		
 		SwingUtilities.invokeLater(() -> {
 		
@@ -866,10 +865,10 @@ public class TelaRetornoDefinitivo extends JFrame {
 		}
 		
 		// Recuperando dados da instituição
-		final Instituicao carregada = listaRetornos.getInstituicao();
+		final IsensysConfig carregada = listaRetornos.getInstituicao();
 		
 		// Atualizando dados da instituição (caso seja diferente da configurada no sistema)
-		if (!configs.getInstituicao().equals(carregada)) {
+		if (!configs.equals(carregada)) {
 			
 			loadInstituicao(carregada, yellow);
 			AlertDialog.info(this, bundle.getString("defs-update-statistics-title"), bundle.getString("defs-update-statistics-dialog"));

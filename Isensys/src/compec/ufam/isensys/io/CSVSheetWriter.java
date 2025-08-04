@@ -19,7 +19,7 @@ public class CSVSheetWriter {
 	 *  @param instituicao - dados institucionais
 	 *  @param edital - informações do edital
 	 *  @throws IOException caso haja alguma falha na escrita do(s) arquivos. */
-	public static void write(final ArrayList<Candidato> listaCandidatos, final File diretorio, final Instituicao instituicao, final Edital edital) throws IOException {
+	public static void write(final ArrayList<Candidato> listaCandidatos, final File diretorio, final IsensysConfig instituicao, final Edital edital) throws IOException {
 		
 		// Stream de escrita de arquivo
 		PrintWriter stream = null;
@@ -67,7 +67,7 @@ public class CSVSheetWriter {
 	 *  @param configs - instituicao - dados institucionais
 	 *  @param edital - informações do edital
 	 *  @param sequencia - número de sequência de arquivo */
-	private static File getSistacFilename(final File diretorio, final Instituicao instituicao, final Edital edital, final int sequencia) {
+	private static File getSistacFilename(final File diretorio, final IsensysConfig instituicao, final Edital edital, final int sequencia) {
 		
 		final String filename = String.format(Constants.StringFormat.SISTAC_SEND_FILENAME_FORMAT, instituicao.getCNPJ(), edital.getEdital(), edital.getDataEdital(), sequencia);
 		
