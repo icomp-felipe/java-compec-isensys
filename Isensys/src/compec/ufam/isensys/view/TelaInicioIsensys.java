@@ -1,17 +1,29 @@
 package compec.ufam.isensys.view;
 
-import java.awt.*;
-import javax.swing.*;
-import com.phill.libs.*;
-import com.phill.libs.ui.*;
-import com.phill.libs.i18n.*;
+import java.awt.Dimension;
 
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.phill.libs.ResourceManager;
+import com.phill.libs.i18n.PropertyBundle;
+import com.phill.libs.ui.AlertDialog;
+import com.phill.libs.ui.ESCDispose;
+import com.phill.libs.ui.GraphicsHelper;
+import com.phill.libs.ui.JPaintedPanel;
+
+import compec.ufam.isensys.constants.Reviewed;
+
+@Reviewed("2025-08-04")
 /** Classe que exibe a tela inicial do software
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.9, 25/FEV/2025 */
+ *  @version 4.0, 04/AGO/2025 */
 public class TelaInicioIsensys extends JFrame {
 
-	private static final long serialVersionUID = -6673738709226295401L;
+	private static final long serialVersionUID = 6673738709226295401L;
 	
 	// Carregando bundle de idiomas
 	private final static PropertyBundle bundle = new PropertyBundle("i18n/tela-inicio-isensys", null);
