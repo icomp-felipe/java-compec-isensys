@@ -9,7 +9,7 @@ import compec.ufam.isensys.model.Candidato;
 
 /** Contém métodos de extração e adequação de dados do candidato solicitante.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 4.0, 02/AGO/2025 */
+ *  @version 4.0, 10/AGO/2025 */
 public class CandidatoBuilder {
 
 	/** Extrai os dados do array para um objeto {@link Candidato}.
@@ -69,12 +69,12 @@ public class CandidatoBuilder {
 			if (data.matches(".*/.*/.*"))
 				return LocalDate.parse(data, Constants.DateFormatters.BRAZILIAN_DATE);
 		
-			return LocalDate.of(2000, 1, 1);
+			return null;
 			
 		}
 		catch (Exception exception) {
 			
-			return LocalDate.of(2000, 1, 1);
+			return null;
 			
 		}
 		
