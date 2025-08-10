@@ -9,11 +9,11 @@ import com.phill.libs.ResourceManager;
 
 /** Armazena as diversas constantes utilizadas em todo o sistema.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 3.8, 21/JUN/2023 */
+ *  @version 4.0, 10/AGO/2025 */
 public class Constants {
 	
 	/** Caminho do arquivo de configuração do sistema. */
-	public static final File SYS_CONFIGS_FILE = ResourceManager.getResourceAsFile("config/program.dat");
+	public static final File SYS_CONFIGS_FILE = ResourceManager.getResourceAsFile("config/isensys.bin");
 	
 	/** Formatos de arquivo utilizados nos métodos de seleção de arquivos.
 	 *  @author Felipe André - felipeandre.eng@gmail.com
