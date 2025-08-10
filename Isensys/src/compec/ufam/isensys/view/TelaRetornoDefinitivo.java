@@ -916,9 +916,6 @@ public class TelaRetornoDefinitivo extends JFrame {
 			if (this.arqPlanilhaErros != null)
 				ExcelSheetReader.readErros(arqPlanilhaErros, listaRetornos, listaRecursos, false);
 			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(500L);
-			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics(true);
 			
