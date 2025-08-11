@@ -11,11 +11,13 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import compec.ufam.isensys.constants.Constants;
+import compec.ufam.isensys.constants.Reviewed;
 import compec.ufam.isensys.exception.RowParseException;
 
+@Reviewed("2025-08-11")
 /** Classe que escreve a planilha de erros de processamento no formato Excel.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 4.0, 03/AGO/2025 */
+ *  @version 4.0, 11/AGO/2025 */
 public class ExcelSheetWriter {
 
 	/** Cria uma nova <code>planilha</code> no formato Excel, com os dados vindos da <code>listaErros</code>.

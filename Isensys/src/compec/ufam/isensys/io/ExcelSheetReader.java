@@ -8,11 +8,11 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.openxml4j.exceptions.*;
 
-import compec.ufam.isensys.constants.*;
 import compec.ufam.isensys.exception.*;
 import compec.ufam.isensys.model.Candidato;
 import compec.ufam.isensys.model.envio.CandidatoBuilder;
 import compec.ufam.isensys.model.envio.CandidatoValidator;
+import compec.ufam.isensys.model.envio.ParseResult;
 import compec.ufam.isensys.model.retorno.*;
 
 /** Classe que lê e processa os dados de um arquivo .xlsx com os dados necessários para solicitação de isenção.
@@ -103,7 +103,7 @@ public class ExcelSheetReader {
 		while (rowIterator.hasNext()) {
 			
 			Row row = rowIterator.next();											// Recuperando uma linha da planilha
-			String[] dados = readLine(row, Constants.SheetIndex.XLSX_ERROR_SHEET);	// Recuperando os dados de uma linha já separados em um array
+			String[] dados = readLine(row, null);	// Recuperando os dados de uma linha já separados em um array
 
 			// Montando objeto 'Retorno'
 			Retorno retorno = new Retorno( new String[] { dados[0], dados[1], dados[2], "N", "1" });

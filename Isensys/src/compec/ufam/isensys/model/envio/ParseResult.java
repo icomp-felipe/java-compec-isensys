@@ -1,4 +1,4 @@
-package compec.ufam.isensys.model.retorno;
+package compec.ufam.isensys.model.envio;
 
 import java.util.ArrayList;
 import java.util.Collections;

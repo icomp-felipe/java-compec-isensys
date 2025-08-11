@@ -20,7 +20,7 @@ import compec.ufam.isensys.model.Candidato;
 public class Retorno implements Serializable {
 
 	// Serial de versionamento da classe
-	private static final transient long serialVersionUID = 4;
+	private static final long serialVersionUID = 4;
 	
 	// Atributos serializáveis
 	private Character situacao;

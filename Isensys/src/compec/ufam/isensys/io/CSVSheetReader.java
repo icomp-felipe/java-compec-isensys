@@ -16,8 +16,8 @@ import compec.ufam.isensys.exception.RowParseException;
 import compec.ufam.isensys.model.IsensysConfig;
 import compec.ufam.isensys.model.envio.CandidatoBuilder;
 import compec.ufam.isensys.model.envio.CandidatoValidator;
+import compec.ufam.isensys.model.envio.ParseResult;
 import compec.ufam.isensys.model.retorno.ListaRetornos;
-import compec.ufam.isensys.model.retorno.ParseResult;
 import compec.ufam.isensys.model.retorno.Retorno;
 
 /** Classe que lê e processa os dados de um arquivo csv pré-formatado (no formato Sistac) com os dados necessários para solicitação de isenção.
