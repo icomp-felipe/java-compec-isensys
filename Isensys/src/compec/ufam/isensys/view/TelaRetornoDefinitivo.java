@@ -547,12 +547,9 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Recuperando título da janela
 			final String title = bundle.getString("defs-erros-select-title");
 			
-			// Preparando o nome do arquivo de sugestão
-			final File suggestion = new Edital(this.arqRetornoSistac).getErrorFilename(null);
-						
 			// Recuperando o arquivo de erros
 			final File parent = (this.arqRetornoSistac != null) ? this.arqRetornoSistac : this.arqCompilacao;
-			final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, parent, suggestion);
+			final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, parent, null);
 		
 			// Faz algo somente se algum arquivo foi selecionado
 			if (selected != null) {
@@ -667,11 +664,8 @@ public class TelaRetornoDefinitivo extends JFrame {
 	 *  @since 3.0, 22/04/2021 */
 	private boolean errosDependencies(final File planilha) {
 			
-		final Edital retorno = new Edital(this.arqRetornoSistac);
-		final Edital erros   = new Edital(planilha);
-			
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
-		if (!retorno.equals(erros)) {
+		if (!FileNameUtils.iguais(arqRetornoSistac, planilha)) {
 			
 			AlertDialog.error(this, bundle.getString("defs-erros-dependencies-title" ),
 	                                bundle.getString("defs-erros-dependencies-dialog"));
@@ -741,11 +735,10 @@ public class TelaRetornoDefinitivo extends JFrame {
 	 *  @since 3.0, 22/04/2021 */
 	private boolean retornoDependencies(final File planilha) {
 		
-		final Edital compilacao = listaRetornos.getEdital();
-		final Edital retorno    = new Edital(planilha);
+		final String edital = listaRetornos.getEdital();
 		
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
-		if (!compilacao.equalsIgnoreDate(retorno)) {
+		if (!FileNameUtils.iguaisSemData(edital, planilha)) {
 					
 			AlertDialog.error(this, bundle.getString("defs-retorno-dependencies-title" ),
 		                            bundle.getString("defs-retorno-dependencies-dialog"));
@@ -945,10 +938,10 @@ public class TelaRetornoDefinitivo extends JFrame {
 		try {
 			
 			// Recuperando dados de edital do nome do arquivo retorno selecionado 
-			Edital edital = new Edital(arqRetornoSistac);
+			int sequencia = FileNameUtils.getSequencia(arqRetornoSistac);
 						
 			// Loop que busca lẽ todos os arquivos subsequentes com base na sequência do primeiro arquivo de retorno selecionado
-			for (File atual = arqRetornoSistac; atual.exists(); atual = edital.getNextRetornoFile(arqRetornoSistac)) {
+			for (File atual = arqRetornoSistac; atual.exists(); atual = FileNameUtils.getNextRetornoFile(arqRetornoSistac, ++sequencia)) {
 				
 				// Processa a lista de retornos do Sistac
 				CSVSheetReader.readRetorno(atual, listaRetornos, listaRecursos, false);
@@ -957,9 +950,6 @@ public class TelaRetornoDefinitivo extends JFrame {
 				this.retornosProcessados.add(atual);
 				
 			}
-			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(500L);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics(false);
@@ -992,9 +982,6 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Processa a lista de erros
 			ExcelSheetReader.readErros(arqPlanilhaErros, listaRetornos, listaRecursos, false);
 			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(500L);
-						
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics(false);
 			
@@ -1032,8 +1019,11 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Ordenando dados
 			listaRetornos.sort();
 			
+			final String[] dados = arqRetornoSistac.getName().split("_");
+			
+			String edital = dados[2];
+			
 			// Gerando visualização do edital
-			Edital edital = new Edital(arqCompilacao);
 			PDFResultado.export(Resultado.DEFINITIVO, cabecalho, edital, pickerPublicacao.getDate(), listaRetornos.getList(), dirSaida);
 			
 			// Calculando e exibindo o relatório de distância e similaridade

@@ -2,11 +2,11 @@ package compec.ufam.isensys.io;
 
 import java.io.*;
 import java.util.*;
+
 import java.nio.charset.*;
 
 import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.model.Candidato;
-import compec.ufam.isensys.constants.*;
 
 /** Classe de manipulação do arquivo Sistac
  *  @author Felipe André - felipeandre.eng@gmail.com
@@ -19,16 +19,16 @@ public class CSVSheetWriter {
 	 *  @param configs - configurações do sistema
 	 *  @param edital - informações do edital
 	 *  @throws IOException caso haja alguma falha na escrita do(s) arquivos. */
-	public static void write(final ArrayList<Candidato> listaCandidatos, final File diretorio, final IsensysConfig configs, final Edital edital) throws IOException {
+	public static void write(final ArrayList<Candidato> listaCandidatos, final File diretorio, final IsensysConfig configs, final String edital, int sequencia) throws IOException {
 		
 		// Calcula a quantidade de arquivos de envio necessária para abranger todos os candidatos, o limite do Sistac é 2.000 por arquivo 
 		int i, qtdArquivos = (int) Math.ceil(listaCandidatos.size() / 2000f);
 		
 		// Loop dos arquivos
-		for (int sequencia = edital.getSequencia(), arquivoAtual = 0; qtdArquivos >= 1; qtdArquivos--, sequencia++, arquivoAtual++) {
+		for (int arquivoAtual = 0; qtdArquivos >= 1; qtdArquivos--, sequencia++, arquivoAtual++) {
 
 			// Abrindo arquivo para escrita
-			final File arquivo = getSistacFilename(diretorio, configs, edital, sequencia);
+			final File arquivo = FileNameUtils.getSistacFilename(diretorio, configs, edital, sequencia);
 			
 			try (PrintWriter stream = new PrintWriter(arquivo, StandardCharsets.UTF_8)) {
 				
@@ -48,16 +48,4 @@ public class CSVSheetWriter {
 		
 	}
 	
-	/** Monta o nome do arquivo de envio do Sistac.
-	 *  @param diretorio - diretório 'pai' onde serão escritos os arquivos
-	 *  @param configs - configurações do sistema
-	 *  @param edital - informações do edital
-	 *  @param sequencia - número de sequência de arquivo */
-	private static File getSistacFilename(final File diretorio, final IsensysConfig configs, final Edital edital, final int sequencia) {
-		
-		final String filename = String.format(Constants.StringFormat.SISTAC_SEND_FILENAME_FORMAT, configs.getCNPJ(), edital.getEdital(), edital.getDataEdital(), sequencia);
-		
-		return new File(diretorio, filename);
-	}
-
 }

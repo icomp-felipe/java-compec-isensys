@@ -71,23 +71,18 @@ public class ListaRetornos implements Serializable {
 		
 	}
 	
-	/** Setter do edital.
-	 *  @param edital - dados de edital a serem copiados para esta instância da classe */
-	public void setEdital(final Edital edital) {
-		
-		if (edital != null) {
-			
-			this.edital     = edital.getEdital    ();
-			this.dataEdital = edital.getDataEdital();
-			
-		}
-		
-	}
-	
 	/** Setter do cabeçalho de edital.
 	 *  @param cabecalho - cabeçalho de edital */
 	public void setCabecalho(final String cabecalho) {
 		this.cabecalho = cabecalho;
+	}
+	
+	public void setEdital(String edital) {
+		this.edital = edital;
+	}
+	
+	public void setDataEdital(String dataEdital) {
+		this.dataEdital = dataEdital;
 	}
 	
 	/**************************** Bloco de Getters *****************************/
@@ -98,16 +93,14 @@ public class ListaRetornos implements Serializable {
 		return new IsensysConfig(this.cnpj, this.nomeFantasia, this.razaoSocial);
 	}
 	
-	/** Getter do edital.
-	 *  @return Um novo edital com os dados internos desta instância. */
-	public Edital getEdital() {
-		return new Edital(this.cnpj, this.edital, this.dataEdital);
-	}
-	
 	/** Getter do cabeçalho de edital.
 	 *  @return Uma String contendo o cabeçalho de edital. */
 	public String getCabecalho() {
 		return this.cabecalho;
+	}
+	
+	public String getEdital() {
+		return edital;
 	}
 	
 	/******************** Bloco de Getters (Funcionalidades) *******************/

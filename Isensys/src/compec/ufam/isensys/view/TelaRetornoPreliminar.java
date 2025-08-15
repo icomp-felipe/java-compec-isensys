@@ -465,11 +465,8 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Recuperando título da janela
 		final String title = bundle.getString("prelim-erros-select-title");
 		
-		// Preparando o nome do arquivo de sugestão
-		final File suggestion = new Edital(this.arqRetornoSistac).getErrorFilename(null);
-		
 		// Recuperando o arquivo de retorno
-		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, suggestion);
+		final File selected = PhillFileUtils.loadFile(this, title, Constants.FileFormat.XLSX, PhillFileUtils.OPEN_DIALOG, this.lastFileSelected, null);
 							
 		// Faz algo somente se algum arquivo foi selecionado
 		if (selected != null) {
@@ -647,11 +644,8 @@ public class TelaRetornoPreliminar extends JFrame {
 	 *  @since 3.0, 22/04/2021 */
 	private boolean errosDependencies(final File planilha) {
 			
-		Edital retorno = new Edital(arqRetornoSistac);
-		Edital erros   = new Edital(planilha);
-			
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
-		if (!retorno.equals(erros)) {
+		if (!FileNameUtils.iguais(arqRetornoSistac, planilha)) {
 			
 			AlertDialog.error(this, bundle.getString("prelim-erros-dependencies-title" ),
 	                                bundle.getString("prelim-erros-dependencies-dialog"));
@@ -896,10 +890,10 @@ public class TelaRetornoPreliminar extends JFrame {
 			this.retornosProcessados = new ArrayList<File>();
 			
 			// Recuperando dados de edital do nome do arquivo retorno selecionado 
-			Edital edital = new Edital(arqRetornoSistac);
+			int sequencia = FileNameUtils.getSequencia(arqRetornoSistac);
 			
 			// Loop que busca lẽ todos os arquivos subsequentes com base na sequência do primeiro arquivo de retorno selecionado
-			for (File atual = arqRetornoSistac; atual.exists(); atual = edital.getNextRetornoFile(arqRetornoSistac)) {
+			for (File atual = arqRetornoSistac; atual.exists(); atual = FileNameUtils.getNextRetornoFile(arqRetornoSistac, ++sequencia)) {
 				
 				// Processa a lista de retornos do Sistac
 				CSVSheetReader.readRetorno(atual, listaRetornos, null, true);
@@ -908,8 +902,6 @@ public class TelaRetornoPreliminar extends JFrame {
 				this.retornosProcessados.add(atual);
 				
 			}
-			
-			Thread.sleep(500L);
 			
 			// Atualiza a view com estatísticas do processamento
 			updateStatistics();
@@ -979,17 +971,22 @@ public class TelaRetornoPreliminar extends JFrame {
 			// Recuperando cabeçalho
 			final String cabecalho = textCabecalho.getText().trim();
 			
+			final String[] dados = arqRetornoSistac.getName().split("_");
+			
+			String edital     = dados[2];
+			String dataEdital = dados[3].substring(0,8);
+			
 			// Adicionando dados extras ao arquivo de compilação
 			listaRetornos.setInstituicao(configs);
-			listaRetornos.setEdital     (new Edital(arqRetornoSistac));
+			listaRetornos.setEdital     (edital);
+			listaRetornos.setDataEdital (dataEdital);
 			listaRetornos.setCabecalho  (cabecalho);
 			
 			// Ordenando dados
 			listaRetornos.sort();
 			
 			// Calculando o nome do arquivo de compilação
-			final Edital edital = new Edital(arqRetornoSistac);
-			this.arqCompilacao = new File(dirSaida, edital.getCompilationFilename());
+			this.arqCompilacao = FileNameUtils.getCompilationFilename(dirSaida, configs, edital, dataEdital);
 			
 			// Gerando visualização
 			PDFResultado.export(Resultado.PRELIMINAR, cabecalho, edital, pickerPublicacao.getDate(), listaRetornos.getList(), dirSaida);

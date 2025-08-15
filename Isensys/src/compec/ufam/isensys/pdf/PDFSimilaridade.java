@@ -7,7 +7,6 @@ import java.awt.image.*;
 
 import com.phill.libs.*;
 
-import compec.ufam.isensys.model.Edital;
 import compec.ufam.isensys.model.retorno.*;
 
 import net.sf.jasperreports.engine.*;
@@ -25,7 +24,7 @@ public class PDFSimilaridade {
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final String cabecalho, final Edital edital, final List<Similaridade> listaDeferidos, final File diretorioDestino) throws JRException, IOException {
+	public static void export(final String cabecalho, final String edital, final List<Similaridade> listaDeferidos, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/compec-header.png"));
@@ -46,7 +45,7 @@ public class PDFSimilaridade {
 		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 
 		// Preparando o arquivo de saída
-		String filename = String.format("Edital %s de %s - Isenção - Relatório de Similaridade.pdf", edital.getNumeroEdital(), edital.getAnoEdital());
+		String filename = String.format("Edital %s de %s - Isenção - Relatório de Similaridade.pdf", edital.substring(0, 2), edital.substring(2));
 		File arquivoDestino = new File(diretorioDestino, filename);
 		
 		// Exportando pra PDF

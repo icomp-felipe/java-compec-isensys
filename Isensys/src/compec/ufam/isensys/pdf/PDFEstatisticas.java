@@ -9,7 +9,6 @@ import java.awt.image.*;
 
 import com.phill.libs.*;
 
-import compec.ufam.isensys.model.*;
 import compec.ufam.isensys.model.retorno.*;
 import compec.ufam.isensys.constants.*;
 
@@ -29,7 +28,7 @@ public class PDFEstatisticas {
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF 
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final String cabecalho, final Edital edital, final int[] contagemAtual, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
+	public static void export(final String cabecalho, final String edital, final int[] contagemAtual, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
 		export(Resultado.PRELIMINAR, cabecalho, edital, contagemAtual, null, null, listaProcessados, diretorioDestino);
 	}
 	
@@ -43,7 +42,7 @@ public class PDFEstatisticas {
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF 
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	public static void export(final String cabecalho, final Edital edital, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
+	public static void export(final String cabecalho, final String edital,  final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
 		export(Resultado.DEFINITIVO, cabecalho, edital, contagemAtual, contagemAnterior, listaRecursos, listaProcessados, diretorioDestino);
 	}
 	
@@ -58,7 +57,7 @@ public class PDFEstatisticas {
 	 *  @param diretorioDestino - diretório de destino do arquivo PDF
 	 *  @throws JRException quando há algum problema ao gerar o relatório Jasper
 	 *  @throws IOException quando algum arquivo de recursos não foi encontrado */
-	private static void export(final Resultado tipoResultado, final String cabecalho, final Edital edital, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
+	private static void export(final Resultado tipoResultado, final String cabecalho, final String edital, final int[] contagemAtual, final int[] contagemAnterior, final List<Retorno> listaRecursos, final List<ArquivoProcessado> listaProcessados, final File diretorioDestino) throws JRException, IOException {
 		
 		// Carregando imagem de cabeçalho (imagem)
 		File imagePath = new File(ResourceManager.getResource("img/compec-header.png"));
@@ -98,7 +97,7 @@ public class PDFEstatisticas {
 		JasperPrint relatorio = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 
 		// Preparando o arquivo de saída
-		String filename = String.format("Edital %s de %s - Isenção - Processamento %s.pdf", edital.getNumeroEdital(), edital.getAnoEdital(), stringResultado);
+		String filename = String.format("Edital %s de %s - Isenção - Processamento %s.pdf", edital.substring(0, 2), edital.substring(2), stringResultado);
 		File arquivoDestino = new File(diretorioDestino, filename);
 		
 		// Exportando pra PDF

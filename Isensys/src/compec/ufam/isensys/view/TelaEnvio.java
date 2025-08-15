@@ -598,25 +598,23 @@ public class TelaEnvio extends JFrame {
 		try {
 
 			// Recuperando edital e sequência
-			final Edital edital = new Edital(configs.getCNPJ(), textOutputEdital.getText().trim(), (int) spinnerOutputSequencia.getValue());
+			final String editalX = textOutputEdital.getText().trim();
+			final int sequencia = (int) spinnerOutputSequencia.getValue();
 			
 			// Ordenando listas
 			this.resultList.sortLists();
 			
 			// Criando arquivo de saída - Sistac
-			CSVSheetWriter.write(this.resultList.getListaCandidatos(), this.outputDir, configs, edital);
+			CSVSheetWriter.write(resultList.getListaCandidatos(), outputDir, configs, editalX, sequencia);
 			
 			// Criando arquivo de saída - Excel (apenas se houveram erros no processamento)
 			if (this.resultList.getListaExcecoes().size() > 0) {
 				
-				final File saidaExcel = edital.getErrorFilename(this.outputDir);
+				final File saidaExcel = FileNameUtils.getErrorFilename(this.outputDir, configs.getCNPJ(), editalX);
 				
 				ExcelSheetWriter.write(resultList.getListaExcecoes(), saidaExcel);
 				
 			}
-			
-			// Só dorme um pouco pra mostrar progresso na view
-			Thread.sleep(1000L);
 			
 			// Desbloqueando campos e botões
 			setExportProcessing(false);
