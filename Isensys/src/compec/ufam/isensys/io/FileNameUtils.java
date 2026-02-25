@@ -20,7 +20,7 @@ public class FileNameUtils {
 			final String[] dados1 = arquivo1.getName().split("_");
 			final String[] dados2 = arquivo2.getName().split("_");
 			
-			return dados1[1].equals(dados2[1]) && dados1[2].equals(dados2[2]) && dados1[3].equals(dados2[3]);
+			return dados1[1].equals(dados2[1]) && dados1[2].equals(dados2[2]) && dados1[3].equals(dados2[3].substring(0, 8));
 			
 		}
 		catch (Exception exception) {

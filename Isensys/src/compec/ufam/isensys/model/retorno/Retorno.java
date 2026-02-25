@@ -38,6 +38,14 @@ public class Retorno implements Serializable {
 		
 	}
 	
+	public Retorno(final String[] data, final String format) {
+		
+		this.candidato = new Candidato(data[1], data[2], LocalDate.parse(data[3], DateTimeFormatter.ofPattern(format)));
+		this.situacao = data[4].charAt(0);
+		this.motivo = data[5].isEmpty() ? 0 : Integer.parseInt(data[5]);
+		
+	}
+	
 	/*************************** Bloco de Setters ******************************/
 	
 	public void setCandidato(final Candidato candidato) {

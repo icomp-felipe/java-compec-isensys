@@ -102,11 +102,11 @@ public class ExcelSheetReader {
 		// Recuperando dados das linhas da planilha
 		while (rowIterator.hasNext()) {
 			
-			Row row = rowIterator.next();											// Recuperando uma linha da planilha
-			String[] dados = readLine(row, null);	// Recuperando os dados de uma linha já separados em um array
+			Row row = rowIterator.next();			// Recuperando uma linha da planilha
+			String[] dados = readLine(row, new int[] {1,2,3});	// Recuperando os dados de uma linha já separados em um array
 
 			// Montando objeto 'Retorno'
-			Retorno retorno = new Retorno( new String[] { dados[0], dados[1], dados[2], "N", "1" });
+			Retorno retorno = new Retorno( new String[] { null, dados[0], dados[1], dados[2], "N", "1" }, "dd/MM/uuuu");
 						
 			// Se o resultado é preliminar, acrescento o novo retorno APENAS na lista de retornos
 			if (preliminar)

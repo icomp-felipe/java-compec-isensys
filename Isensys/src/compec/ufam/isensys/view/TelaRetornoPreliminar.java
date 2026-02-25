@@ -647,6 +647,9 @@ public class TelaRetornoPreliminar extends JFrame {
 		// Caso algum dos dados seja diferente, uma tela de erro é exibida e o processamento é interrompido
 		if (!FileNameUtils.iguais(arqRetornoSistac, planilha)) {
 			
+			System.out.println(arqRetornoSistac);
+			System.out.println(planilha);
+			
 			AlertDialog.error(this, bundle.getString("prelim-erros-dependencies-title" ),
 	                                bundle.getString("prelim-erros-dependencies-dialog"));
 			
