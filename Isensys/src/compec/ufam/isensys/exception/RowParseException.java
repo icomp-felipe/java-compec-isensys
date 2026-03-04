@@ -1,5 +1,6 @@
 package compec.ufam.isensys.exception;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import compec.ufam.isensys.constants.Constants;
@@ -48,10 +49,13 @@ public class RowParseException extends Exception {
 	/** Método utilizado em {@link ExcelSheetWriter#write(ArrayList, java.io.File)} para montagem da planilha de erros.
 	 *  @return Dados para preenchimento de uma linha de erros da planilha, já organizados em um array. */
 	public String[] getErrorSummaryArray() {
+		
+		final LocalDate dataNascimento = candidato.getDataNascimento();
+		
 		return new String[] { Integer.toString(linha),
 							  candidato.getNome(),
 							  candidato.getCpf(),
-							  candidato.getDataNascimento().format(Constants.DateFormatters.BRAZILIAN_DATE),
+							  dataNascimento == null ? "" : dataNascimento.format(Constants.DateFormatters.BRAZILIAN_DATE),
 							  "Indeferido", getErrorSummaryString()
 							};
 	}
