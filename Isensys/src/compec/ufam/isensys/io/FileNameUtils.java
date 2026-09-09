@@ -2,7 +2,7 @@ package compec.ufam.isensys.io;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,11 +70,11 @@ public class FileNameUtils {
 		return new File(diretorio, filename);
 	}
 	
-	/** Retorna a data atual do Sistac (UTC ou GMT+0) no formato DDMMYYYY. 
+	/** Retorna a data atual do Sistac (GMT-3) no formato DDMMYYYY. 
 	 *  @return Uma String contendo a data atual do Sistac no formato DDMMYYYY. */
 	private static String getDataSistac() {
 		
-		LocalDate sistac = LocalDate.now(ZoneOffset.UTC);
+		LocalDate sistac = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 		
 	    return sistac.format(Constants.DateFormatters.SISTAC_DATE);
 	}
