@@ -1019,7 +1019,7 @@ public class TelaRetornoDefinitivo extends JFrame {
 			// Ordenando dados
 			listaRetornos.sort();
 			
-			final String[] dados = arqRetornoSistac.getName().split("_");
+			final String[] dados = arqCompilacao.getName().split("_");
 			
 			String edital = dados[2];
 			
