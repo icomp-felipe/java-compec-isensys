@@ -12,7 +12,7 @@ import compec.ufam.isensys.model.IsensysConfig;
 
 /** Contém métodos de salvamento e recuperação de dados do arquivo de propriedades do sistema.
  *  @author Felipe André - felipeandre.eng@gmail.com
- *  @version 4.0, 04/AGO/2025 */
+ *  @version 4.0, 12/OUT/2026 */
 public class IsensysConfigDAO {
 	
 	/** Salva as configurações do sistema em disco.
@@ -20,8 +20,13 @@ public class IsensysConfigDAO {
 	 *  @throws IOException caso o arquivo não possa ser escrito por algum motivo. */
 	public static void save(final IsensysConfig configs) throws IOException {
 		
+		var configFile = Constants.SYS_CONFIGS_FILE;
+		
+		if (!configFile.exists())
+			configFile.getParentFile().mkdirs();
+		
 		// Abrindo arquivo para escrita
-		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(Constants.SYS_CONFIGS_FILE));
+		ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(configFile));
 				
 		// Escrevendo dados
 		stream.writeObject(configs);
